@@ -1,12 +1,15 @@
-package com.stedi.lsportfolio;
+package com.stedi.lsportfolio.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.stedi.lsportfolio.R;
+
 // TODO ic_launcher
 // TODO build.gradle
 // TODO splash pending activity start
+// TODO correct toolbar shadow
 public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

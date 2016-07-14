@@ -1,20 +1,25 @@
-package com.stedi.lsportfolio;
+package com.stedi.lsportfolio.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.stedi.lsportfolio.activity.DetailsActivity;
+import com.stedi.lsportfolio.R;
+
 import java.util.ArrayList;
 
-public class AppsFragment extends Fragment {
+public class AppsFragment extends Fragment implements AdapterView.OnItemClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,7 +29,13 @@ public class AppsFragment extends Fragment {
             items.add("Item " + (i + 1));
         }
         listView.setAdapter(new AppsAdapter(getActivity(), items));
+        listView.setOnItemClickListener(this);
         return listView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        startActivity(new Intent(getActivity(), DetailsActivity.class));
     }
 
     private class AppsAdapter extends ArrayAdapter<String> {
