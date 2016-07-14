@@ -10,8 +10,8 @@ public class DetailsActivity extends ToolbarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_activity);
-        getToolbar().setNavigationIcon(R.drawable.ic_back_icon);
-        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+        setToolbarIcon(ToolbarIcon.BACK);
+        setToolbarIconListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

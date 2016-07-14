@@ -10,6 +10,18 @@ import com.stedi.lsportfolio.R;
 
 public abstract class ToolbarActivity extends AppCompatActivity {
     private Toolbar toolbar;
+    private ToolbarIcon currentIcon;
+
+    public enum ToolbarIcon {
+        DRAWER(R.drawable.ic_menu_icon),
+        BACK(R.drawable.ic_back_icon);
+
+        private int resId;
+
+        ToolbarIcon(int resId) {
+            this.resId = resId;
+        }
+    }
 
     @Override
     public void setContentView(int layoutResID) {
@@ -29,8 +41,17 @@ public abstract class ToolbarActivity extends AppCompatActivity {
         initToolbar();
     }
 
-    public Toolbar getToolbar() {
-        return toolbar;
+    public void setToolbarIcon(ToolbarIcon icon) {
+        currentIcon = icon;
+        toolbar.setNavigationIcon(currentIcon.resId);
+    }
+
+    public ToolbarIcon getToolbarIcon() {
+        return currentIcon;
+    }
+
+    public void setToolbarIconListener(View.OnClickListener onClickListener) {
+        toolbar.setNavigationOnClickListener(onClickListener);
     }
 
     private void initToolbar() {
