@@ -21,7 +21,7 @@ public class DrawerActivity extends AppCompatActivity {
         initToolbar();
         initDrawer();
         if (getCurrentFragment() == null)
-            showFragment(new ListFragment(), false);
+            showFragment(new AppsFragment(), false);
     }
 
     private void initToolbar() {
@@ -43,8 +43,8 @@ public class DrawerActivity extends AppCompatActivity {
     private void initDrawer() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_activity_drawer_layout);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
-        findViewById(R.id.drawer_activity_item_aplikacje).setOnClickListener(drawerItemsListener);
-        findViewById(R.id.drawer_activity_item_kontakt).setOnClickListener(drawerItemsListener);
+        findViewById(R.id.drawer_activity_item_apps).setOnClickListener(drawerItemsListener);
+        findViewById(R.id.drawer_activity_item_contact).setOnClickListener(drawerItemsListener);
     }
 
     private Fragment getCurrentFragment() {
@@ -64,10 +64,10 @@ public class DrawerActivity extends AppCompatActivity {
         public void onClick(View v) {
             drawerLayout.closeDrawers();
             Fragment frgCurrent = getCurrentFragment();
-            if (v.getId() == R.id.drawer_activity_item_aplikacje && frgCurrent instanceof KontaktFragment) {
+            if (v.getId() == R.id.drawer_activity_item_apps && frgCurrent instanceof ContactFragment) {
                 getSupportFragmentManager().popBackStack();
-            } else if (v.getId() == R.id.drawer_activity_item_kontakt && frgCurrent instanceof ListFragment) {
-                showFragment(new KontaktFragment(), true);
+            } else if (v.getId() == R.id.drawer_activity_item_contact && frgCurrent instanceof AppsFragment) {
+                showFragment(new ContactFragment(), true);
             }
         }
     };

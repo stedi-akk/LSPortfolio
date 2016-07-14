@@ -7,12 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 // TODO ic_launcher
 // TODO build.gradle
 // TODO splash pending activity start
-// TODO polish words to english
-public class SplashActivity extends AppCompatActivity {
+public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_activity);
+        setContentView(R.layout.loading_activity);
 
         if (savedInstanceState == null) {
             new Thread(new Runnable() {
@@ -27,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(new Intent(SplashActivity.this, DrawerActivity.class));
+                            startActivity(new Intent(LoadingActivity.this, DrawerActivity.class));
                         }
                     });
                 }

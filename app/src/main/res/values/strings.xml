@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">LS Portfolio</string>
-    <string name="aplikacje">Aplikacje</string>
-    <string name="kontakt">Kontakt</string>
+    <string name="apps">Aplikacje</string>
+    <string name="contact">Kontakt</string>
 </resources>

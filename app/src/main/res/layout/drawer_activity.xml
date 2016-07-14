@@ -47,16 +47,16 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/drawer_activity_item_aplikacje"
+                android:id="@+id/drawer_activity_item_apps"
                 style="@style/DrawerItem"
-                android:text="@string/aplikacje" />
+                android:text="@string/apps" />
 
             <View style="@style/GreyDivider" />
 
             <TextView
-                android:id="@+id/drawer_activity_item_kontakt"
+                android:id="@+id/drawer_activity_item_contact"
                 style="@style/DrawerItem"
-                android:text="@string/kontakt" />
+                android:text="@string/contact" />
 
             <View style="@style/GreyDivider" />
 

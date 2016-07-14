@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_color">#5db88c</color>
-    <color name="main_selector">#73dfab</color>
+    <color name="default_selector">#73dfab</color>
 
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">@color/main_selector</color>
+    <color name="colorAccent">@color/default_selector</color>
     <color name="windowBackground">#fff</color>
 
     <color name="grey_dark">#5f5f5f</color>

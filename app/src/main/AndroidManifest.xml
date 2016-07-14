@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
 
         <!--<activity-->
-        <!--android:name=".SplashActivity"-->
+        <!--android:name=".LoadingActivity"-->
         <!--android:noHistory="true">-->
         <!--<intent-filter>-->
         <!--<action android:name="android.intent.action.MAIN" />-->
