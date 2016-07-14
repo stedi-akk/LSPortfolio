@@ -2,6 +2,8 @@ package com.stedi.lsportfolio;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -18,6 +20,8 @@ public class DrawerActivity extends AppCompatActivity {
         setContentView(R.layout.drawer_activity);
         initToolbar();
         initDrawer();
+        if (getCurrentFragment() == null)
+            showFragment(new ListFragment(), false);
     }
 
     private void initToolbar() {
@@ -27,7 +31,13 @@ public class DrawerActivity extends AppCompatActivity {
         if (actionBar != null)
             actionBar.setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_menu_icon);
-        toolbar.setNavigationOnClickListener(toolbarNavigationListener);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED)
+                    drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     private void initDrawer() {
@@ -37,19 +47,28 @@ public class DrawerActivity extends AppCompatActivity {
         findViewById(R.id.drawer_activity_item_kontakt).setOnClickListener(drawerItemsListener);
     }
 
-    private View.OnClickListener toolbarNavigationListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Utils.showToast("its work");
-            if (drawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED)
-                drawerLayout.openDrawer(GravityCompat.START);
-        }
-    };
+    private Fragment getCurrentFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.drawer_activity_content);
+    }
+
+    private void showFragment(Fragment frg, boolean addToBackStack) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.drawer_activity_content, frg, frg.getClass().getSimpleName());
+        if (addToBackStack)
+            ft.addToBackStack(frg.getClass().getSimpleName());
+        ft.commit();
+    }
 
     private View.OnClickListener drawerItemsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Utils.showToast("yes, its work too");
+            drawerLayout.closeDrawers();
+            Fragment frgCurrent = getCurrentFragment();
+            if (v.getId() == R.id.drawer_activity_item_aplikacje && frgCurrent instanceof KontaktFragment) {
+                getSupportFragmentManager().popBackStack();
+            } else if (v.getId() == R.id.drawer_activity_item_kontakt && frgCurrent instanceof ListFragment) {
+                showFragment(new KontaktFragment(), true);
+            }
         }
     };
 }

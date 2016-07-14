@@ -13,6 +13,6 @@ public class Utils {
     }
 
     public static void showToast(CharSequence text) {
-        Toast.makeText(App.getContext(), text, Toast.LENGTH_LONG).show();
+        Toast.makeText(App.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 }

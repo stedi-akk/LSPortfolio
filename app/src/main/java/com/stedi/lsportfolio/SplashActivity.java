@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 // TODO ic_launcher
 // TODO build.gradle
 // TODO splash pending activity start
+// TODO polish words to english
 public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
