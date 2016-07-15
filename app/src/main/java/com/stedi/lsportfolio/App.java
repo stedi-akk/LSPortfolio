@@ -11,6 +11,7 @@ import java.util.LinkedList;
 // TODO splash pending activity start
 // TODO correct toolbar shadow
 // TODO no internet toast
+// TODO layout optimization (text-image, relative, etc)
 public final class App extends Application {
     private static App instance;
 

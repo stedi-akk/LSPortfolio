@@ -10,6 +10,7 @@ public class LsApp implements Serializable {
     private String name;
     @SerializedName("icon")
     private String iconUrl;
+    private String description;
     @SerializedName("gallery")
     private List<String> galleryUrls;
 
@@ -23,6 +24,10 @@ public class LsApp implements Serializable {
 
     public String getIconUrl() {
         return iconUrl;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public List<String> getGalleryUrls() {

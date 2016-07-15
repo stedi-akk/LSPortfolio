@@ -1,15 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"
-        android:textSize="@dimen/text_large" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
+                android:paddingTop="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ls_app_activity_icon"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginRight="24dp" />
+
+                    <TextView
+                        android:id="@+id/ls_app_activity_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom"
+                        android:paddingBottom="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_large" />
+
+                </LinearLayout>
+
+                <View
+                    style="@style/DefaultDivider"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="24dp" />
+
+                <TextView
+                    android:id="@+id/ls_app_activity_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <com.stedi.lsportfolio.ui.other.BlockingViewPager
+                android:id="@+id/ls_app_activity_pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ls_app_screen_height"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:background="#0FF000" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
