@@ -1,15 +1,15 @@
-package com.stedi.lsportfolio.activity;
+package com.stedi.lsportfolio.ui.activity;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.stedi.lsportfolio.R;
 
-public class DetailsActivity extends ToolbarActivity {
+public class LsAppActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.details_activity);
+        setContentView(R.layout.ls_app_activity);
         setToolbarIcon(ToolbarIcon.BACK);
         setToolbarIconListener(new View.OnClickListener() {
             @Override

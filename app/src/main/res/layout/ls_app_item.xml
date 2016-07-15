@@ -6,19 +6,17 @@
     android:padding="24dp">
 
     <ImageView
-        android:id="@+id/apps_fragment_iv"
+        android:id="@+id/ls_app_item_iv"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:src="@drawable/ic_launcher" />
+        android:layout_marginRight="24dp" />
 
     <TextView
-        android:id="@+id/apps_fragment_tv"
+        android:id="@+id/ls_app_item_tv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:text="Test"
         android:textColor="@color/black"
         android:textSize="@dimen/text_large" />
 

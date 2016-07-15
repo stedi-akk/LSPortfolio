@@ -2,4 +2,5 @@
     <string name="app_name">LS Portfolio</string>
     <string name="apps">Aplikacje</string>
     <string name="contact">Kontakt</string>
+    <string name="no_internet">Nie masz połączenia z internetem</string>
 </resources>

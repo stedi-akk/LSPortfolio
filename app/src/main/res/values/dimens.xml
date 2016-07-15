@@ -3,5 +3,4 @@
     <dimen name="text_small">12sp</dimen>
     <dimen name="text_medium">18sp</dimen>
     <dimen name="text_large">22sp</dimen>
-
 </resources>

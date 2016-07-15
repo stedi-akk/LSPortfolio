@@ -1,4 +1,4 @@
-package com.stedi.lsportfolio.activity;
+package com.stedi.lsportfolio.ui.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,8 +9,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.fragments.AppsFragment;
-import com.stedi.lsportfolio.fragments.ContactFragment;
+import com.stedi.lsportfolio.ui.fragments.ContactFragment;
+import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
 
 public class DrawerActivity extends ToolbarActivity {
     private DrawerLayout drawerLayout;
@@ -26,11 +26,8 @@ public class DrawerActivity extends ToolbarActivity {
         findViewById(R.id.drawer_activity_item_apps).setOnClickListener(drawerItemsListener);
         findViewById(R.id.drawer_activity_item_contact).setOnClickListener(drawerItemsListener);
 
-        Fragment frgCurrent = getCurrentFragment();
-        if (frgCurrent == null) {
-            frgCurrent = new AppsFragment();
-            showFragment(frgCurrent, false);
-        }
+        if (getCurrentFragment() == null)
+            showFragment(new LsAllAppsFragment(), false);
     }
 
     private View.OnClickListener drawerItemsListener = new View.OnClickListener() {
@@ -40,7 +37,7 @@ public class DrawerActivity extends ToolbarActivity {
             Fragment frgCurrent = getCurrentFragment();
             if (v.getId() == R.id.drawer_activity_item_apps && frgCurrent instanceof ContactFragment) {
                 getSupportFragmentManager().popBackStack();
-            } else if (v.getId() == R.id.drawer_activity_item_contact && frgCurrent instanceof AppsFragment) {
+            } else if (v.getId() == R.id.drawer_activity_item_contact && frgCurrent instanceof LsAllAppsFragment) {
                 showFragment(new ContactFragment(), true);
             }
         }

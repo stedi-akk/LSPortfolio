@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 public class Utils {
     public static void log(String text) {
-        Log.d("DEBUG", text);
+        Log.d("LS_DEBUG", text);
     }
 
     public static void showToast(int resId) {
