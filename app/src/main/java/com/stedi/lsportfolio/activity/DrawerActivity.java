@@ -31,14 +31,6 @@ public class DrawerActivity extends ToolbarActivity {
             frgCurrent = new AppsFragment();
             showFragment(frgCurrent, false);
         }
-        setToolbarIcon(frgCurrent instanceof AppsFragment ? ToolbarIcon.DRAWER : ToolbarIcon.BACK);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getCurrentFragment() instanceof ContactFragment)
-            setToolbarIcon(ToolbarIcon.DRAWER);
-        super.onBackPressed();
     }
 
     private View.OnClickListener drawerItemsListener = new View.OnClickListener() {
@@ -48,10 +40,8 @@ public class DrawerActivity extends ToolbarActivity {
             Fragment frgCurrent = getCurrentFragment();
             if (v.getId() == R.id.drawer_activity_item_apps && frgCurrent instanceof ContactFragment) {
                 getSupportFragmentManager().popBackStack();
-                setToolbarIcon(ToolbarIcon.DRAWER);
             } else if (v.getId() == R.id.drawer_activity_item_contact && frgCurrent instanceof AppsFragment) {
                 showFragment(new ContactFragment(), true);
-                setToolbarIcon(ToolbarIcon.BACK);
             }
         }
     };
@@ -61,7 +51,6 @@ public class DrawerActivity extends ToolbarActivity {
         public void onClick(View v) {
             if (getToolbarIcon() == ToolbarIcon.BACK) {
                 getSupportFragmentManager().popBackStack();
-                setToolbarIcon(ToolbarIcon.DRAWER);
             } else if (getToolbarIcon() == ToolbarIcon.DRAWER
                     && drawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
                 drawerLayout.openDrawer(GravityCompat.START);

@@ -17,5 +17,6 @@ public class DetailsActivity extends ToolbarActivity {
                 finish();
             }
         });
+        setToolbarTitle("Details here");
     }
 }

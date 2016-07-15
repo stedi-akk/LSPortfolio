@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.stedi.lsportfolio.activity.DetailsActivity;
 import com.stedi.lsportfolio.R;
+import com.stedi.lsportfolio.activity.DetailsActivity;
+import com.stedi.lsportfolio.activity.ToolbarActivity;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ public class AppsFragment extends Fragment implements AdapterView.OnItemClickLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        updateToolbar();
         ListView listView = (ListView) inflater.inflate(R.layout.apps_fragment, container, false);
         ArrayList<String> items = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -31,6 +33,12 @@ public class AppsFragment extends Fragment implements AdapterView.OnItemClickLis
         listView.setAdapter(new AppsAdapter(getActivity(), items));
         listView.setOnItemClickListener(this);
         return listView;
+    }
+
+    private void updateToolbar() {
+        ToolbarActivity act = (ToolbarActivity) getActivity();
+        act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);
+        act.setToolbarTitle(R.string.apps);
     }
 
     @Override

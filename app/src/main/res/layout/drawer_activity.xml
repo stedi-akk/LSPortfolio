@@ -17,35 +17,32 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/main_color">
+        android:background="@color/main_color"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:paddingBottom="40dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="40dp">
 
-        <LinearLayout
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/drawer_activity_item_apps"
+            style="@style/DrawerItem"
+            android:text="@string/apps" />
 
-            <TextView
-                android:id="@+id/drawer_activity_item_apps"
-                style="@style/DrawerItem"
-                android:text="@string/apps" />
+        <View style="@style/GreyDivider" />
 
-            <View style="@style/GreyDivider" />
+        <TextView
+            android:id="@+id/drawer_activity_item_contact"
+            style="@style/DrawerItem"
+            android:text="@string/contact" />
 
-            <TextView
-                android:id="@+id/drawer_activity_item_contact"
-                style="@style/DrawerItem"
-                android:text="@string/contact" />
+        <View style="@style/GreyDivider" />
 
-            <View style="@style/GreyDivider" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
