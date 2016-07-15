@@ -66,10 +66,26 @@
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp" />
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:background="#0FF000" />
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
+                android:paddingTop="24dp">
+
+                <View
+                    style="@style/DefaultDivider"
+                    android:layout_marginBottom="24dp" />
+
+                <LinearLayout
+                    android:id="@+id/ls_app_activity_stores_container"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
