@@ -2,9 +2,10 @@ package com.stedi.lsportfolio.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LsApp {
+public class LsApp implements Serializable {
     private long id;
     private String name;
     @SerializedName("icon")

@@ -1,4 +1,4 @@
-package com.stedi.lsportfolio.ui.adapters;
+package com.stedi.lsportfolio.ui.other;
 
 import android.content.Context;
 import android.view.LayoutInflater;

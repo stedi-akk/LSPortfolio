@@ -11,12 +11,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.stedi.lsportfolio.R;
+import com.stedi.lsportfolio.api.ResponseLsApp;
+import com.stedi.lsportfolio.api.Server;
 import com.stedi.lsportfolio.model.LsAllApps;
+import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
-import com.stedi.lsportfolio.ui.adapters.LsAllAppsAdapter;
+import com.stedi.lsportfolio.ui.other.AsyncDialog;
+import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
-public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemClickListener {
+// TODO empty view
+public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemClickListener, AsyncDialog.OnResult<ResponseLsApp> {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +37,23 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getActivity(), LsAppActivity.class));
+        final LsApp app = (LsApp) parent.getItemAtPosition(position);
+        new AsyncDialog<ResponseLsApp>() {
+            @Override
+            protected ResponseLsApp doInBackground() throws Exception {
+                return Server.requestLsApp(app.getId());
+            }
+        }.execute(this);
+    }
+
+    @Override
+    public void onResult(Exception exception, ResponseLsApp response) {
+        if (exception != null) {
+            exception.printStackTrace();
+        } else {
+            Intent intent = new Intent(getActivity(), LsAppActivity.class);
+            intent.putExtra(LsAppActivity.INTENT_APP_KEY, response.getApp());
+            startActivity(intent);
+        }
     }
 }
