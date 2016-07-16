@@ -85,8 +85,12 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillStoreLinks() {
+        boolean isSw600Dp = Utils.isSw600dp();
+        int margin = (int) Utils.dp2px(24);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
-        for (final StoreLink link : app.getStoreLinks()) {
+        container.setOrientation(isSw600Dp ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+        for (int i = 0; i < app.getStoreLinks().size(); i++) {
+            final StoreLink link = app.getStoreLinks().get(i);
             if (link.getType() == null)
                 continue;
             ImageView imageView = new ImageView(this);
@@ -101,10 +105,15 @@ public class LsAppActivity extends ToolbarActivity {
                     }
                 }
             });
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.bottomMargin = (int) Utils.dp2px(24);
-            imageView.setLayoutParams(params);
+            if (i < app.getStoreLinks().size() - 1) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                if (isSw600Dp)
+                    params.rightMargin = margin;
+                else
+                    params.bottomMargin = margin;
+                imageView.setLayoutParams(params);
+            }
             container.addView(imageView);
         }
     }

@@ -61,4 +61,8 @@ public class Utils {
                 .error(R.drawable.picasso_error)
                 .into(iv);
     }
+
+    public static boolean isSw600dp() {
+        return App.getContext().getResources().getBoolean(R.bool.is_sw600dp);
+    }
 }

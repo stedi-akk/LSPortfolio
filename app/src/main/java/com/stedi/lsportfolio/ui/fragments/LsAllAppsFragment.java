@@ -27,6 +27,7 @@ import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
 // TODO toast on swipe
+// TODO update button on empty view
 public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
         View.OnClickListener,
@@ -131,6 +132,7 @@ public class LsAllAppsFragment extends Fragment implements
     }
 
     private void fillListView() {
+        swipeLayout.setEnabled(!LsAllApps.getInstance().getApps().isEmpty());
         listView.setEmptyView(emptyView);
         listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
         if (checkedItemPosition != -1)
@@ -191,8 +193,8 @@ public class LsAllAppsFragment extends Fragment implements
     @Subscribe
     public void onResponseLsAllApps(ResponseLsAllApps response) {
         LsAllApps.getInstance().setApps(response.getApps());
-        tryAgainBtn.setVisibility(View.GONE);
-        swipeLayout.setEnabled(true);
+        if (tryAgainBtn.getVisibility() == View.VISIBLE)
+            tryAgainBtn.setVisibility(View.GONE);
         lsAllAppsRequested = false;
         fillListView();
         disableSwipeLayout();

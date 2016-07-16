@@ -83,6 +83,7 @@
                 <LinearLayout
                     android:id="@+id/ls_app_activity_stores_container"
                     android:orientation="vertical"
+                    android:layout_marginBottom="24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 

@@ -9,8 +9,6 @@ import com.squareup.otto.Bus;
 import java.util.LinkedList;
 
 // TODO ic_launcher
-// TODO build.gradle
-// TODO correct toolbar shadow
 // TODO layout optimization (text-image, relative, etc)
 public final class App extends Application {
     private static App instance;

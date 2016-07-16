@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 
+// TODO progress and error handle
 public class ContactFragment extends Fragment {
     @Nullable
     @Override
