@@ -4,13 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.squareup.otto.Bus;
+
 import java.util.LinkedList;
 
 // TODO ic_launcher
 // TODO build.gradle
-// TODO splash pending activity start
 // TODO correct toolbar shadow
-// TODO no internet toast
 // TODO layout optimization (text-image, relative, etc)
 public final class App extends Application {
     private static App instance;
@@ -18,16 +18,22 @@ public final class App extends Application {
     private final LinkedList<Runnable> pendingRunnables = new LinkedList<>();
     private final Handler handler = new Handler();
 
+    private Bus bus;
     private boolean isResumed;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        bus = new Bus();
     }
 
     public static Context getContext() {
         return instance.getApplicationContext();
+    }
+
+    public static Bus getBus() {
+        return instance.bus;
     }
 
     public static void postOnResume(Runnable runnable) {

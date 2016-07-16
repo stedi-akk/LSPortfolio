@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.Utils;
+import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.model.LsAppDetailed;
 import com.stedi.lsportfolio.model.StoreLink;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
@@ -26,7 +26,6 @@ public class LsAppActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         app = (LsAppDetailed) getIntent().getSerializableExtra(INTENT_APP_KEY);
         if (app == null) {
             finish();

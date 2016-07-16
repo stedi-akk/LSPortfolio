@@ -4,4 +4,5 @@
     <string name="contact">Kontakt</string>
     <string name="no_internet">Nie masz połączenia z internetem</string>
     <string name="please_wait">Czekaj…</string>
+    <string name="unknown_error">Nastąpił błąd</string>
 </resources>

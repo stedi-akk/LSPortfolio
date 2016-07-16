@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.Utils;
+import com.stedi.lsportfolio.other.Utils;
 
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
     public interface OnResult<Result> {

@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.squareup.otto.Subscribe;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.api.Server;
 import com.stedi.lsportfolio.model.LsAllApps;
+import com.stedi.lsportfolio.other.NoNetworkException;
+import com.stedi.lsportfolio.other.Utils;
 
 public class LoadingActivity extends AppCompatActivity implements Runnable {
     private static Thread loadingThread;
@@ -16,6 +19,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getBus().register(this);
         setContentView(R.layout.loading_activity);
         if (LsAllApps.getInstance().getApps() != null) {
             startActivity(new Intent(this, DrawerActivity.class));
@@ -28,18 +32,40 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Override
     public void run() {
         try {
+            Utils.throwOnNoNetwork();
             final ResponseLsAllApps response = Server.requestLsAllApps();
             App.postOnResume(new Runnable() {
                 @Override
                 public void run() {
-                    LsAllApps.getInstance().setApps(response.getApps());
-                    startActivity(new Intent(LoadingActivity.this, DrawerActivity.class));
+                    App.getBus().post(response);
                     loadingThread = null;
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception ex) {
+            App.postOnResume(new Runnable() {
+                @Override
+                public void run() {
+                    App.getBus().post(ex);
+                    loadingThread = null;
+                }
+            });
         }
+    }
+
+    @Subscribe
+    public void onResponse(ResponseLsAllApps response) {
+        LsAllApps.getInstance().setApps(response.getApps());
+        startActivity(new Intent(LoadingActivity.this, DrawerActivity.class));
+    }
+
+    @Subscribe
+    public void onException(Exception ex) {
+        ex.printStackTrace();
+        if (ex instanceof NoNetworkException)
+            Utils.showToast(R.string.no_internet);
+        else
+            Utils.showToast(R.string.unknown_error);
+        finish();
     }
 
     @Override
@@ -52,5 +78,11 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     protected void onPause() {
         super.onPause();
         App.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.getBus().unregister(this);
     }
 }
