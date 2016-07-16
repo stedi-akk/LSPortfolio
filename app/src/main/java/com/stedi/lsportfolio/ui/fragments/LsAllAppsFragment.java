@@ -28,7 +28,8 @@ import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
 // TODO catch wipe bug
 // TODO toast on swipe
-// TODO update button on empty view
+// TODO tryagain button on empty view
+// TODO tryagain button style
 public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
         View.OnClickListener,

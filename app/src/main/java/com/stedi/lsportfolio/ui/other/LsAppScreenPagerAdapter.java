@@ -6,11 +6,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.stedi.lsportfolio.App;
+import com.stedi.lsportfolio.other.BorderTransformation;
 import com.stedi.lsportfolio.other.Utils;
 
 import java.util.List;
 
 public class LsAppScreenPagerAdapter extends PagerAdapter {
+    private final BorderTransformation transformation = new BorderTransformation();
+
     private List<String> imgUrls;
     private float pageWidth;
 
@@ -22,7 +25,7 @@ public class LsAppScreenPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         ImageView iv = new ImageView(App.getContext());
-        Utils.loadWithPicasso(imgUrls.get(position), iv);
+        Utils.loadWithPicasso(imgUrls.get(position), iv, transformation);
         collection.addView(iv);
         return iv;
     }

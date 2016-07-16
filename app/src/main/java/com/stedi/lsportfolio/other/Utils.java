@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Transformation;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 
@@ -55,11 +57,17 @@ public class Utils {
     }
 
     public static void loadWithPicasso(String url, ImageView iv) {
-        Picasso.with(App.getContext())
+        Utils.loadWithPicasso(url, iv, null);
+    }
+
+    public static void loadWithPicasso(String url, ImageView iv, Transformation transformation) {
+        RequestCreator creator = Picasso.with(App.getContext())
                 .load(url)
                 .placeholder(R.drawable.main_progress)
-                .error(R.drawable.alert)
-                .into(iv);
+                .error(R.drawable.alert);
+        if (transformation != null)
+            creator.transform(transformation);
+        creator.into(iv);
     }
 
     public static boolean isSw600dp() {
