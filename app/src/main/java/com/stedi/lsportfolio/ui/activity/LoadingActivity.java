@@ -19,10 +19,9 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.getBus().register(this);
         setContentView(R.layout.loading_activity);
         if (LsAllApps.getInstance().getApps() != null) {
-            startActivity(new Intent(this, DrawerActivity.class));
+            startDrawerActivity();
         } else if (savedInstanceState == null && loadingThread == null) {
             loadingThread = new Thread(this);
             loadingThread.start();
@@ -54,7 +53,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Subscribe
     public void onResponse(ResponseLsAllApps response) {
         LsAllApps.getInstance().setApps(response.getApps());
-        startActivity(new Intent(LoadingActivity.this, DrawerActivity.class));
+        startDrawerActivity();
     }
 
     @Subscribe
@@ -65,6 +64,12 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
         else
             Utils.showToast(R.string.unknown_error);
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        App.getBus().register(this);
     }
 
     @Override
@@ -80,8 +85,13 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         App.getBus().unregister(this);
+    }
+
+    private void startDrawerActivity() {
+        finish();
+        startActivity(new Intent(this, DrawerActivity.class));
     }
 }

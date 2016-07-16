@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,21 +26,33 @@ import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
-public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+// TODO toast on swipe
+public class LsAllAppsFragment extends Fragment implements
+        AdapterView.OnItemClickListener,
+        View.OnClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
+
     private final String KEY_CHECKED_ITEM_POSITION = "KEY_CHECKED_ITEM_POSITION";
     private final String KEY_LS_ALL_APPS_REQUESTED = "KEY_LS_ALL_APPS_REQUESTED";
+    private final String KEY_IS_SWIPE_REFRESHING = "KEY_IS_SWIPE_REFRESHING";
 
+    private SwipeRefreshLayout swipeLayout;
     private ListView listView;
     private View emptyView;
     private View tryAgainBtn;
 
     private boolean lsAllAppsRequested;
+    private boolean isSwipeRefreshing;
     private int checkedItemPosition = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.getBus().register(this);
+        if (savedInstanceState != null) {
+            checkedItemPosition = savedInstanceState.getInt(KEY_CHECKED_ITEM_POSITION);
+            lsAllAppsRequested = savedInstanceState.getBoolean(KEY_LS_ALL_APPS_REQUESTED);
+            isSwipeRefreshing = savedInstanceState.getBoolean(KEY_IS_SWIPE_REFRESHING);
+        }
     }
 
     @Nullable
@@ -49,12 +62,22 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);
         act.setToolbarTitle(R.string.apps);
 
-        if (savedInstanceState != null) {
-            checkedItemPosition = savedInstanceState.getInt(KEY_CHECKED_ITEM_POSITION);
-            lsAllAppsRequested = savedInstanceState.getBoolean(KEY_LS_ALL_APPS_REQUESTED);
-        }
-
         View root = inflater.inflate(R.layout.ls_all_apps_fragment, container, false);
+
+        if (swipeLayout != null)
+            isSwipeRefreshing = swipeLayout.isRefreshing();
+        swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.ls_all_apps_list_swipe);
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.main_color));
+        if (isSwipeRefreshing) {
+            swipeLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeLayout.setRefreshing(true);
+                }
+            });
+        }
+        swipeLayout.setOnRefreshListener(this);
+
         listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
         emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
         tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again);
@@ -62,6 +85,7 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
 
         if (LsAllApps.getInstance().getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
+            swipeLayout.setEnabled(false);
             if (!lsAllAppsRequested) {
                 lsAllAppsRequested = true;
                 requestLsAllApps();
@@ -71,6 +95,30 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         }
 
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        App.getBus().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        App.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        App.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        App.getBus().unregister(this);
     }
 
     private void requestLsAllApps() {
@@ -88,6 +136,31 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         if (checkedItemPosition != -1)
             listView.setItemChecked(checkedItemPosition, true);
         listView.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final ResponseLsAllApps response = Server.requestLsAllApps();
+                    App.postOnResume(new Runnable() {
+                        @Override
+                        public void run() {
+                            App.getBus().post(response);
+                        }
+                    });
+                } catch (final Exception ex) {
+                    App.postOnResume(new Runnable() {
+                        @Override
+                        public void run() {
+                            App.getBus().post(ex);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -119,8 +192,10 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
     public void onResponseLsAllApps(ResponseLsAllApps response) {
         LsAllApps.getInstance().setApps(response.getApps());
         tryAgainBtn.setVisibility(View.GONE);
+        swipeLayout.setEnabled(true);
         lsAllAppsRequested = false;
         fillListView();
+        disableSwipeLayout();
     }
 
     @Subscribe
@@ -131,6 +206,7 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         else
             Utils.showToast(R.string.unknown_error);
         dropCheckedItem();
+        disableSwipeLayout();
     }
 
     @Override
@@ -138,16 +214,21 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_CHECKED_ITEM_POSITION, checkedItemPosition);
         outState.putBoolean(KEY_LS_ALL_APPS_REQUESTED, lsAllAppsRequested);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        App.getBus().unregister(this);
+        outState.putBoolean(KEY_IS_SWIPE_REFRESHING, swipeLayout != null ? swipeLayout.isRefreshing() : isSwipeRefreshing);
     }
 
     private void dropCheckedItem() {
         listView.setItemChecked(checkedItemPosition, false);
         checkedItemPosition = -1;
+    }
+
+    private void disableSwipeLayout() {
+        swipeLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                if (swipeLayout.isRefreshing())
+                    swipeLayout.setRefreshing(false);
+            }
+        });
     }
 }
