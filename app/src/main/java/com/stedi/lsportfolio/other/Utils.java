@@ -5,9 +5,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.util.TypedValue;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.App;
+import com.stedi.lsportfolio.R;
 
 public class Utils {
     private static Toast singleToast;
@@ -49,5 +52,13 @@ public class Utils {
     public static void throwOnNoNetwork() throws NoNetworkException {
         if (!Utils.hasInternet())
             throw new NoNetworkException();
+    }
+
+    public static void loadWithPicasso(String url, ImageView iv) {
+        Picasso.with(App.getContext())
+                .load(url)
+                .placeholder(R.drawable.picasso_placeholder)
+                .error(R.drawable.picasso_error)
+                .into(iv);
     }
 }

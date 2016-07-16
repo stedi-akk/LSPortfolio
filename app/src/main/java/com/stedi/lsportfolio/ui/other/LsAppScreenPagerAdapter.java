@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.App;
+import com.stedi.lsportfolio.other.Utils;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class LsAppScreenPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         ImageView iv = new ImageView(App.getContext());
-        Picasso.with(App.getContext()).load(imgUrls.get(position)).into(iv);
+        Utils.loadWithPicasso(imgUrls.get(position), iv);
         collection.addView(iv);
         return iv;
     }

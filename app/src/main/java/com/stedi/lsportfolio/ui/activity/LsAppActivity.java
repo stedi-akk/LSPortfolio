@@ -10,11 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.model.LsAppDetailed;
 import com.stedi.lsportfolio.model.StoreLink;
+import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
@@ -51,7 +50,7 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillMainInfo() {
-        Picasso.with(this).load(app.getIconUrl()).into((ImageView) findViewById(R.id.ls_app_activity_icon));
+        Utils.loadWithPicasso(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_icon));
         ((TextView) findViewById(R.id.ls_app_activity_name)).setText(app.getName());
         ((TextView) findViewById(R.id.ls_app_activity_description)).setText(app.getDescription());
     }

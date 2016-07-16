@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsApp;
+import com.stedi.lsportfolio.other.Utils;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class LsAllAppsAdapter extends ArrayAdapter<LsApp> {
                 R.drawable.activated_on_grey : R.drawable.activated_on_white);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         LsApp app = getItem(position);
-        Picasso.with(getContext()).load(app.getIconUrl()).into(holder.imageView);
+        Utils.loadWithPicasso(app.getIconUrl(), holder.imageView);
         holder.textView.setText(app.getName());
         return convertView;
     }
