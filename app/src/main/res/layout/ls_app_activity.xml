@@ -62,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/ls_app_screen_height"
                 android:clipToPadding="false"
+                android:visibility="gone"
                 android:overScrollMode="never"
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp" />

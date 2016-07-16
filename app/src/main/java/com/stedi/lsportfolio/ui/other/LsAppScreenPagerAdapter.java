@@ -14,8 +14,8 @@ public class LsAppScreenPagerAdapter extends PagerAdapter {
     private List<String> imgUrls;
     private float pageWidth;
 
-    public LsAppScreenPagerAdapter(List<String> imgUrls, float pagerWidth) {
-        this.pageWidth = pagerWidth;
+    public LsAppScreenPagerAdapter(List<String> imgUrls, float pageWidth) {
+        this.pageWidth = pageWidth;
         this.imgUrls = imgUrls;
     }
 

@@ -13,13 +13,11 @@ import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.Utils;
 
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
-    private Thread backgroundThread;
-
-    protected abstract Result doInBackground() throws Exception;
-
     public interface OnResult<Result> {
         void onResult(Exception exception, Result result);
     }
+
+    protected abstract Result doInBackground() throws Exception;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,9 +67,8 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
 
     public void execute(Fragment fragment) {
         setTargetFragment(fragment, 0);
-        super.show(fragment.getFragmentManager(), AsyncDialog.class.getSimpleName());
-        backgroundThread = new Thread(this);
-        backgroundThread.start();
+        super.show(fragment.getFragmentManager(), getClass().getSimpleName());
+        new Thread(this).start();
     }
 
     @Override

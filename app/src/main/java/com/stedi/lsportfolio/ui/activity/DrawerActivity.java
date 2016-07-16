@@ -30,6 +30,15 @@ public class DrawerActivity extends ToolbarActivity {
             showFragment(new LsAllAppsFragment(), false);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+            return;
+        }
+        super.onBackPressed();
+    }
+
     private View.OnClickListener drawerItemsListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

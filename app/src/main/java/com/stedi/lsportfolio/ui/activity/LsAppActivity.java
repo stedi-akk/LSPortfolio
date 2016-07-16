@@ -58,19 +58,25 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillViewPager() {
+        int lsAppScreensCount = app.getGalleryUrls().size();
+        if (lsAppScreensCount == 0)
+            return;
+
         BlockingViewPager pager = (BlockingViewPager) findViewById(R.id.ls_app_activity_pager);
+        pager.setVisibility(View.VISIBLE);
 
         float pageMargin = Utils.dp2px(24); // space between images
-        float pagerMargins = Utils.dp2px(48); // left and right margin
         pager.setPageMargin((int) pageMargin);
+
+        float leftPadding = pager.getPaddingLeft();
+        float rightPadding = pager.getPaddingRight();
 
         int lsAppScreenWidth = getResources().getDimensionPixelSize(R.dimen.ls_app_screen_width); // image width
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        float pageWidth = 1 / ((screenWidth - pagerMargins - pagerMargins) / lsAppScreenWidth); // for adapter getPageWidth()
+        float pageWidth = 1 / ((screenWidth - leftPadding - rightPadding) / lsAppScreenWidth); // for adapter getPageWidth()
 
-        int lsAppScreensCount = app.getGalleryUrls().size();
         float fullPagerWidth = (lsAppScreensCount * lsAppScreenWidth) +
-                pagerMargins + pagerMargins +
+                leftPadding + rightPadding +
                 ((lsAppScreensCount - 1) * pageMargin);
 
         if (fullPagerWidth <= screenWidth)
@@ -83,9 +89,9 @@ public class LsAppActivity extends ToolbarActivity {
     private void fillStoreLinks() {
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
         for (final StoreLink link : app.getStoreLinks()) {
-            ImageView imageView = new ImageView(this);
             if (link.getType() == null)
                 continue;
+            ImageView imageView = new ImageView(this);
             imageView.setImageResource(link.getType().getIconResId());
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

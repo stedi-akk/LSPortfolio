@@ -46,10 +46,6 @@ public final class App extends Application {
         instance.isResumed = false;
     }
 
-    public static boolean isResumed() {
-        return instance.isResumed;
-    }
-
     private void executePendingRunnables() {
         while (!pendingRunnables.isEmpty())
             handler.post(pendingRunnables.pollFirst());
