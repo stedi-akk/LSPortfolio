@@ -3,6 +3,7 @@ package com.stedi.lsportfolio.ui.other;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,13 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.other.Utils;
 
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
-    public interface OnResult<Result> {
-        void onResult(Exception exception, Result result);
-    }
-
     protected abstract Result doInBackground() throws Exception;
 
     @Override
@@ -25,6 +21,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
         setRetainInstance(true);
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         ProgressDialog dialog = new ProgressDialog(getActivity());
@@ -66,7 +63,6 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     }
 
     public void execute(Fragment fragment) {
-        setTargetFragment(fragment, 0);
         super.show(fragment.getFragmentManager(), getClass().getSimpleName());
         new Thread(this).start();
     }
@@ -85,14 +81,12 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
 
     private void onAfterExecute(final Exception exception, final Result result) {
         App.postOnResume(new Runnable() {
-            @SuppressWarnings("unchecked")
             @Override
             public void run() {
-                Fragment fragment = getTargetFragment();
-                if (fragment != null && fragment instanceof OnResult)
-                    ((OnResult<Result>) fragment).onResult(exception, result);
+                if (exception != null)
+                    App.getBus().post(exception);
                 else
-                    Utils.showToast("fail here");
+                    App.getBus().post(result);
                 dismiss();
             }
         });

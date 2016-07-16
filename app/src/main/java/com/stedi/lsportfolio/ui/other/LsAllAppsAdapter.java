@@ -26,7 +26,7 @@ public class LsAllAppsAdapter extends ArrayAdapter<LsApp> {
             convertView.setTag(new ViewHolder(convertView));
         }
         convertView.setBackgroundResource(position % 2 == 0 ?
-                R.drawable.default_selector_on_grey : R.drawable.default_selector_on_white);
+                R.drawable.activated_on_grey : R.drawable.activated_on_white);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         LsApp app = getItem(position);
         Picasso.with(getContext()).load(app.getIconUrl()).into(holder.imageView);
