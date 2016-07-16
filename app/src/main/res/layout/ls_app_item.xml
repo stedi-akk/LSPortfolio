@@ -3,20 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="24dp">
+    android:paddingBottom="24dp"
+    android:paddingLeft="48dp"
+    android:paddingRight="48dp"
+    android:paddingTop="24dp">
 
     <ImageView
         android:id="@+id/ls_app_item_iv"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp" />
+        android:layout_marginRight="48dp" />
 
     <TextView
         android:id="@+id/ls_app_item_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:ellipsize="end"
         android:gravity="center_vertical"
+        android:maxLines="3"
         android:textColor="@color/black"
         android:textSize="@dimen/text_large" />
 

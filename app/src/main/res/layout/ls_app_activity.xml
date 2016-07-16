@@ -20,8 +20,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="24dp"
-                android:paddingLeft="48dp"
-                android:paddingRight="48dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
                 android:paddingTop="24dp">
 
                 <LinearLayout
@@ -39,7 +39,9 @@
                         android:id="@+id/ls_app_activity_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:ellipsize="end"
                         android:gravity="bottom"
+                        android:maxLines="3"
                         android:paddingBottom="8dp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_large" />
@@ -61,20 +63,22 @@
                 android:id="@+id/ls_app_activity_pager"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/ls_app_screen_height"
+                android:layout_marginBottom="24dp"
                 android:clipToPadding="false"
-                android:visibility="gone"
                 android:overScrollMode="never"
-                android:paddingLeft="48dp"
-                android:paddingRight="48dp" />
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:visibility="gone" />
 
             <LinearLayout
+                android:id="@+id/ls_app_activity_bottom_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingLeft="48dp"
-                android:paddingRight="48dp"
-                android:paddingTop="24dp">
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:visibility="gone">
 
                 <View
                     style="@style/DefaultDivider"
@@ -82,10 +86,10 @@
 
                 <LinearLayout
                     android:id="@+id/ls_app_activity_stores_container"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="24dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:orientation="vertical" />
 
             </LinearLayout>
 

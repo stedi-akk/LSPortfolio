@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 
+// TODO custom
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
     protected abstract Result doInBackground() throws Exception;
 

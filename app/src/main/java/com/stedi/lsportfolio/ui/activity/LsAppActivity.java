@@ -17,6 +17,7 @@ import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
+// TODO screens borders
 public class LsAppActivity extends ToolbarActivity {
     public static final String INTENT_APP_KEY = "INTENT_APP_KEY";
 
@@ -85,8 +86,11 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillStoreLinks() {
+        if (app.getStoreLinks().size() == 0)
+            return;
         boolean isSw600Dp = Utils.isSw600dp();
         int margin = (int) Utils.dp2px(24);
+        findViewById(R.id.ls_app_activity_bottom_container).setVisibility(View.VISIBLE);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
         container.setOrientation(isSw600Dp ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
         for (int i = 0; i < app.getStoreLinks().size(); i++) {

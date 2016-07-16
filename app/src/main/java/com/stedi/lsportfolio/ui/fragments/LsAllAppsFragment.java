@@ -26,6 +26,7 @@ import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
+// TODO catch wipe bug
 // TODO toast on swipe
 // TODO update button on empty view
 public class LsAllAppsFragment extends Fragment implements

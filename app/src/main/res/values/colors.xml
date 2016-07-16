@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_color">#5db88c</color>
+    <color name="main_color">#4dc88f</color>
     <color name="default_selector">#73dfab</color>
     <color name="error">#d50000</color>
 
