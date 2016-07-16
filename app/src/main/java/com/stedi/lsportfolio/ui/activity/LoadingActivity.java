@@ -32,7 +32,6 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Override
     public void run() {
         try {
-            Utils.throwOnNoNetwork();
             final ResponseLsAllApps response = Server.requestLsAllApps();
             App.postOnResume(new Runnable() {
                 @Override

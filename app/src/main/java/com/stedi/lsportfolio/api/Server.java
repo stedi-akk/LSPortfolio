@@ -1,5 +1,7 @@
 package com.stedi.lsportfolio.api;
 
+import com.stedi.lsportfolio.other.Utils;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -25,11 +27,13 @@ public class Server {
     }
 
     public static ResponseLsAllApps requestLsAllApps() throws Exception {
+        Utils.throwOnNoNetwork();
         Call<ResponseLsAllApps> call = Server.with(RequestLsAllApps.class).get();
         return call.execute().body();
     }
 
     public static ResponseLsApp requestLsApp(long id) throws Exception {
+        Utils.throwOnNoNetwork();
         Call<ResponseLsApp> call = Server.with(RequestLsApp.class).get(id);
         return call.execute().body();
     }

@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.squareup.otto.Subscribe;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
+import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.api.ResponseLsApp;
 import com.stedi.lsportfolio.api.Server;
 import com.stedi.lsportfolio.model.LsAllApps;
@@ -24,11 +25,15 @@ import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
-public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private final String KEY_CHECKED_ITEM_POSITION = "KEY_CHECKED_ITEM_POSITION";
+    private final String KEY_LS_ALL_APPS_REQUESTED = "KEY_LS_ALL_APPS_REQUESTED";
 
     private ListView listView;
+    private View emptyView;
+    private View tryAgainBtn;
 
+    private boolean lsAllAppsRequested;
     private int checkedItemPosition = -1;
 
     @Override
@@ -43,14 +48,46 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         ToolbarActivity act = (ToolbarActivity) getActivity();
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);
         act.setToolbarTitle(R.string.apps);
-        listView = (ListView) inflater.inflate(R.layout.ls_all_apps_fragment, container, false);
-        listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
-        if (savedInstanceState != null)
+
+        if (savedInstanceState != null) {
             checkedItemPosition = savedInstanceState.getInt(KEY_CHECKED_ITEM_POSITION);
+            lsAllAppsRequested = savedInstanceState.getBoolean(KEY_LS_ALL_APPS_REQUESTED);
+        }
+
+        View root = inflater.inflate(R.layout.ls_all_apps_fragment, container, false);
+        listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
+        emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
+        tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again);
+        tryAgainBtn.setOnClickListener(this);
+
+        if (LsAllApps.getInstance().getApps() == null) {
+            tryAgainBtn.setVisibility(View.VISIBLE);
+            if (!lsAllAppsRequested) {
+                lsAllAppsRequested = true;
+                requestLsAllApps();
+            }
+        } else {
+            fillListView();
+        }
+
+        return root;
+    }
+
+    private void requestLsAllApps() {
+        new AsyncDialog<ResponseLsAllApps>() {
+            @Override
+            protected ResponseLsAllApps doInBackground() throws Exception {
+                return Server.requestLsAllApps();
+            }
+        }.execute(this);
+    }
+
+    private void fillListView() {
+        listView.setEmptyView(emptyView);
+        listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
         if (checkedItemPosition != -1)
             listView.setItemChecked(checkedItemPosition, true);
         listView.setOnItemClickListener(this);
-        return listView;
     }
 
     @Override
@@ -60,18 +97,30 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
         new AsyncDialog<ResponseLsApp>() {
             @Override
             protected ResponseLsApp doInBackground() throws Exception {
-                Utils.throwOnNoNetwork();
                 return Server.requestLsApp(app.getId());
             }
         }.execute(this);
     }
 
+    @Override
+    public void onClick(View v) {
+        requestLsAllApps();
+    }
+
     @Subscribe
-    public void onResponse(ResponseLsApp response) {
+    public void onResponseLsApp(ResponseLsApp response) {
         Intent intent = new Intent(getActivity(), LsAppActivity.class);
         intent.putExtra(LsAppActivity.INTENT_APP_KEY, response.getApp());
         startActivity(intent);
         dropCheckedItem();
+    }
+
+    @Subscribe
+    public void onResponseLsAllApps(ResponseLsAllApps response) {
+        LsAllApps.getInstance().setApps(response.getApps());
+        tryAgainBtn.setVisibility(View.GONE);
+        lsAllAppsRequested = false;
+        fillListView();
     }
 
     @Subscribe
@@ -88,6 +137,7 @@ public class LsAllAppsFragment extends Fragment implements AdapterView.OnItemCli
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_CHECKED_ITEM_POSITION, checkedItemPosition);
+        outState.putBoolean(KEY_LS_ALL_APPS_REQUESTED, lsAllAppsRequested);
     }
 
     @Override
