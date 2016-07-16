@@ -18,6 +18,8 @@ import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
 // TODO screens borders
+// TODO finish
+// TODO store icons on tablets gravity
 public class LsAppActivity extends ToolbarActivity {
     public static final String INTENT_APP_KEY = "INTENT_APP_KEY";
 

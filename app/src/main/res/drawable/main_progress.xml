@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:innerRadius="20dp"
     android:shape="ring"
-    android:thickness="5dp"
+    android:thickness="8dp"
     android:useLevel="false">
     <gradient
         android:endColor="@color/main_color"

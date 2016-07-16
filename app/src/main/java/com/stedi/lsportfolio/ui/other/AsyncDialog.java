@@ -1,37 +1,44 @@
 package com.stedi.lsportfolio.ui.other;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 
-// TODO custom
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
     protected abstract Result doInBackground() throws Exception;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AsyncDialogTheme);
         setRetainInstance(true);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ProgressDialog dialog = new ProgressDialog(getActivity());
-        dialog.setMessage(getString(R.string.please_wait));
-        dialog.setIndeterminate(true);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         setCancelable(false);
         return dialog;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.async_dialog, container, false);
     }
 
     @Override

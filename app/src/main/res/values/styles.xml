@@ -8,6 +8,12 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
+    <style name="AsyncDialogTheme" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="ToolbarShadow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>

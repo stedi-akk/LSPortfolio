@@ -57,8 +57,8 @@ public class Utils {
     public static void loadWithPicasso(String url, ImageView iv) {
         Picasso.with(App.getContext())
                 .load(url)
-                .placeholder(R.drawable.picasso_placeholder)
-                .error(R.drawable.picasso_error)
+                .placeholder(R.drawable.main_progress)
+                .error(R.drawable.alert)
                 .into(iv);
     }
 

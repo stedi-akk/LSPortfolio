@@ -11,6 +11,8 @@ import java.util.LinkedList;
 // TODO ic_launcher
 // TODO layout optimization (text-image, relative, etc)
 // TODO own rules
+// TODO finish ui for tablets
+// TODO correct alert icon size
 public final class App extends Application {
     private static App instance;
 
