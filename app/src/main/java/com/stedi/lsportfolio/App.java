@@ -8,8 +8,6 @@ import com.squareup.otto.Bus;
 
 import java.util.LinkedList;
 
-// TODO all apps click test
-// TODO butterknife
 public final class App extends Application {
     private static App instance;
 
