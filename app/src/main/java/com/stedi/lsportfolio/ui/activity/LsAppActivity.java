@@ -17,8 +17,6 @@ import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
-// TODO finish
-// TODO store icons on tablets gravity
 public class LsAppActivity extends ToolbarActivity {
     public static final String INTENT_APP_KEY = "INTENT_APP_KEY";
 
@@ -30,9 +28,9 @@ public class LsAppActivity extends ToolbarActivity {
         app = (LsAppDetailed) getIntent().getSerializableExtra(INTENT_APP_KEY);
         if (app == null) {
             finish();
-            Utils.showToast("fail here");
+            Utils.showToast(R.string.unknown_error);
+            return;
         }
-
         initLayout();
         fillMainInfo();
         fillViewPager();
@@ -89,15 +87,19 @@ public class LsAppActivity extends ToolbarActivity {
     private void fillStoreLinks() {
         if (app.getStoreLinks().size() == 0)
             return;
+
         boolean isSw600Dp = Utils.isSw600dp();
         int margin = (int) Utils.dp2px(24);
+
         findViewById(R.id.ls_app_activity_bottom_container).setVisibility(View.VISIBLE);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
         container.setOrientation(isSw600Dp ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+
         for (int i = 0; i < app.getStoreLinks().size(); i++) {
             final StoreLink link = app.getStoreLinks().get(i);
             if (link.getType() == null)
                 continue;
+
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(link.getType().getIconResId());
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +109,11 @@ public class LsAppActivity extends ToolbarActivity {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.getUrl())));
                     } catch (ActivityNotFoundException ex) {
                         ex.printStackTrace();
+                        Utils.showToast(R.string.unknown_error);
                     }
                 }
             });
+
             if (i < app.getStoreLinks().size() - 1) {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -119,6 +123,7 @@ public class LsAppActivity extends ToolbarActivity {
                     params.bottomMargin = margin;
                 imageView.setLayoutParams(params);
             }
+
             container.addView(imageView);
         }
     }

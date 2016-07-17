@@ -12,6 +12,7 @@ import java.util.LinkedList;
 // TODO layout optimization (text-image, relative, etc)
 // TODO own rules
 // TODO finish ui for tablets
+// TODO all apps click test
 public final class App extends Application {
     private static App instance;
 
