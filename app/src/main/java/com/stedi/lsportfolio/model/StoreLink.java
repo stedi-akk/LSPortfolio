@@ -11,7 +11,7 @@ public class StoreLink implements Serializable {
     public enum Type {
         GOOGLE_PLAY(R.drawable.img_google_play_badge, "play.google.com/"),
         APP_STORE(R.drawable.img_app_store_badge, "itunes.apple.com/"),
-        WINDOWS_STORE(R.drawable.img_win_store_badge, "windowsphone.com/", "microsoft.com/");
+        WIN_STORE(R.drawable.img_win_store_badge, "windowsphone.com/", "microsoft.com/");
 
         private final int iconResId;
         private final String[] urls;
@@ -34,7 +34,7 @@ public class StoreLink implements Serializable {
         if (type == null) {
             for (Type t : Type.values()) {
                 for (String tUrl : t.urls) {
-                    if (url.contains(tUrl))
+                    if (getUrl().contains(tUrl))
                         type = t;
                 }
             }
