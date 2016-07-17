@@ -6,12 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 
-// TODO progress and error handle
 public class ContactFragment extends Fragment {
     @Nullable
     @Override
@@ -20,9 +20,19 @@ public class ContactFragment extends Fragment {
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.BACK);
         act.setToolbarTitle(R.string.contact);
 
-        WebView webView = (WebView) inflater.inflate(R.layout.contact_fragment, container, false);
-        webView.loadUrl("http://public.looksoft.pl/portfolio/kontakt.html");
+        View root = inflater.inflate(R.layout.contact_fragment, container, false);
+        WebView webView = (WebView) root.findViewById(R.id.contact_fragment_web_view);
+        webView.getSettings().setJavaScriptEnabled(true);
 
-        return webView;
+        final View progressView = root.findViewById(R.id.contact_fragment_progress);
+        webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                if (progress >= 100)
+                    progressView.setVisibility(View.GONE);
+            }
+        });
+
+        webView.loadUrl("http://public.looksoft.pl/portfolio/kontakt.html");
+        return root;
     }
 }
