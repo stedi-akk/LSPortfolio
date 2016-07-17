@@ -8,8 +8,6 @@ import com.squareup.otto.Bus;
 
 import java.util.LinkedList;
 
-// TODO ic_launcher
-// TODO layout optimization (text-image, relative, etc)
 // TODO own rules
 // TODO finish ui for tablets
 // TODO all apps click test

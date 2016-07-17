@@ -24,7 +24,6 @@
         android:background="@color/main_color"
         android:clickable="true"
         android:orientation="vertical"
-        android:paddingBottom="40dp"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
         android:paddingTop="100dp">

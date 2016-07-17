@@ -40,7 +40,7 @@
 
                 <View
                     android:id="@+id/ls_app_activity_first_divider"
-                    style="@style/DefaultDivider"
+                    style="@style/MainDivider"
                     android:layout_below="@+id/ls_app_activity_icon"
                     android:layout_marginBottom="24dp"
                     android:layout_marginTop="24dp" />
@@ -75,7 +75,7 @@
                 android:visibility="gone">
 
                 <View
-                    style="@style/DefaultDivider"
+                    style="@style/MainDivider"
                     android:layout_marginBottom="24dp" />
 
                 <LinearLayout
