@@ -27,9 +27,7 @@ import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
 // TODO catch wipe bug
-// TODO toast on swipe
 // TODO tryagain button on empty view
-// TODO tryagain button style
 public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
         View.OnClickListener,
@@ -200,6 +198,7 @@ public class LsAllAppsFragment extends Fragment implements
         lsAllAppsRequested = false;
         fillListView();
         disableSwipeLayout();
+        Utils.showToast(R.string.list_updated);
     }
 
     @Subscribe

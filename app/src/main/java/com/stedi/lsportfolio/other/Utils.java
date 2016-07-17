@@ -63,8 +63,8 @@ public class Utils {
     public static void loadWithPicasso(String url, ImageView iv, Transformation transformation) {
         RequestCreator creator = Picasso.with(App.getContext())
                 .load(url)
-                .placeholder(R.drawable.static_progress)
-                .error(R.drawable.alert);
+                .placeholder(R.drawable.shape_static_progress)
+                .error(R.drawable.shape_alert);
         if (transformation != null)
             creator.transform(transformation);
         creator.into(iv);

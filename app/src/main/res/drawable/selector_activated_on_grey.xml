@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_activated="true" android:drawable="@color/default_selector" />
-    <item android:state_activated="false" android:drawable="@color/white" />
+    <item android:drawable="@color/default_selector" android:state_activated="true" />
+    <item android:drawable="@color/grey_light" android:state_activated="false" />
     <item android:drawable="@android:color/transparent" />
 </selector>

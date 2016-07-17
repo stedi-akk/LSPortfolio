@@ -7,4 +7,5 @@
     <string name="unknown_error">Nastąpił błąd</string>
     <string name="try_again">Ponów próbę</string>
     <string name="empty_list">Pusta lista</string>
+    <string name="list_updated">Lista zaktualizowana</string>
 </resources>
