@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ls_app_item_lr_padding">96dp</dimen>
+    <dimen name="ls_app_activity_lr_padding">64dp</dimen>
+</resources>

@@ -4,15 +4,15 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="24dp"
-    android:paddingLeft="48dp"
-    android:paddingRight="48dp"
+    android:paddingLeft="@dimen/ls_app_item_lr_padding"
+    android:paddingRight="@dimen/ls_app_item_lr_padding"
     android:paddingTop="24dp">
 
     <ImageView
         android:id="@+id/ls_app_item_iv"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginRight="48dp" />
+        android:layout_marginRight="@dimen/ls_app_item_lr_padding" />
 
     <TextView
         android:id="@+id/ls_app_item_tv"

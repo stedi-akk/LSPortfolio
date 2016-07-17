@@ -18,13 +18,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="24dp">
+                android:paddingBottom="24dp"
+                android:paddingLeft="@dimen/ls_app_activity_lr_padding"
+                android:paddingRight="@dimen/ls_app_activity_lr_padding"
+                android:paddingTop="24dp">
 
                 <ImageView
                     android:id="@+id/ls_app_activity_icon"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginRight="@dimen/ls_app_activity_lr_padding" />
 
                 <TextView
                     android:id="@+id/ls_app_activity_name"
@@ -60,8 +63,8 @@
                 android:layout_marginBottom="24dp"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
+                android:paddingLeft="@dimen/ls_app_activity_lr_padding"
+                android:paddingRight="@dimen/ls_app_activity_lr_padding"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -70,8 +73,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
+                android:paddingLeft="@dimen/ls_app_activity_lr_padding"
+                android:paddingRight="@dimen/ls_app_activity_lr_padding"
                 android:visibility="gone">
 
                 <View

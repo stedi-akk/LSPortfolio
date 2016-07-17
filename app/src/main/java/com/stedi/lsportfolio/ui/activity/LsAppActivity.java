@@ -89,7 +89,7 @@ public class LsAppActivity extends ToolbarActivity {
             return;
 
         boolean isSw600Dp = Utils.isSw600dp();
-        int margin = (int) Utils.dp2px(24);
+        int margin = (int) Utils.dp2px(24); // space between buttons
 
         findViewById(R.id.ls_app_activity_bottom_container).setVisibility(View.VISIBLE);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);

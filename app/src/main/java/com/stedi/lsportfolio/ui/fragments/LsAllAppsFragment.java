@@ -79,7 +79,7 @@ public class LsAllAppsFragment extends Fragment implements
 
         listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
         emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
-        tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again);
+        tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
         tryAgainBtn.setOnClickListener(this);
 
         if (LsAllApps.getInstance().getApps() == null) {
@@ -118,26 +118,6 @@ public class LsAllAppsFragment extends Fragment implements
     public void onStop() {
         super.onStop();
         App.getBus().unregister(this);
-    }
-
-    private void requestLsAllApps() {
-        new AsyncDialog<ResponseLsAllApps>() {
-            @Override
-            protected ResponseLsAllApps doInBackground() throws Exception {
-                return Server.requestLsAllApps();
-            }
-        }.execute(this);
-    }
-
-    private void fillListView() {
-        boolean empty = LsAllApps.getInstance().getApps().isEmpty();
-        swipeLayout.setEnabled(!empty);
-        tryAgainBtn.setVisibility(empty ? View.VISIBLE : View.GONE);
-        listView.setEmptyView(emptyView);
-        listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
-        if (checkedItemPosition != -1)
-            listView.setItemChecked(checkedItemPosition, true);
-        listView.setOnItemClickListener(this);
     }
 
     @Override
@@ -218,6 +198,26 @@ public class LsAllAppsFragment extends Fragment implements
         outState.putInt(KEY_CHECKED_ITEM_POSITION, checkedItemPosition);
         outState.putBoolean(KEY_LS_ALL_APPS_REQUESTED, lsAllAppsRequested);
         outState.putBoolean(KEY_IS_SWIPE_REFRESHING, swipeLayout != null ? swipeLayout.isRefreshing() : isSwipeRefreshing);
+    }
+
+    private void requestLsAllApps() {
+        new AsyncDialog<ResponseLsAllApps>() {
+            @Override
+            protected ResponseLsAllApps doInBackground() throws Exception {
+                return Server.requestLsAllApps();
+            }
+        }.execute(this);
+    }
+
+    private void fillListView() {
+        boolean isEmpty = LsAllApps.getInstance().getApps().isEmpty();
+        swipeLayout.setEnabled(!isEmpty);
+        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        listView.setEmptyView(emptyView);
+        listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
+        if (checkedItemPosition != -1)
+            listView.setItemChecked(checkedItemPosition, true);
+        listView.setOnItemClickListener(this);
     }
 
     private void dropCheckedItem() {
