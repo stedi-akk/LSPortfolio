@@ -26,8 +26,6 @@ import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 
-// TODO catch wipe bug
-// TODO tryagain button on empty view
 public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
         View.OnClickListener,
@@ -132,7 +130,9 @@ public class LsAllAppsFragment extends Fragment implements
     }
 
     private void fillListView() {
-        swipeLayout.setEnabled(!LsAllApps.getInstance().getApps().isEmpty());
+        boolean empty = LsAllApps.getInstance().getApps().isEmpty();
+        swipeLayout.setEnabled(!empty);
+        tryAgainBtn.setVisibility(empty ? View.VISIBLE : View.GONE);
         listView.setEmptyView(emptyView);
         listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
         if (checkedItemPosition != -1)

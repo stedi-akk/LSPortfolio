@@ -19,27 +19,34 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/ls_all_apps_empty_view"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
-        android:text="@string/empty_list"
-        android:textSize="@dimen/text_medium"
-        android:visibility="invisible" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/ls_all_apps_try_again"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/selector_button"
-        android:padding="8dp"
-        android:text="@string/try_again"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_medium"
-        android:visibility="gone" />
+        <Button
+            android:id="@+id/ls_all_apps_try_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/selector_button"
+            android:padding="8dp"
+            android:text="@string/try_again"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_medium"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/ls_all_apps_empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/empty_list"
+            android:textSize="@dimen/text_medium"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 
 </FrameLayout>
