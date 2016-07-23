@@ -52,6 +52,8 @@ public class LsAllAppsFragment extends Fragment implements
     @Inject Api api;
     @Inject PendingRunnables pendingRunnables;
     @Inject LsAllApps allApps;
+    @Inject Utils utils;
+    @Inject LsAllAppsAdapter appsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class LsAllAppsFragment extends Fragment implements
         swipeLayout.setOnRefreshListener(this);
 
         listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
+        listView.setAdapter(appsAdapter);
         emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
         tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
         tryAgainBtn.setOnClickListener(this);
@@ -189,16 +192,13 @@ public class LsAllAppsFragment extends Fragment implements
         lsAllAppsRequested = false;
         fillListView();
         disableSwipeLayout();
-        Utils.showToast(R.string.list_updated);
+        utils.showToast(R.string.list_updated);
     }
 
     @Subscribe
     public void onException(Exception ex) {
         ex.printStackTrace();
-        if (ex instanceof NoNetworkException)
-            Utils.showToast(R.string.no_internet);
-        else
-            Utils.showToast(R.string.unknown_error);
+        utils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
         dropCheckedItem();
         disableSwipeLayout();
     }
@@ -225,7 +225,7 @@ public class LsAllAppsFragment extends Fragment implements
         swipeLayout.setEnabled(!isEmpty);
         tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         listView.setEmptyView(emptyView);
-        listView.setAdapter(new LsAllAppsAdapter(getActivity(), allApps.getApps()));
+        appsAdapter.setApps(allApps.getApps());
         if (checkedItemPosition != -1)
             listView.setItemChecked(checkedItemPosition, true);
         listView.setOnItemClickListener(this);

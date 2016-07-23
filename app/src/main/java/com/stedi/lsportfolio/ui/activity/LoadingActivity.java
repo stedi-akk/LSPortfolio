@@ -24,6 +24,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Inject Api api;
     @Inject PendingRunnables pendingRunnables;
     @Inject LsAllApps allApps;
+    @Inject Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +70,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Subscribe
     public void onException(Exception ex) {
         ex.printStackTrace();
-        if (ex instanceof NoNetworkException)
-            Utils.showToast(R.string.no_internet);
-        else
-            Utils.showToast(R.string.unknown_error);
+        utils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
         finish();
     }
 

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,24 +12,55 @@ import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class LsAllAppsAdapter extends ArrayAdapter<LsApp> {
-    public LsAllAppsAdapter(Context context, List<LsApp> apps) {
-        super(context, R.layout.ls_app_item, apps);
+import javax.inject.Inject;
+import javax.inject.Named;
+
+public class LsAllAppsAdapter extends BaseAdapter {
+    private final Context context;
+    private final Utils utils;
+
+    private List<LsApp> apps = new ArrayList<>();
+
+    @Inject
+    public LsAllAppsAdapter(@Named("ApplicationContext") Context context, Utils utils) {
+        this.context = context;
+        this.utils = utils;
+    }
+
+    public void setApps(List<LsApp> apps) {
+        this.apps = apps;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return apps.size();
+    }
+
+    @Override
+    public LsApp getItem(int position) {
+        return apps.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.ls_app_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.ls_app_item, parent, false);
             convertView.setTag(new ViewHolder(convertView));
         }
         convertView.setBackgroundResource(position % 2 == 0 ?
                 R.drawable.selector_activated_on_grey : R.drawable.selector_activated_on_white);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         LsApp app = getItem(position);
-        Utils.loadWithPicasso(app.getIconUrl(), holder.imageView);
+        utils.loadWithPicasso(app.getIconUrl(), holder.imageView);
         holder.textView.setText(app.getName());
         return convertView;
     }

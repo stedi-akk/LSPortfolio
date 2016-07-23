@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsAppDetailed;
 import com.stedi.lsportfolio.model.StoreLink;
@@ -17,18 +18,26 @@ import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
+import javax.inject.Inject;
+
+import dagger.Lazy;
+
 public class LsAppActivity extends ToolbarActivity {
     public static final String INTENT_APP_KEY = "INTENT_APP_KEY";
 
     private LsAppDetailed app;
 
+    @Inject Utils utils;
+    @Inject Lazy<LsAppScreenPagerAdapter> lazyScreensAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getInjector().inject(this);
         app = (LsAppDetailed) getIntent().getSerializableExtra(INTENT_APP_KEY);
         if (app == null) {
             finish();
-            Utils.showToast(R.string.unknown_error);
+            utils.showToast(R.string.unknown_error);
             return;
         }
         initLayout();
@@ -50,7 +59,7 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillMainInfo() {
-        Utils.loadWithPicasso(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_icon));
+        utils.loadWithPicasso(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_icon));
         ((TextView) findViewById(R.id.ls_app_activity_name)).setText(app.getName());
         ((TextView) findViewById(R.id.ls_app_activity_description)).setText(app.getDescription());
     }
@@ -63,7 +72,7 @@ public class LsAppActivity extends ToolbarActivity {
         BlockingViewPager pager = (BlockingViewPager) findViewById(R.id.ls_app_activity_pager);
         pager.setVisibility(View.VISIBLE);
 
-        float pageMargin = Utils.dp2px(24); // space between images
+        float pageMargin = utils.dp2px(24); // space between images
         pager.setPageMargin((int) pageMargin);
 
         float leftPadding = pager.getPaddingLeft();
@@ -81,15 +90,20 @@ public class LsAppActivity extends ToolbarActivity {
             pager.disableSwipe(true);
 
         pager.setOffscreenPageLimit((int) (3 / pageWidth));
-        pager.setAdapter(new LsAppScreenPagerAdapter(app.getGalleryUrls(), pageWidth));
+
+        LsAppScreenPagerAdapter adapter = lazyScreensAdapter.get();
+        adapter.setImgUrls(app.getGalleryUrls());
+        adapter.setPageWidth(pageWidth);
+
+        pager.setAdapter(adapter);
     }
 
     private void fillStoreLinks() {
         if (app.getStoreLinks().size() == 0)
             return;
 
-        boolean isSw600Dp = Utils.isSw600dp();
-        int margin = (int) Utils.dp2px(24); // space between buttons
+        boolean isSw600Dp = utils.isSw600dp();
+        int margin = (int) utils.dp2px(24); // space between buttons
 
         findViewById(R.id.ls_app_activity_bottom_container).setVisibility(View.VISIBLE);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
@@ -109,7 +123,7 @@ public class LsAppActivity extends ToolbarActivity {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.getUrl())));
                     } catch (ActivityNotFoundException ex) {
                         ex.printStackTrace();
-                        Utils.showToast(R.string.unknown_error);
+                        utils.showToast(R.string.unknown_error);
                     }
                 }
             });

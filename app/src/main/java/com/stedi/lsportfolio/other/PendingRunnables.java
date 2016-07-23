@@ -13,7 +13,7 @@ public final class PendingRunnables {
     private final LinkedList<Runnable> runnables = new LinkedList<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private boolean isAllowed;
+    private volatile boolean isAllowed;
 
     @Inject
     public PendingRunnables() {

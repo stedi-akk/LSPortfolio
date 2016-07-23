@@ -12,10 +12,12 @@ import retrofit2.http.Path;
 public class ApiImpl implements Api {
     private final String url;
     private final OkHttpClient client;
+    private final Utils utils;
 
-    public ApiImpl(String url, OkHttpClient client) {
+    public ApiImpl(String url, OkHttpClient client, Utils utils) {
         this.url = url;
         this.client = client;
+        this.utils = utils;
     }
 
     private interface RequestLsAllApps {
@@ -28,14 +30,14 @@ public class ApiImpl implements Api {
 
     @Override
     public ResponseLsAllApps requestLsAllApps() throws Exception {
-        Utils.throwOnNoNetwork();
+        utils.throwOnNoNetwork();
         Call<ResponseLsAllApps> call = createCall(RequestLsAllApps.class).get();
         return call.execute().body();
     }
 
     @Override
     public ResponseLsApp requestLsApp(long id) throws Exception {
-        Utils.throwOnNoNetwork();
+        utils.throwOnNoNetwork();
         Call<ResponseLsApp> call = createCall(RequestLsApp.class).get(id);
         return call.execute().body();
     }
