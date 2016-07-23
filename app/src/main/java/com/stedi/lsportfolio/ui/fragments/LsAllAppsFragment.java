@@ -51,6 +51,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Inject Bus bus;
     @Inject Api api;
     @Inject PendingRunnables pendingRunnables;
+    @Inject LsAllApps allApps;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class LsAllAppsFragment extends Fragment implements
         tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
         tryAgainBtn.setOnClickListener(this);
 
-        if (LsAllApps.getInstance().getApps() == null) {
+        if (allApps.getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
             if (!lsAllAppsRequested) {
@@ -182,7 +183,7 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Subscribe
     public void onResponseLsAllApps(ResponseLsAllApps response) {
-        LsAllApps.getInstance().setApps(response.getApps());
+        allApps.setApps(response.getApps());
         if (tryAgainBtn.getVisibility() == View.VISIBLE)
             tryAgainBtn.setVisibility(View.GONE);
         lsAllAppsRequested = false;
@@ -220,11 +221,11 @@ public class LsAllAppsFragment extends Fragment implements
     }
 
     private void fillListView() {
-        boolean isEmpty = LsAllApps.getInstance().getApps().isEmpty();
+        boolean isEmpty = allApps.getApps().isEmpty();
         swipeLayout.setEnabled(!isEmpty);
         tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         listView.setEmptyView(emptyView);
-        listView.setAdapter(new LsAllAppsAdapter(getActivity(), LsAllApps.getInstance().getApps()));
+        listView.setAdapter(new LsAllAppsAdapter(getActivity(), allApps.getApps()));
         if (checkedItemPosition != -1)
             listView.setItemChecked(checkedItemPosition, true);
         listView.setOnItemClickListener(this);

@@ -23,13 +23,14 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Inject Bus bus;
     @Inject Api api;
     @Inject PendingRunnables pendingRunnables;
+    @Inject LsAllApps allApps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.getInjector().inject(this);
         setContentView(R.layout.loading_activity);
-        if (LsAllApps.getInstance().getApps() != null) {
+        if (allApps.getApps() != null) {
             startDrawerActivity();
         } else if (savedInstanceState == null && loadingThread == null) {
             loadingThread = new Thread(this);
@@ -61,7 +62,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
 
     @Subscribe
     public void onResponse(ResponseLsAllApps response) {
-        LsAllApps.getInstance().setApps(response.getApps());
+        allApps.setApps(response.getApps());
         startDrawerActivity();
     }
 

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class PendingRunnables {
+public final class PendingRunnables {
     private final LinkedList<Runnable> runnables = new LinkedList<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
 

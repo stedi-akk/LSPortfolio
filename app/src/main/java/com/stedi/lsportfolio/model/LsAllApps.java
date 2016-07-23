@@ -2,18 +2,15 @@ package com.stedi.lsportfolio.model;
 
 import java.util.List;
 
-public final class LsAllApps {
-    private static LsAllApps instance;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
+public final class LsAllApps {
     private List<LsApp> apps;
 
-    private LsAllApps() {
-    }
-
-    public static LsAllApps getInstance() {
-        if (instance == null)
-            instance = new LsAllApps();
-        return instance;
+    @Inject
+    public LsAllApps() {
     }
 
     public void setApps(List<LsApp> apps) {
