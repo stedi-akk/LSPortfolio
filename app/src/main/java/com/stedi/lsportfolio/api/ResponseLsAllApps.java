@@ -4,7 +4,7 @@ import com.stedi.lsportfolio.model.LsApp;
 
 import java.util.List;
 
-public class ResponseLsAllApps {
+public class ResponseLsAllApps extends BaseResponse {
     private Data data;
 
     private class Data {

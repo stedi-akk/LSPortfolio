@@ -16,11 +16,15 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 @Module
 public class ApiModule {
-    @Provides @Named("ServerUrl") String provideServerUrl() {
+    @Provides
+    @Named("ServerUrl")
+    String provideServerUrl() {
         return "http://www.looksoft.pl";
     }
 
-    @Singleton @Provides OkHttpClient provideOkHttpClient() {
+    @Singleton
+    @Provides
+    OkHttpClient provideOkHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
@@ -31,7 +35,8 @@ public class ApiModule {
                 .build();
     }
 
-    @Provides Api provideApi(@Named("ServerUrl") String url, OkHttpClient client, Utils utils) {
+    @Provides
+    Api provideApi(@Named("ServerUrl") String url, OkHttpClient client, Utils utils) {
         return new ApiImpl(url, client, utils);
     }
 }

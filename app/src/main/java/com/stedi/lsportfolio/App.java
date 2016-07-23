@@ -20,6 +20,10 @@ public final class App extends Application {
                 .build();
     }
 
+    public static App getInstance() {
+        return instance;
+    }
+
     public static Injector getInjector() {
         return instance.injector;
     }

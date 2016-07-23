@@ -32,14 +32,14 @@ public class ApiImpl implements Api {
     public ResponseLsAllApps requestLsAllApps() throws Exception {
         utils.throwOnNoNetwork();
         Call<ResponseLsAllApps> call = createCall(RequestLsAllApps.class).get();
-        return call.execute().body();
+        return call.execute().body().validate();
     }
 
     @Override
     public ResponseLsApp requestLsApp(long id) throws Exception {
         utils.throwOnNoNetwork();
         Call<ResponseLsApp> call = createCall(RequestLsApp.class).get(id);
-        return call.execute().body();
+        return call.execute().body().validate();
     }
 
     private <T> T createCall(Class<T> service) {

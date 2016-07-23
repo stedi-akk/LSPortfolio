@@ -20,15 +20,20 @@ public class AppModule {
         this.app = app;
     }
 
-    @Provides @Named("ApplicationContext") Context provideContext() {
+    @Provides
+    @Named("ApplicationContext")
+    Context provideContext() {
         return app.getApplicationContext();
     }
 
-    @Singleton @Provides Bus provideBus() {
+    @Singleton
+    @Provides
+    Bus provideBus() {
         return new Bus();
     }
 
-    @Provides Picasso providePicasso(@Named("ApplicationContext") Context context) {
+    @Provides
+    Picasso providePicasso(@Named("ApplicationContext") Context context) {
         return Picasso.with(context);
     }
 }
