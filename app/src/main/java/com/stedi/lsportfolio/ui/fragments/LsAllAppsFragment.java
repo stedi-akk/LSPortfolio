@@ -11,12 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
+import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.api.ResponseLsApp;
-import com.stedi.lsportfolio.api.Server;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.NoNetworkException;
@@ -25,6 +26,8 @@ import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
+
+import javax.inject.Inject;
 
 public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
@@ -44,6 +47,9 @@ public class LsAllAppsFragment extends Fragment implements
     private boolean isSwipeRefreshing;
     private int checkedItemPosition = -1;
 
+    @Inject Bus bus;
+    @Inject Api api;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,8 @@ public class LsAllAppsFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        App.getInjector().inject(this);
+
         ToolbarActivity act = (ToolbarActivity) getActivity();
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);
         act.setToolbarTitle(R.string.apps);
@@ -99,7 +107,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        App.getBus().register(this);
+        bus.register(this);
     }
 
     @Override
@@ -117,7 +125,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Override
     public void onStop() {
         super.onStop();
-        App.getBus().unregister(this);
+        bus.unregister(this);
     }
 
     @Override
@@ -126,18 +134,18 @@ public class LsAllAppsFragment extends Fragment implements
             @Override
             public void run() {
                 try {
-                    final ResponseLsAllApps response = Server.requestLsAllApps();
+                    final ResponseLsAllApps response = api.requestLsAllApps();
                     App.postOnResume(new Runnable() {
                         @Override
                         public void run() {
-                            App.getBus().post(response);
+                            bus.post(response);
                         }
                     });
                 } catch (final Exception ex) {
                     App.postOnResume(new Runnable() {
                         @Override
                         public void run() {
-                            App.getBus().post(ex);
+                            bus.post(ex);
                         }
                     });
                 }
@@ -152,7 +160,7 @@ public class LsAllAppsFragment extends Fragment implements
         new AsyncDialog<ResponseLsApp>() {
             @Override
             protected ResponseLsApp doInBackground() throws Exception {
-                return Server.requestLsApp(app.getId());
+                return api.requestLsApp(app.getId());
             }
         }.execute(this);
     }
@@ -204,7 +212,7 @@ public class LsAllAppsFragment extends Fragment implements
         new AsyncDialog<ResponseLsAllApps>() {
             @Override
             protected ResponseLsAllApps doInBackground() throws Exception {
-                return Server.requestLsAllApps();
+                return api.requestLsAllApps();
             }
         }.execute(this);
     }

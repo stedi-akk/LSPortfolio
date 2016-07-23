@@ -12,11 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Bus;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 
+import javax.inject.Inject;
+
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
     protected abstract Result doInBackground() throws Exception;
+
+    private final Injections injections = new Injections();
+
+    public static class Injections {
+        @Inject Bus bus;
+
+        public Injections() {
+            App.getInjector().inject(this);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,9 +105,9 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
             @Override
             public void run() {
                 if (exception != null)
-                    App.getBus().post(exception);
+                    injections.bus.post(exception);
                 else
-                    App.getBus().post(result);
+                    injections.bus.post(result);
                 dismiss();
             }
         });

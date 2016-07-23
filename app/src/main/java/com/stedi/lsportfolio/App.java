@@ -4,32 +4,33 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
-import com.squareup.otto.Bus;
+import com.stedi.lsportfolio.di.components.DaggerInjector;
+import com.stedi.lsportfolio.di.components.Injector;
 
 import java.util.LinkedList;
 
 public final class App extends Application {
     private static App instance;
 
+    private Injector injector;
+
     private final LinkedList<Runnable> pendingRunnables = new LinkedList<>();
     private final Handler handler = new Handler();
-
-    private Bus bus;
     private boolean isResumed;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-        bus = new Bus();
+        injector = DaggerInjector.builder().build();
+    }
+
+    public static Injector getInjector() {
+        return instance.injector;
     }
 
     public static Context getContext() {
         return instance.getApplicationContext();
-    }
-
-    public static Bus getBus() {
-        return instance.bus;
     }
 
     public static void postOnResume(Runnable runnable) {
