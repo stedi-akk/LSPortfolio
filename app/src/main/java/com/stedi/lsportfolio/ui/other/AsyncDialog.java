@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.squareup.otto.Bus;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
+import com.stedi.lsportfolio.other.PendingRunnables;
 
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
 
     public static class Injections {
         @Inject Bus bus;
+        @Inject PendingRunnables pendingRunnables;
 
         public Injections() {
             App.getInjector().inject(this);
@@ -57,13 +59,13 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     @Override
     public void onResume() {
         super.onResume();
-        App.onResume();
+        injections.pendingRunnables.allow();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        App.onPause();
+        injections.pendingRunnables.forbid();
     }
 
     @Override
@@ -101,7 +103,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     }
 
     private void onAfterExecute(final Exception exception, final Result result) {
-        App.postOnResume(new Runnable() {
+        injections.pendingRunnables.post(new Runnable() {
             @Override
             public void run() {
                 if (exception != null)

@@ -12,6 +12,7 @@ import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.other.NoNetworkException;
+import com.stedi.lsportfolio.other.PendingRunnables;
 import com.stedi.lsportfolio.other.Utils;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
 
     @Inject Bus bus;
     @Inject Api api;
+    @Inject PendingRunnables pendingRunnables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     public void run() {
         try {
             final ResponseLsAllApps response = api.requestLsAllApps();
-            App.postOnResume(new Runnable() {
+            pendingRunnables.post(new Runnable() {
                 @Override
                 public void run() {
                     bus.post(response);
@@ -47,7 +49,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
                 }
             });
         } catch (final Exception ex) {
-            App.postOnResume(new Runnable() {
+            pendingRunnables.post(new Runnable() {
                 @Override
                 public void run() {
                     bus.post(ex);
@@ -82,13 +84,13 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onResume() {
         super.onResume();
-        App.onResume();
+        pendingRunnables.allow();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        App.onPause();
+        pendingRunnables.forbid();
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.stedi.lsportfolio.api.ResponseLsApp;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.NoNetworkException;
+import com.stedi.lsportfolio.other.PendingRunnables;
 import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
@@ -49,6 +50,7 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Inject Bus bus;
     @Inject Api api;
+    @Inject PendingRunnables pendingRunnables;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,13 +115,13 @@ public class LsAllAppsFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        App.onResume();
+        pendingRunnables.allow();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        App.onPause();
+        pendingRunnables.forbid();
     }
 
     @Override
@@ -135,14 +137,14 @@ public class LsAllAppsFragment extends Fragment implements
             public void run() {
                 try {
                     final ResponseLsAllApps response = api.requestLsAllApps();
-                    App.postOnResume(new Runnable() {
+                    pendingRunnables.post(new Runnable() {
                         @Override
                         public void run() {
                             bus.post(response);
                         }
                     });
                 } catch (final Exception ex) {
-                    App.postOnResume(new Runnable() {
+                    pendingRunnables.post(new Runnable() {
                         @Override
                         public void run() {
                             bus.post(ex);
