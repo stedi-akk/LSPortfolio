@@ -11,8 +11,8 @@ import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.model.LsAllApps;
+import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.NoNetworkException;
-import com.stedi.lsportfolio.other.PendingUiRunnables;
 import com.stedi.lsportfolio.other.Utils;
 
 import javax.inject.Inject;
@@ -22,7 +22,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
 
     @Inject Bus bus;
     @Inject Api api;
-    @Inject PendingUiRunnables pur;
+    @Inject CachedUiRunnables cur;
     @Inject LsAllApps allApps;
     @Inject Utils utils;
 
@@ -43,7 +43,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     public void run() {
         try {
             final ResponseLsAllApps response = api.requestLsAllApps();
-            pur.post(new Runnable() {
+            cur.post(new Runnable() {
                 @Override
                 public void run() {
                     bus.post(response);
@@ -51,7 +51,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
                 }
             });
         } catch (final Exception ex) {
-            pur.post(new Runnable() {
+            cur.post(new Runnable() {
                 @Override
                 public void run() {
                     bus.post(ex);
@@ -83,13 +83,13 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onResume() {
         super.onResume();
-        pur.postMode();
+        cur.postMode();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        pur.cachingMode();
+        cur.cachingMode();
     }
 
     @Override

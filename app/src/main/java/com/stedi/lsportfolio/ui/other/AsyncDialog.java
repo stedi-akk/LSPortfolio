@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.squareup.otto.Bus;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.other.PendingUiRunnables;
+import com.stedi.lsportfolio.other.CachedUiRunnables;
 
 import javax.inject.Inject;
 
@@ -35,7 +35,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
 
     public static class Injections {
         @Inject Bus bus;
-        @Inject PendingUiRunnables pur;
+        @Inject CachedUiRunnables cur;
 
         public Injections() {
             App.getInjector().inject(this);
@@ -68,13 +68,13 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     @Override
     public void onResume() {
         super.onResume();
-        injections.pur.postMode();
+        injections.cur.postMode();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        injections.pur.cachingMode();
+        injections.cur.cachingMode();
     }
 
     @Override
@@ -112,7 +112,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     }
 
     private void onAfterExecute(final Exception exception, final Result result) {
-        injections.pur.post(new Runnable() {
+        injections.cur.post(new Runnable() {
             @Override
             public void run() {
                 if (exception != null)
