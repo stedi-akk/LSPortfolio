@@ -21,7 +21,7 @@ import com.stedi.lsportfolio.api.ResponseLsApp;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.NoNetworkException;
-import com.stedi.lsportfolio.other.PendingRunnables;
+import com.stedi.lsportfolio.other.PendingUiRunnables;
 import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
@@ -50,7 +50,7 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Inject Bus bus;
     @Inject Api api;
-    @Inject PendingRunnables pendingRunnables;
+    @Inject PendingUiRunnables pur;
     @Inject LsAllApps allApps;
     @Inject Utils utils;
     @Inject LsAllAppsAdapter appsAdapter;
@@ -119,13 +119,13 @@ public class LsAllAppsFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        pendingRunnables.allow();
+        pur.postMode();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        pendingRunnables.forbid();
+        pur.cachingMode();
     }
 
     @Override
@@ -141,14 +141,14 @@ public class LsAllAppsFragment extends Fragment implements
             public void run() {
                 try {
                     final ResponseLsAllApps response = api.requestLsAllApps();
-                    pendingRunnables.post(new Runnable() {
+                    pur.post(new Runnable() {
                         @Override
                         public void run() {
                             bus.post(response);
                         }
                     });
                 } catch (final Exception ex) {
-                    pendingRunnables.post(new Runnable() {
+                    pur.post(new Runnable() {
                         @Override
                         public void run() {
                             bus.post(ex);

@@ -22,7 +22,7 @@ public final class Utils {
     private final Context context;
     private final Picasso picasso;
 
-    private Toast singleToast;
+    private Toast lastToast; // for closing existing toast
 
     @Inject
     public Utils(@Named("ApplicationContext") Context context, Picasso picasso) {
@@ -39,10 +39,10 @@ public final class Utils {
     }
 
     public void showToast(CharSequence text) {
-        if (singleToast != null)
-            singleToast.cancel();
-        singleToast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-        singleToast.show();
+        if (lastToast != null)
+            lastToast.cancel();
+        lastToast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+        lastToast.show();
     }
 
     public float dp2px(float dp) {

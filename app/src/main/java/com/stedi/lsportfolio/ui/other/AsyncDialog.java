@@ -15,18 +15,27 @@ import android.view.ViewGroup;
 import com.squareup.otto.Bus;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
-import com.stedi.lsportfolio.other.PendingRunnables;
+import com.stedi.lsportfolio.other.PendingUiRunnables;
 
 import javax.inject.Inject;
 
+/**
+ * For doing background operation with DialogFragment, and posting result of this operation with Bus
+ *
+ * @param <Result> type of result
+ */
 public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
+    /**
+     * @return type of result
+     * @throws Exception if any (will be posted with Bus)
+     */
     protected abstract Result doInBackground() throws Exception;
 
     private final Injections injections = new Injections();
 
     public static class Injections {
         @Inject Bus bus;
-        @Inject PendingRunnables pendingRunnables;
+        @Inject PendingUiRunnables pur;
 
         public Injections() {
             App.getInjector().inject(this);
@@ -59,13 +68,13 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     @Override
     public void onResume() {
         super.onResume();
-        injections.pendingRunnables.allow();
+        injections.pur.postMode();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        injections.pendingRunnables.forbid();
+        injections.pur.cachingMode();
     }
 
     @Override
@@ -103,7 +112,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     }
 
     private void onAfterExecute(final Exception exception, final Result result) {
-        injections.pendingRunnables.post(new Runnable() {
+        injections.pur.post(new Runnable() {
             @Override
             public void run() {
                 if (exception != null)

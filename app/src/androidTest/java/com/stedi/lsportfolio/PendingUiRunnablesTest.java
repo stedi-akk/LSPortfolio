@@ -2,20 +2,20 @@ package com.stedi.lsportfolio;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.stedi.lsportfolio.other.PendingRunnables;
+import com.stedi.lsportfolio.other.PendingUiRunnables;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class PendingRunnablesTest {
+public class PendingUiRunnablesTest {
     private final Object lock = new Object();
-    private final PendingRunnables pendingRunnables = new PendingRunnables();
+    private final PendingUiRunnables pur = new PendingUiRunnables();
 
     @Test
-    public void afterAllow() {
-        pendingRunnables.allow();
-        pendingRunnables.post(new Runnable() {
+    public void afterPostMode() {
+        pur.postMode();
+        pur.post(new Runnable() {
             @Override
             public void run() {
                 notifyTest();
@@ -25,14 +25,14 @@ public class PendingRunnablesTest {
     }
 
     @Test
-    public void beforeAllow() {
-        pendingRunnables.post(new Runnable() {
+    public void beforePostMode() {
+        pur.post(new Runnable() {
             @Override
             public void run() {
                 notifyTest();
             }
         });
-        pendingRunnables.allow();
+        pur.postMode();
         waitTest();
     }
 
@@ -47,6 +47,11 @@ public class PendingRunnablesTest {
     }
 
     private void notifyTest() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         synchronized (lock) {
             lock.notify();
         }

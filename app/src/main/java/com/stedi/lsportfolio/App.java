@@ -20,6 +20,9 @@ public final class App extends Application {
                 .build();
     }
 
+    /**
+     * For testing purpose
+     */
     public static App getInstance() {
         return instance;
     }

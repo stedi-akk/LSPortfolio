@@ -21,11 +21,13 @@ public class ApiImpl implements Api {
     }
 
     private interface RequestLsAllApps {
-        @GET("/api/main") Call<ResponseLsAllApps> get();
+        @GET("/api/main")
+        Call<ResponseLsAllApps> get();
     }
 
     private interface RequestLsApp {
-        @GET("/api/product/{id}") Call<ResponseLsApp> get(@Path("id") long id);
+        @GET("/api/product/{id}")
+        Call<ResponseLsApp> get(@Path("id") long id);
     }
 
     @Override

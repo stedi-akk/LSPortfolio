@@ -34,6 +34,9 @@ public class LsAppScreenPagerAdapter extends PagerAdapter {
         this.imgUrls = imgUrls;
     }
 
+    /**
+     * For getPageWidth()
+     */
     public void setPageWidth(float pageWidth) {
         this.pageWidth = pageWidth;
     }

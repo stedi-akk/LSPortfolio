@@ -80,7 +80,7 @@ public class LsAppActivity extends ToolbarActivity {
 
         int lsAppScreenWidth = getResources().getDimensionPixelSize(R.dimen.ls_app_screen_width); // image width
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        float pageWidth = 1 / ((screenWidth - leftPadding - rightPadding) / lsAppScreenWidth); // for adapter getPageWidth()
+        float pageWidth = 1 / ((screenWidth - leftPadding - rightPadding) / lsAppScreenWidth); // adapter getPageWidth()
 
         float fullPagerWidth = (lsAppScreensCount * lsAppScreenWidth) +
                 leftPadding + rightPadding +
