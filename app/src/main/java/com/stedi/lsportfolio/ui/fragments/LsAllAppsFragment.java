@@ -22,6 +22,7 @@ import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.NoNetworkException;
+import com.stedi.lsportfolio.other.SimpleObserver;
 import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
@@ -30,7 +31,6 @@ import com.stedi.lsportfolio.ui.other.RxDialog;
 
 import javax.inject.Inject;
 
-import rx.Observer;
 import rx.schedulers.Schedulers;
 
 public class LsAllAppsFragment extends Fragment implements
@@ -140,11 +140,7 @@ public class LsAllAppsFragment extends Fragment implements
     public void onRefresh() {
         api.requestLsAllApps()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<ResponseLsAllApps>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
+                .subscribe(new SimpleObserver<ResponseLsAllApps>() {
                     @Override
                     public void onError(Throwable e) {
                         cur.post(() -> bus.post(e));

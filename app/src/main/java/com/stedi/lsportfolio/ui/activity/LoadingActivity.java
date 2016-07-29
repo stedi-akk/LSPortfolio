@@ -13,11 +13,11 @@ import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.NoNetworkException;
+import com.stedi.lsportfolio.other.SimpleObserver;
 import com.stedi.lsportfolio.other.Utils;
 
 import javax.inject.Inject;
 
-import rx.Observer;
 import rx.schedulers.Schedulers;
 
 public class LoadingActivity extends AppCompatActivity {
@@ -40,11 +40,7 @@ public class LoadingActivity extends AppCompatActivity {
             isLoading = true;
             api.requestLsAllApps()
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Observer<ResponseLsAllApps>() {
-                        @Override
-                        public void onCompleted() {
-                        }
-
+                    .subscribe(new SimpleObserver<ResponseLsAllApps>() {
                         @Override
                         public void onError(Throwable e) {
                             cur.post(() -> bus.post(e));

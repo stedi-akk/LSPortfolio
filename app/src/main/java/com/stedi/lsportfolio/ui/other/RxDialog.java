@@ -14,11 +14,11 @@ import com.squareup.otto.Bus;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
+import com.stedi.lsportfolio.other.SimpleObserver;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Observer;
 import rx.schedulers.Schedulers;
 
 /**
@@ -93,11 +93,7 @@ public class RxDialog<T> extends DialogFragment {
         super.show(fragment.getFragmentManager(), getClass().getSimpleName());
         onBackground.getObservable()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<T>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
+                .subscribe(new SimpleObserver<T>() {
                     @Override
                     public void onError(Throwable e) {
                         injections.cur.post(() -> {
