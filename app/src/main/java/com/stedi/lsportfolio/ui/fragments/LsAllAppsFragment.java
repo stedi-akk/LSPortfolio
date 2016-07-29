@@ -25,14 +25,16 @@ import com.stedi.lsportfolio.other.NoNetworkException;
 import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
-import com.stedi.lsportfolio.ui.other.AsyncDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
+import com.stedi.lsportfolio.ui.other.RxDialog;
 
 import javax.inject.Inject;
 
+import rx.Observer;
+import rx.schedulers.Schedulers;
+
 public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
-        View.OnClickListener,
         SwipeRefreshLayout.OnRefreshListener {
 
     private final String KEY_CHECKED_ITEM_POSITION = "KEY_CHECKED_ITEM_POSITION";
@@ -80,28 +82,28 @@ public class LsAllAppsFragment extends Fragment implements
             isSwipeRefreshing = swipeLayout.isRefreshing();
         swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.ls_all_apps_list_swipe);
         swipeLayout.setColorSchemeColors(getResources().getColor(R.color.main_color));
-        if (isSwipeRefreshing) {
-            swipeLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeLayout.setRefreshing(true);
-                }
-            });
-        }
+        if (isSwipeRefreshing)
+            swipeLayout.post(() -> swipeLayout.setRefreshing(true));
         swipeLayout.setOnRefreshListener(this);
 
         listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
         listView.setAdapter(appsAdapter);
         emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
         tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
-        tryAgainBtn.setOnClickListener(this);
+        tryAgainBtn.setOnClickListener(v -> {
+            new RxDialog<ResponseLsAllApps>()
+                    .with(() -> api.requestLsAllApps())
+                    .execute(this);
+        });
 
         if (allApps.getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
             if (!lsAllAppsRequested) {
                 lsAllAppsRequested = true;
-                requestLsAllApps();
+                new RxDialog<ResponseLsAllApps>()
+                        .with(() -> api.requestLsAllApps())
+                        .execute(this);
             }
         } else {
             fillListView();
@@ -136,44 +138,32 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Override
     public void onRefresh() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final ResponseLsAllApps response = api.requestLsAllApps();
-                    cur.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bus.post(response);
-                        }
-                    });
-                } catch (final Exception ex) {
-                    cur.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bus.post(ex);
-                        }
-                    });
-                }
-            }
-        }).start();
+        api.requestLsAllApps()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<ResponseLsAllApps>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        cur.post(() -> bus.post(e));
+                    }
+
+                    @Override
+                    public void onNext(ResponseLsAllApps responseLsAllApps) {
+                        cur.post(() -> bus.post(responseLsAllApps));
+                    }
+                });
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         checkedItemPosition = ((ListView) parent).getCheckedItemPosition();
-        final LsApp app = (LsApp) parent.getItemAtPosition(position);
-        new AsyncDialog<ResponseLsApp>() {
-            @Override
-            protected ResponseLsApp doInBackground() throws Exception {
-                return api.requestLsApp(app.getId());
-            }
-        }.execute(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        requestLsAllApps();
+        LsApp app = (LsApp) parent.getItemAtPosition(position);
+        new RxDialog<ResponseLsApp>()
+                .with(() -> api.requestLsApp(app.getId()))
+                .execute(this);
     }
 
     @Subscribe
@@ -211,15 +201,6 @@ public class LsAllAppsFragment extends Fragment implements
         outState.putBoolean(KEY_IS_SWIPE_REFRESHING, swipeLayout != null ? swipeLayout.isRefreshing() : isSwipeRefreshing);
     }
 
-    private void requestLsAllApps() {
-        new AsyncDialog<ResponseLsAllApps>() {
-            @Override
-            protected ResponseLsAllApps doInBackground() throws Exception {
-                return api.requestLsAllApps();
-            }
-        }.execute(this);
-    }
-
     private void fillListView() {
         boolean isEmpty = allApps.getApps().isEmpty();
         swipeLayout.setEnabled(!isEmpty);
@@ -237,12 +218,9 @@ public class LsAllAppsFragment extends Fragment implements
     }
 
     private void disableSwipeLayout() {
-        swipeLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                if (swipeLayout.isRefreshing())
-                    swipeLayout.setRefreshing(false);
-            }
+        swipeLayout.post(() -> {
+            if (swipeLayout.isRefreshing())
+                swipeLayout.setRefreshing(false);
         });
     }
 }

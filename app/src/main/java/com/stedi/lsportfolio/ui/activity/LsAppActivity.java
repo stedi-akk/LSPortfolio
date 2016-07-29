@@ -49,12 +49,7 @@ public class LsAppActivity extends ToolbarActivity {
     private void initLayout() {
         setContentView(R.layout.ls_app_activity);
         setToolbarIcon(ToolbarIcon.BACK);
-        setToolbarIconListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        setToolbarIconListener(v -> finish());
         setToolbarTitle(app.getName());
     }
 
@@ -110,21 +105,18 @@ public class LsAppActivity extends ToolbarActivity {
         container.setOrientation(isSw600Dp ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
 
         for (int i = 0; i < app.getStoreLinks().size(); i++) {
-            final StoreLink link = app.getStoreLinks().get(i);
+            StoreLink link = app.getStoreLinks().get(i);
             if (link.getType() == null)
                 continue;
 
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(link.getType().getIconResId());
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.getUrl())));
-                    } catch (ActivityNotFoundException ex) {
-                        ex.printStackTrace();
-                        utils.showToast(R.string.unknown_error);
-                    }
+            imageView.setOnClickListener(v -> {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.getUrl())));
+                } catch (ActivityNotFoundException ex) {
+                    ex.printStackTrace();
+                    utils.showToast(R.string.unknown_error);
                 }
             });
 

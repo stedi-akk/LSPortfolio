@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +17,21 @@ import com.stedi.lsportfolio.other.CachedUiRunnables;
 
 import javax.inject.Inject;
 
-/**
- * For doing background operation with DialogFragment, and posting result of this operation with Bus
- *
- * @param <Result> type of result
- */
-public abstract class AsyncDialog<Result> extends DialogFragment implements Runnable {
-    /**
-     * @return type of result
-     * @throws Exception if any (will be posted with Bus)
-     */
-    protected abstract Result doInBackground() throws Exception;
+import rx.Observable;
+import rx.Observer;
+import rx.schedulers.Schedulers;
 
+/**
+ * For doing background operation with RxJava, and posting result of this operation with Bus
+ */
+public class RxDialog<T> extends DialogFragment {
     private final Injections injections = new Injections();
+
+    private OnBackground<T> onBackground;
+
+    public interface OnBackground<T> {
+        Observable<T> getObservable();
+    }
 
     public static class Injections {
         @Inject Bus bus;
@@ -45,7 +45,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.AsyncDialogTheme);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.RxDialogTheme);
         setRetainInstance(true);
     }
 
@@ -62,7 +62,7 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.async_dialog, container, false);
+        return inflater.inflate(R.layout.rx_dialog, container, false);
     }
 
     @Override
@@ -84,43 +84,35 @@ public abstract class AsyncDialog<Result> extends DialogFragment implements Runn
         super.onDestroyView();
     }
 
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        throw new RuntimeException("Use execute() to show dialog");
-    }
-
-    @Override
-    public int show(FragmentTransaction transaction, String tag) {
-        throw new RuntimeException("Use execute() to show dialog");
+    public RxDialog with(OnBackground<T> onBackground) {
+        this.onBackground = onBackground;
+        return this;
     }
 
     public void execute(Fragment fragment) {
         super.show(fragment.getFragmentManager(), getClass().getSimpleName());
-        new Thread(this).start();
-    }
+        onBackground.getObservable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<T>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-    @Override
-    public void run() {
-        Result result = null;
-        Exception exception = null;
-        try {
-            result = doInBackground();
-        } catch (Exception e) {
-            exception = e;
-        }
-        onAfterExecute(exception, result);
-    }
+                    @Override
+                    public void onError(Throwable e) {
+                        injections.cur.post(() -> {
+                            injections.bus.post(e);
+                            dismiss();
+                        });
+                    }
 
-    private void onAfterExecute(final Exception exception, final Result result) {
-        injections.cur.post(new Runnable() {
-            @Override
-            public void run() {
-                if (exception != null)
-                    injections.bus.post(exception);
-                else
-                    injections.bus.post(result);
-                dismiss();
-            }
-        });
+                    @Override
+                    public void onNext(T t) {
+                        injections.cur.post(() -> {
+                            injections.bus.post(t);
+                            dismiss();
+                        });
+                    }
+                });
     }
 }

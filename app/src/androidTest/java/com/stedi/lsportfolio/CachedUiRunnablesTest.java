@@ -107,13 +107,10 @@ public class CachedUiRunnablesTest {
         callbacks = new boolean[size];
         for (int i = 0; i < callbacks.length; i++) {
             final int finalI = i;
-            cur.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (callbacks[finalI])
-                        throw new RuntimeException("called more than once");
-                    callbacks[finalI] = true;
-                }
+            cur.post(() -> {
+                if (callbacks[finalI])
+                    throw new RuntimeException("called more than once");
+                callbacks[finalI] = true;
             });
         }
     }

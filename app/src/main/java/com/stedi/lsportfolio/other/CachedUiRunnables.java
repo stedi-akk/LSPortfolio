@@ -28,15 +28,12 @@ public final class CachedUiRunnables {
      * On postMode() runnable will be posted on UI thread.
      * On cachingMode() runnable will be cached.
      */
-    public void post(final Runnable runnable) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!cachingMode)
-                    runnable.run();
-                else
-                    cache.add(runnable);
-            }
+    public void post(Runnable runnable) {
+        handler.post(() -> {
+            if (!cachingMode)
+                runnable.run();
+            else
+                cache.add(runnable);
         });
     }
 

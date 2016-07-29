@@ -7,7 +7,7 @@
         <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
-    <style name="AsyncDialogTheme" parent="android:Theme.Dialog">
+    <style name="RxDialogTheme" parent="android:Theme.Dialog">
         <item name="android:windowBackground">@drawable/panel_white</item>
         <item name="android:windowNoTitle">true</item>
     </style>

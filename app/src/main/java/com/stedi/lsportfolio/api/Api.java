@@ -1,7 +1,9 @@
 package com.stedi.lsportfolio.api;
 
-public interface Api {
-    ResponseLsAllApps requestLsAllApps() throws Exception;
+import rx.Observable;
 
-    ResponseLsApp requestLsApp(long id) throws Exception;
+public interface Api {
+    Observable<ResponseLsAllApps> requestLsAllApps();
+
+    Observable<ResponseLsApp> requestLsApp(long id);
 }

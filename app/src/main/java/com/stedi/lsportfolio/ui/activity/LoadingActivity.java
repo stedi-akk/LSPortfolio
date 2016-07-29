@@ -17,8 +17,11 @@ import com.stedi.lsportfolio.other.Utils;
 
 import javax.inject.Inject;
 
-public class LoadingActivity extends AppCompatActivity implements Runnable {
-    private static Thread loadingThread; // in case of back button
+import rx.Observer;
+import rx.schedulers.Schedulers;
+
+public class LoadingActivity extends AppCompatActivity {
+    private static boolean isLoading; // in case of back button
 
     @Inject Bus bus;
     @Inject Api api;
@@ -33,31 +36,25 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.loading_activity);
         if (allApps.getApps() != null) {
             startDrawerActivity();
-        } else if (savedInstanceState == null && loadingThread == null) {
-            loadingThread = new Thread(this);
-            loadingThread.start();
-        }
-    }
+        } else if (savedInstanceState == null && !isLoading) {
+            isLoading = true;
+            api.requestLsAllApps()
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Observer<ResponseLsAllApps>() {
+                        @Override
+                        public void onCompleted() {
+                        }
 
-    @Override
-    public void run() {
-        try {
-            final ResponseLsAllApps response = api.requestLsAllApps();
-            cur.post(new Runnable() {
-                @Override
-                public void run() {
-                    bus.post(response);
-                    loadingThread = null;
-                }
-            });
-        } catch (final Exception ex) {
-            cur.post(new Runnable() {
-                @Override
-                public void run() {
-                    bus.post(ex);
-                    loadingThread = null;
-                }
-            });
+                        @Override
+                        public void onError(Throwable e) {
+                            cur.post(() -> bus.post(e));
+                        }
+
+                        @Override
+                        public void onNext(ResponseLsAllApps responseLsAllApps) {
+                            cur.post(() -> bus.post(responseLsAllApps));
+                        }
+                    });
         }
     }
 
@@ -65,6 +62,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
     public void onResponse(ResponseLsAllApps response) {
         allApps.setApps(response.getApps());
         startDrawerActivity();
+        isLoading = false;
     }
 
     @Subscribe
@@ -72,6 +70,7 @@ public class LoadingActivity extends AppCompatActivity implements Runnable {
         ex.printStackTrace();
         utils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
         finish();
+        isLoading = false;
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.stedi.lsportfolio.di.modules.AppModule;
 import com.stedi.lsportfolio.ui.activity.LoadingActivity;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
-import com.stedi.lsportfolio.ui.other.AsyncDialog;
+import com.stedi.lsportfolio.ui.other.RxDialog;
 
 import javax.inject.Singleton;
 
@@ -20,5 +20,5 @@ public interface Injector {
 
     void inject(LsAppActivity activity);
 
-    void inject(AsyncDialog.Injections injections);
+    void inject(RxDialog.Injections injections);
 }

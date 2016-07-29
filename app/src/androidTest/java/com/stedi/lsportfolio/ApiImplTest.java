@@ -17,7 +17,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import rx.Observer;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -42,36 +44,67 @@ public class ApiImplTest {
 
     @Test
     public void testResponseLsAllApps() {
-        try {
-            ResponseLsAllApps response = api.requestLsAllApps();
-            assertThat(response, is(notNullValue()));
-            assertThat(response.getApps(), is(notNullValue()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        api.requestLsAllApps()
+                .subscribe(new Observer<ResponseLsAllApps>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        fail();
+                    }
+
+                    @Override
+                    public void onNext(ResponseLsAllApps response) {
+                        assertThat(response, is(notNullValue()));
+                        assertThat(response.getApps(), is(notNullValue()));
+                    }
+                });
     }
 
     @Test
     public void testResponseLsAppExist() {
-        try {
-            ResponseLsApp response = api.requestLsApp(3);
-            assertThat(response, is(notNullValue()));
-            assertThat(response.getApp(), is(notNullValue()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        api.requestLsApp(3)
+                .subscribe(new Observer<ResponseLsApp>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        fail();
+                    }
+
+                    @Override
+                    public void onNext(ResponseLsApp response) {
+                        assertThat(response, is(notNullValue()));
+                        assertThat(response.getApp(), is(notNullValue()));
+                    }
+                });
     }
 
-    @Test(expected = ServerException.class)
-    public void testResponseLsAppNotExist() throws Exception {
-        try {
-            api.requestLsApp(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-        fail();
+    @Test
+    public void testResponseLsAppNotExist() {
+        api.requestLsApp(1)
+                .subscribe(new Observer<ResponseLsApp>() {
+                    @Override
+                    public void onCompleted() {
+                        fail();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        assertThat(e, is(instanceOf(ServerException.class)));
+                    }
+
+                    @Override
+                    public void onNext(ResponseLsApp response) {
+                        fail();
+                    }
+                });
     }
 }

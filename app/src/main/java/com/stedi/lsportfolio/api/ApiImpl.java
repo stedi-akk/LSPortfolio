@@ -8,11 +8,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import rx.Observable;
 
 public class ApiImpl implements Api {
     private final String url;
     private final OkHttpClient client;
     private final Utils utils;
+
+    private interface OnRequest<T> {
+        Call<T> getCall();
+    }
 
     public ApiImpl(String url, OkHttpClient client, Utils utils) {
         this.url = url;
@@ -31,17 +36,26 @@ public class ApiImpl implements Api {
     }
 
     @Override
-    public ResponseLsAllApps requestLsAllApps() throws Exception {
-        utils.throwOnNoNetwork();
-        Call<ResponseLsAllApps> call = createCall(RequestLsAllApps.class).get();
-        return call.execute().body().validate();
+    public Observable<ResponseLsAllApps> requestLsAllApps() {
+        return request(() -> createCall(RequestLsAllApps.class).get());
     }
 
     @Override
-    public ResponseLsApp requestLsApp(long id) throws Exception {
-        utils.throwOnNoNetwork();
-        Call<ResponseLsApp> call = createCall(RequestLsApp.class).get(id);
-        return call.execute().body().validate();
+    public Observable<ResponseLsApp> requestLsApp(long id) {
+        return request(() -> createCall(RequestLsApp.class).get(id));
+    }
+
+    private <T extends BaseResponse> Observable<T> request(OnRequest<T> onRequest) {
+        return Observable.create(subscriber -> {
+            try {
+                utils.throwOnNoNetwork();
+                T t = onRequest.getCall().execute().body().validate();
+                subscriber.onNext(t);
+                subscriber.onCompleted();
+            } catch (Throwable throwable) {
+                subscriber.onError(throwable);
+            }
+        });
     }
 
     private <T> T createCall(Class<T> service) {
