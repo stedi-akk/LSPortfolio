@@ -1,4 +1,3 @@
 ## TODO
- * More unit tests
  * Material design
- * RxJava
+ * More unit tests
