@@ -7,11 +7,14 @@ import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.api.ResponseLsApp;
 import com.stedi.lsportfolio.di.modules.ApiModule;
 import com.stedi.lsportfolio.di.modules.AppModule;
+import com.stedi.lsportfolio.other.NoNetworkException;
 import com.stedi.lsportfolio.other.ServerException;
+import com.stedi.lsportfolio.other.Utils;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.net.SocketTimeoutException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,6 +27,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class ApiImplTest {
@@ -35,15 +46,12 @@ public class ApiImplTest {
         void inject(ApiImplTest test);
     }
 
-    @Before
-    public void before() {
+    @Test
+    public void testResponseLsAllApps() {
         DaggerApiImplTest_TestInjector.builder()
                 .appModule(new AppModule(App.getInstance()))
                 .build().inject(this);
-    }
 
-    @Test
-    public void testResponseLsAllApps() {
         api.requestLsAllApps()
                 .subscribe(new Observer<ResponseLsAllApps>() {
                     @Override
@@ -66,6 +74,10 @@ public class ApiImplTest {
 
     @Test
     public void testResponseLsAppExist() {
+        DaggerApiImplTest_TestInjector.builder()
+                .appModule(new AppModule(App.getInstance()))
+                .build().inject(this);
+
         api.requestLsApp(3)
                 .subscribe(new Observer<ResponseLsApp>() {
                     @Override
@@ -88,6 +100,10 @@ public class ApiImplTest {
 
     @Test
     public void testResponseLsAppNotExist() {
+        DaggerApiImplTest_TestInjector.builder()
+                .appModule(new AppModule(App.getInstance()))
+                .build().inject(this);
+
         api.requestLsApp(1)
                 .subscribe(new Observer<ResponseLsApp>() {
                     @Override
@@ -106,5 +122,70 @@ public class ApiImplTest {
                         fail();
                     }
                 });
+    }
+
+    @Test
+    public void testTimeout() {
+        ApiModule apiModule = spy(new ApiModule());
+        when(apiModule.provideTimeout()).thenReturn(10L);
+        DaggerApiImplTest_TestInjector.builder()
+                .appModule(new AppModule(App.getInstance()))
+                .apiModule(apiModule)
+                .build().inject(this);
+
+        api.requestLsAllApps().subscribe(new Observer<ResponseLsAllApps>() {
+            @Override
+            public void onCompleted() {
+                fail();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                assertThat(e, is(instanceOf(SocketTimeoutException.class)));
+            }
+
+            @Override
+            public void onNext(ResponseLsAllApps responseLsAllApps) {
+                fail();
+            }
+        });
+
+        verify(apiModule, times(1)).provideTimeout();
+    }
+
+    @Test
+    public void testNoNetwork() throws NoNetworkException {
+        Utils utils = mock(Utils.class);
+        doReturn(false).when(utils).hasInternet();
+        doCallRealMethod().when(utils).throwOnNoNetwork();
+
+        AppModule module = spy(new AppModule(App.getInstance()));
+        when(module.provideUtils(any(), any())).thenReturn(utils);
+
+        DaggerApiImplTest_TestInjector.builder()
+                .appModule(module)
+                .build().inject(this);
+
+        api.requestLsAllApps().subscribe(new Observer<ResponseLsAllApps>() {
+            @Override
+            public void onCompleted() {
+                fail();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                assertThat(e, is(instanceOf(NoNetworkException.class)));
+            }
+
+            @Override
+            public void onNext(ResponseLsAllApps responseLsAllApps) {
+                fail();
+            }
+        });
+
+        verify(utils, times(1)).throwOnNoNetwork();
+        verify(module, times(1)).provideUtils(any(), any());
     }
 }

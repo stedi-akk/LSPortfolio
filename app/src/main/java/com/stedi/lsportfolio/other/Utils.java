@@ -13,19 +13,13 @@ import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Transformation;
 import com.stedi.lsportfolio.R;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-@Singleton
-public final class Utils {
+public class Utils {
     private final Context context;
     private final Picasso picasso;
 
     private Toast lastToast; // for closing existing toast
 
-    @Inject
-    public Utils(@Named("ApplicationContext") Context context, Picasso picasso) {
+    public Utils(Context context, Picasso picasso) {
         this.context = context;
         this.picasso = picasso;
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.App;
+import com.stedi.lsportfolio.other.Utils;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -22,18 +23,24 @@ public class AppModule {
 
     @Provides
     @Named("ApplicationContext")
-    Context provideContext() {
+    public Context provideContext() {
         return app.getApplicationContext();
     }
 
     @Singleton
     @Provides
-    Bus provideBus() {
+    public Bus provideBus() {
         return new Bus();
     }
 
     @Provides
-    Picasso providePicasso(@Named("ApplicationContext") Context context) {
+    public Picasso providePicasso(@Named("ApplicationContext") Context context) {
         return Picasso.with(context);
+    }
+
+    @Singleton
+    @Provides
+    public Utils provideUtils(@Named("ApplicationContext") Context context, Picasso picasso) {
+        return new Utils(context, picasso);
     }
 }
