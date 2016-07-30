@@ -9,7 +9,7 @@ import com.stedi.lsportfolio.di.modules.ApiModule;
 import com.stedi.lsportfolio.di.modules.AppModule;
 import com.stedi.lsportfolio.other.NoNetworkException;
 import com.stedi.lsportfolio.other.ServerException;
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.ContextUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -156,12 +156,12 @@ public class ApiImplTest {
 
     @Test
     public void testNoNetwork() throws NoNetworkException {
-        Utils utils = mock(Utils.class);
-        doReturn(false).when(utils).hasInternet();
-        doCallRealMethod().when(utils).throwOnNoNetwork();
+        ContextUtils contextUtils = mock(ContextUtils.class);
+        doReturn(false).when(contextUtils).hasInternet();
+        doCallRealMethod().when(contextUtils).throwOnNoNetwork();
 
         AppModule module = spy(new AppModule(App.getInstance()));
-        when(module.provideUtils(any(), any())).thenReturn(utils);
+        when(module.provideContextUtils(any())).thenReturn(contextUtils);
 
         DaggerApiImplTest_TestInjector.builder()
                 .appModule(module)
@@ -185,7 +185,7 @@ public class ApiImplTest {
             }
         });
 
-        verify(utils, times(1)).throwOnNoNetwork();
-        verify(module, times(1)).provideUtils(any(), any());
+        verify(contextUtils, times(1)).throwOnNoNetwork();
+        verify(module, times(1)).provideContextUtils(any());
     }
 }

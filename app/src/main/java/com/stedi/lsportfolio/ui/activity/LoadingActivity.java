@@ -12,9 +12,9 @@ import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
+import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
 import com.stedi.lsportfolio.other.SimpleObserver;
-import com.stedi.lsportfolio.other.Utils;
 
 import javax.inject.Inject;
 
@@ -27,7 +27,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Inject Api api;
     @Inject CachedUiRunnables cur;
     @Inject LsAllApps allApps;
-    @Inject Utils utils;
+    @Inject ContextUtils contextUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Subscribe
     public void onException(Exception ex) {
         ex.printStackTrace();
-        utils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
+        contextUtils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
         finish();
         isLoading = false;
     }

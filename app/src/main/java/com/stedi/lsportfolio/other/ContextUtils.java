@@ -3,29 +3,21 @@ package com.stedi.lsportfolio.other;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.util.TypedValue;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-import com.squareup.picasso.Transformation;
 import com.stedi.lsportfolio.R;
 
-public class Utils {
+/**
+ * Utils methods based on context
+ */
+public class ContextUtils {
     private final Context context;
-    private final Picasso picasso;
 
     private Toast lastToast; // for closing existing toast
 
-    public Utils(Context context, Picasso picasso) {
+    public ContextUtils(Context context) {
         this.context = context;
-        this.picasso = picasso;
-    }
-
-    public static void log(String text) {
-        Log.d("LS_DEBUG", text);
     }
 
     public void showToast(int resId) {
@@ -61,20 +53,6 @@ public class Utils {
     public void throwOnNoNetwork() throws NoNetworkException {
         if (!hasInternet())
             throw new NoNetworkException();
-    }
-
-    public void loadWithPicasso(String url, ImageView iv) {
-        loadWithPicasso(url, iv, null);
-    }
-
-    public void loadWithPicasso(String url, ImageView iv, Transformation transformation) {
-        RequestCreator creator = picasso
-                .load(url)
-                .placeholder(R.drawable.shape_static_progress)
-                .error(R.drawable.shape_alert);
-        if (transformation != null)
-            creator.transform(transformation);
-        creator.into(iv);
     }
 
     public boolean isSw600dp() {

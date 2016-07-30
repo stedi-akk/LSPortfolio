@@ -1,14 +1,13 @@
 package com.stedi.lsportfolio.ui.other;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.stedi.lsportfolio.other.BorderTransformation;
-import com.stedi.lsportfolio.other.Utils;
+import com.squareup.picasso.Transformation;
+import com.stedi.lsportfolio.other.PicassoHelper;
 
 import java.util.List;
 
@@ -16,35 +15,35 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class LsAppScreenPagerAdapter extends PagerAdapter {
-    private final BorderTransformation transformation;
     private final Context context;
-    private final Utils utils;
+    private final PicassoHelper picassoHelper;
 
     private List<String> imgUrls;
+    private Transformation transformation;
     private float pageWidth;
 
     @Inject
-    public LsAppScreenPagerAdapter(@Named("ApplicationContext") Context context, Utils utils) {
+    public LsAppScreenPagerAdapter(@Named("ApplicationContext") Context context, PicassoHelper picassoHelper) {
         this.context = context;
-        this.utils = utils;
-        this.transformation = new BorderTransformation(Color.LTGRAY, utils.dp2px(1));
+        this.picassoHelper = picassoHelper;
     }
 
     public void setImgUrls(List<String> imgUrls) {
         this.imgUrls = imgUrls;
     }
 
-    /**
-     * For getPageWidth()
-     */
     public void setPageWidth(float pageWidth) {
         this.pageWidth = pageWidth;
+    }
+
+    public void setTransformation(Transformation transformation) {
+        this.transformation = transformation;
     }
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         ImageView iv = new ImageView(context);
-        utils.loadWithPicasso(imgUrls.get(position), iv, transformation);
+        picassoHelper.load(imgUrls.get(position), iv, transformation);
         collection.addView(iv);
         return iv;
     }

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Picasso;
 import com.stedi.lsportfolio.App;
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.ContextUtils;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -40,7 +40,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    public Utils provideUtils(@Named("ApplicationContext") Context context, Picasso picasso) {
-        return new Utils(context, picasso);
+    public ContextUtils provideContextUtils(@Named("ApplicationContext") Context context) {
+        return new ContextUtils(context);
     }
 }

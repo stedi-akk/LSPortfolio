@@ -1,6 +1,6 @@
 package com.stedi.lsportfolio.api;
 
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.ContextUtils;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -13,16 +13,16 @@ import rx.Observable;
 public class ApiImpl implements Api {
     private final String url;
     private final OkHttpClient client;
-    private final Utils utils;
+    private final ContextUtils contextUtils;
 
     private interface OnRequest<T> {
         Call<T> getCall();
     }
 
-    public ApiImpl(String url, OkHttpClient client, Utils utils) {
+    public ApiImpl(String url, OkHttpClient client, ContextUtils contextUtils) {
         this.url = url;
         this.client = client;
-        this.utils = utils;
+        this.contextUtils = contextUtils;
     }
 
     private interface RequestLsAllApps {
@@ -48,7 +48,7 @@ public class ApiImpl implements Api {
     private <T extends BaseResponse> Observable<T> request(OnRequest<T> onRequest) {
         return Observable.create(subscriber -> {
             try {
-                utils.throwOnNoNetwork();
+                contextUtils.throwOnNoNetwork();
                 T t = onRequest.getCall().execute().body().validate();
                 subscriber.onNext(t);
                 subscriber.onCompleted();

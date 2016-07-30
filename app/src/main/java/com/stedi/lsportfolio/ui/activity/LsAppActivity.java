@@ -2,6 +2,7 @@ package com.stedi.lsportfolio.ui.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,9 @@ import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsAppDetailed;
 import com.stedi.lsportfolio.model.StoreLink;
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.BorderTransformation;
+import com.stedi.lsportfolio.other.ContextUtils;
+import com.stedi.lsportfolio.other.PicassoHelper;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
@@ -27,7 +30,8 @@ public class LsAppActivity extends ToolbarActivity {
 
     private LsAppDetailed app;
 
-    @Inject Utils utils;
+    @Inject ContextUtils contextUtils;
+    @Inject PicassoHelper picassoHelper;
     @Inject Lazy<LsAppScreenPagerAdapter> lazyScreensAdapter;
 
     @Override
@@ -37,7 +41,7 @@ public class LsAppActivity extends ToolbarActivity {
         app = (LsAppDetailed) getIntent().getSerializableExtra(INTENT_APP_KEY);
         if (app == null) {
             finish();
-            utils.showToast(R.string.unknown_error);
+            contextUtils.showToast(R.string.unknown_error);
             return;
         }
         initLayout();
@@ -54,7 +58,7 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillMainInfo() {
-        utils.loadWithPicasso(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_icon));
+        picassoHelper.load(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_icon));
         ((TextView) findViewById(R.id.ls_app_activity_name)).setText(app.getName());
         ((TextView) findViewById(R.id.ls_app_activity_description)).setText(app.getDescription());
     }
@@ -67,7 +71,7 @@ public class LsAppActivity extends ToolbarActivity {
         BlockingViewPager pager = (BlockingViewPager) findViewById(R.id.ls_app_activity_pager);
         pager.setVisibility(View.VISIBLE);
 
-        float pageMargin = utils.dp2px(24); // space between images
+        float pageMargin = contextUtils.dp2px(24); // space between images
         pager.setPageMargin((int) pageMargin);
 
         float leftPadding = pager.getPaddingLeft();
@@ -88,6 +92,7 @@ public class LsAppActivity extends ToolbarActivity {
 
         LsAppScreenPagerAdapter adapter = lazyScreensAdapter.get();
         adapter.setImgUrls(app.getGalleryUrls());
+        adapter.setTransformation(new BorderTransformation(Color.LTGRAY, contextUtils.dp2px(1)));
         adapter.setPageWidth(pageWidth);
 
         pager.setAdapter(adapter);
@@ -97,8 +102,8 @@ public class LsAppActivity extends ToolbarActivity {
         if (app.getStoreLinks().size() == 0)
             return;
 
-        boolean isSw600Dp = utils.isSw600dp();
-        int margin = (int) utils.dp2px(24); // space between buttons
+        boolean isSw600Dp = contextUtils.isSw600dp();
+        int margin = (int) contextUtils.dp2px(24); // space between buttons
 
         findViewById(R.id.ls_app_activity_bottom_container).setVisibility(View.VISIBLE);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
@@ -116,7 +121,7 @@ public class LsAppActivity extends ToolbarActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.getUrl())));
                 } catch (ActivityNotFoundException ex) {
                     ex.printStackTrace();
-                    utils.showToast(R.string.unknown_error);
+                    contextUtils.showToast(R.string.unknown_error);
                 }
             });
 

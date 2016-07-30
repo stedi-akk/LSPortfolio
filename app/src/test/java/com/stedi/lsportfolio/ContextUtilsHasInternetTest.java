@@ -4,15 +4,17 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.ContextUtils;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class UtilsHasInternetTest {
+public class ContextUtilsHasInternetTest {
     private Context context;
     private ConnectivityManager connectivityManager;
     private NetworkInfo wifiInfo;
@@ -31,56 +33,56 @@ public class UtilsHasInternetTest {
     @Test
     public void testAllConnected() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager);
-        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[] {mobileInfo, wifiInfo});
+        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[]{mobileInfo, wifiInfo});
         when(wifiInfo.isConnected()).thenReturn(true);
         when(mobileInfo.isConnected()).thenReturn(true);
-        assertTrue(new Utils(context, null).hasInternet());
+        assertTrue(new ContextUtils(context).hasInternet());
     }
 
     @Test
     public void testWifiConnected() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager);
-        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[] {mobileInfo, wifiInfo});
+        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[]{mobileInfo, wifiInfo});
         when(wifiInfo.isConnected()).thenReturn(true);
         when(mobileInfo.isConnected()).thenReturn(false);
-        assertTrue(new Utils(context, null).hasInternet());
+        assertTrue(new ContextUtils(context).hasInternet());
     }
 
     @Test
     public void testMobileConnected() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager);
-        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[] {mobileInfo, wifiInfo});
+        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[]{mobileInfo, wifiInfo});
         when(wifiInfo.isConnected()).thenReturn(false);
         when(mobileInfo.isConnected()).thenReturn(true);
-        assertTrue(new Utils(context, null).hasInternet());
+        assertTrue(new ContextUtils(context).hasInternet());
     }
 
     @Test
     public void testNotConnected() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager);
-        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[] {mobileInfo, wifiInfo});
+        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[]{mobileInfo, wifiInfo});
         when(wifiInfo.isConnected()).thenReturn(false);
         when(mobileInfo.isConnected()).thenReturn(false);
-        assertFalse(new Utils(context, null).hasInternet());
+        assertFalse(new ContextUtils(context).hasInternet());
     }
 
     @Test
     public void testNoNetworkInfo() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager);
-        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[] {});
-        assertFalse(new Utils(context, null).hasInternet());
+        when(connectivityManager.getAllNetworkInfo()).thenReturn(new NetworkInfo[]{});
+        assertFalse(new ContextUtils(context).hasInternet());
     }
 
     @Test
     public void testNullNetworkInfo() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivityManager);
         when(connectivityManager.getAllNetworkInfo()).thenReturn(null);
-        assertFalse(new Utils(context, null).hasInternet());
+        assertFalse(new ContextUtils(context).hasInternet());
     }
 
     @Test
     public void testNoConnectivityManager() {
         when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(null);
-        assertFalse(new Utils(context, null).hasInternet());
+        assertFalse(new ContextUtils(context).hasInternet());
     }
 }

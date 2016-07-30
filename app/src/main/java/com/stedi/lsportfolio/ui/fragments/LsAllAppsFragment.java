@@ -21,9 +21,9 @@ import com.stedi.lsportfolio.api.ResponseLsApp;
 import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
+import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
 import com.stedi.lsportfolio.other.SimpleObserver;
-import com.stedi.lsportfolio.other.Utils;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
@@ -54,7 +54,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Inject Api api;
     @Inject CachedUiRunnables cur;
     @Inject LsAllApps allApps;
-    @Inject Utils utils;
+    @Inject ContextUtils contextUtils;
     @Inject LsAllAppsAdapter appsAdapter;
 
     @Override
@@ -178,13 +178,13 @@ public class LsAllAppsFragment extends Fragment implements
         lsAllAppsRequested = false;
         fillListView();
         disableSwipeLayout();
-        utils.showToast(R.string.list_updated);
+        contextUtils.showToast(R.string.list_updated);
     }
 
     @Subscribe
     public void onException(Exception ex) {
         ex.printStackTrace();
-        utils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
+        contextUtils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
         dropCheckedItem();
         disableSwipeLayout();
     }

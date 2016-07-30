@@ -4,9 +4,12 @@ import com.stedi.lsportfolio.model.StoreLink;
 
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class StoreLinkTest {
     private final String[] GOOGLE_PLAY_URLS = {

@@ -2,7 +2,7 @@ package com.stedi.lsportfolio.di.modules;
 
 import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ApiImpl;
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.ContextUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +42,7 @@ public class ApiModule {
     }
 
     @Provides
-    public Api provideApi(@Named("ServerUrl") String url, OkHttpClient client, Utils utils) {
-        return new ApiImpl(url, client, utils);
+    public Api provideApi(@Named("ServerUrl") String url, OkHttpClient client, ContextUtils contextUtils) {
+        return new ApiImpl(url, client, contextUtils);
     }
 }

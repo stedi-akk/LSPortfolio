@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsApp;
-import com.stedi.lsportfolio.other.Utils;
+import com.stedi.lsportfolio.other.PicassoHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +20,14 @@ import javax.inject.Named;
 
 public class LsAllAppsAdapter extends BaseAdapter {
     private final Context context;
-    private final Utils utils;
+    private final PicassoHelper picassoHelper;
 
     private List<LsApp> apps = new ArrayList<>();
 
     @Inject
-    public LsAllAppsAdapter(@Named("ApplicationContext") Context context, Utils utils) {
+    public LsAllAppsAdapter(@Named("ApplicationContext") Context context, PicassoHelper picassoHelper) {
         this.context = context;
-        this.utils = utils;
+        this.picassoHelper = picassoHelper;
     }
 
     public void setApps(List<LsApp> apps) {
@@ -60,7 +60,7 @@ public class LsAllAppsAdapter extends BaseAdapter {
                 R.drawable.selector_activated_on_grey : R.drawable.selector_activated_on_white);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         LsApp app = getItem(position);
-        utils.loadWithPicasso(app.getIconUrl(), holder.imageView);
+        picassoHelper.load(app.getIconUrl(), holder.imageView);
         holder.textView.setText(app.getName());
         return convertView;
     }
