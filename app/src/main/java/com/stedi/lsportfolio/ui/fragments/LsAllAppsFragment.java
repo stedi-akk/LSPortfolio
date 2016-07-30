@@ -37,7 +37,6 @@ public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private final String KEY_CHECKED_ITEM_POSITION = "KEY_CHECKED_ITEM_POSITION";
     private final String KEY_LS_ALL_APPS_REQUESTED = "KEY_LS_ALL_APPS_REQUESTED";
     private final String KEY_IS_SWIPE_REFRESHING = "KEY_IS_SWIPE_REFRESHING";
 
@@ -48,7 +47,6 @@ public class LsAllAppsFragment extends Fragment implements
 
     private boolean lsAllAppsRequested;
     private boolean isSwipeRefreshing;
-    private int checkedItemPosition = -1;
 
     @Inject Bus bus;
     @Inject Api api;
@@ -61,7 +59,6 @@ public class LsAllAppsFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            checkedItemPosition = savedInstanceState.getInt(KEY_CHECKED_ITEM_POSITION);
             lsAllAppsRequested = savedInstanceState.getBoolean(KEY_LS_ALL_APPS_REQUESTED);
             isSwipeRefreshing = savedInstanceState.getBoolean(KEY_IS_SWIPE_REFRESHING);
         }
@@ -155,7 +152,6 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        checkedItemPosition = ((ListView) parent).getCheckedItemPosition();
         LsApp app = (LsApp) parent.getItemAtPosition(position);
         new RxDialog<ResponseLsApp>()
                 .with(() -> api.requestLsApp(app.getId()))
@@ -167,7 +163,6 @@ public class LsAllAppsFragment extends Fragment implements
         Intent intent = new Intent(getActivity(), LsAppActivity.class);
         intent.putExtra(LsAppActivity.INTENT_APP_KEY, response.getApp());
         startActivity(intent);
-        dropCheckedItem();
     }
 
     @Subscribe
@@ -185,14 +180,12 @@ public class LsAllAppsFragment extends Fragment implements
     public void onException(Exception ex) {
         ex.printStackTrace();
         contextUtils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
-        dropCheckedItem();
         disableSwipeLayout();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(KEY_CHECKED_ITEM_POSITION, checkedItemPosition);
         outState.putBoolean(KEY_LS_ALL_APPS_REQUESTED, lsAllAppsRequested);
         outState.putBoolean(KEY_IS_SWIPE_REFRESHING, swipeLayout != null ? swipeLayout.isRefreshing() : isSwipeRefreshing);
     }
@@ -203,14 +196,7 @@ public class LsAllAppsFragment extends Fragment implements
         tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         listView.setEmptyView(emptyView);
         appsAdapter.setApps(allApps.getApps());
-        if (checkedItemPosition != -1)
-            listView.setItemChecked(checkedItemPosition, true);
         listView.setOnItemClickListener(this);
-    }
-
-    private void dropCheckedItem() {
-        listView.setItemChecked(checkedItemPosition, false);
-        checkedItemPosition = -1;
     }
 
     private void disableSwipeLayout() {

@@ -6,6 +6,6 @@
     <dimen name="ls_app_screen_height">427dp</dimen>
     <dimen name="ls_app_screen_width">240dp</dimen>
 
-    <dimen name="ls_app_item_lr_padding">24dp</dimen>
+    <dimen name="ls_all_apps_lr_padding">16dp</dimen>
     <dimen name="ls_app_activity_lr_padding">24dp</dimen>
 </resources>

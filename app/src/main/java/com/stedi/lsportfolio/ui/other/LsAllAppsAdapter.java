@@ -1,6 +1,5 @@
 package com.stedi.lsportfolio.ui.other;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class LsAllAppsAdapter extends BaseAdapter {
-    private final Context context;
     private final PicassoHelper picassoHelper;
 
     private List<LsApp> apps = new ArrayList<>();
 
     @Inject
-    public LsAllAppsAdapter(@Named("ApplicationContext") Context context, PicassoHelper picassoHelper) {
-        this.context = context;
+    public LsAllAppsAdapter(PicassoHelper picassoHelper) {
         this.picassoHelper = picassoHelper;
     }
 
@@ -53,11 +49,9 @@ public class LsAllAppsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.ls_app_item, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ls_app_item, parent, false);
             convertView.setTag(new ViewHolder(convertView));
         }
-        convertView.setBackgroundResource(position % 2 == 0 ?
-                R.drawable.selector_activated_on_grey : R.drawable.selector_activated_on_white);
         ViewHolder holder = (ViewHolder) convertView.getTag();
         LsApp app = getItem(position);
         picassoHelper.load(app.getIconUrl(), holder.imageView);

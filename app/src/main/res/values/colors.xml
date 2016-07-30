@@ -12,5 +12,7 @@
     <color name="colorPrimary">@color/main_color</color>
     <color name="colorPrimaryDark">#2d7654</color>
     <color name="colorAccent">@color/default_selector</color>
-    <color name="windowBackground">@color/white</color>
+    <color name="windowBackground">@color/grey_light</color>
+
+    <color name="material_shadow_start">#34000000</color>
 </resources>
