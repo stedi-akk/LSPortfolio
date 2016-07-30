@@ -6,22 +6,11 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="?attr/actionBarSize" />
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="end"
-            android:paddingRight="8dp"
-            android:singleLine="true"
-            android:textColor="@color/main_color"
-            android:textSize="@dimen/text_large" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <View style="@style/ToolbarShadow" />
+    <!--<View style="@style/ToolbarShadow" />-->
 
 </LinearLayout>

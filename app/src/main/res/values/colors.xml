@@ -9,8 +9,8 @@
     <color name="default_selector">#73dfab</color>
     <color name="error">#ef5350</color>
 
-    <color name="colorPrimary">@color/white</color>
-    <color name="colorPrimaryDark">@color/black</color>
+    <color name="colorPrimary">@color/main_color</color>
+    <color name="colorPrimaryDark">#2d7654</color>
     <color name="colorAccent">@color/default_selector</color>
     <color name="windowBackground">@color/white</color>
 </resources>

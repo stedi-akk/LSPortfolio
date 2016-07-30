@@ -5,18 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.stedi.lsportfolio.R;
 
 public abstract class ToolbarActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ToolbarIcon currentIcon;
-    private TextView tvTitle;
 
     public enum ToolbarIcon {
-        DRAWER(R.drawable.ic_menu_icon),
-        BACK(R.drawable.ic_back_icon);
+        DRAWER(R.drawable.ic_menu_white),
+        BACK(R.drawable.ic_arrow_back_white);
 
         private int resId;
 
@@ -57,16 +55,15 @@ public abstract class ToolbarActivity extends AppCompatActivity {
     }
 
     public void setToolbarTitle(CharSequence title) {
-        tvTitle.setText(title);
+        toolbar.setTitle(title);
     }
 
     public void setToolbarTitle(int resId) {
-        tvTitle.setText(resId);
+        toolbar.setTitle(resId);
     }
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        tvTitle = (TextView) findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
