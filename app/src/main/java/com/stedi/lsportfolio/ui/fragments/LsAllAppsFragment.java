@@ -37,7 +37,7 @@ public class LsAllAppsFragment extends Fragment implements
         AdapterView.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private final String KEY_LS_ALL_APPS_REQUESTED = "KEY_LS_ALL_APPS_REQUESTED";
+    private final String KEY_IS_LS_ALL_APPS_REQUESTED = "KEY_IS_LS_ALL_APPS_REQUESTED";
     private final String KEY_IS_SWIPE_REFRESHING = "KEY_IS_SWIPE_REFRESHING";
 
     private SwipeRefreshLayout swipeLayout;
@@ -45,7 +45,7 @@ public class LsAllAppsFragment extends Fragment implements
     private View emptyView;
     private View tryAgainBtn;
 
-    private boolean lsAllAppsRequested;
+    private boolean isLsAllAppsRequested;
     private boolean isSwipeRefreshing;
 
     @Inject Bus bus;
@@ -59,7 +59,7 @@ public class LsAllAppsFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            lsAllAppsRequested = savedInstanceState.getBoolean(KEY_LS_ALL_APPS_REQUESTED);
+            isLsAllAppsRequested = savedInstanceState.getBoolean(KEY_IS_LS_ALL_APPS_REQUESTED);
             isSwipeRefreshing = savedInstanceState.getBoolean(KEY_IS_SWIPE_REFRESHING);
         }
     }
@@ -85,6 +85,7 @@ public class LsAllAppsFragment extends Fragment implements
 
         listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
         listView.setAdapter(appsAdapter);
+        listView.setOnItemClickListener(this);
         emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
         tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
         tryAgainBtn.setOnClickListener(v -> {
@@ -96,8 +97,8 @@ public class LsAllAppsFragment extends Fragment implements
         if (allApps.getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
-            if (!lsAllAppsRequested) {
-                lsAllAppsRequested = true;
+            if (!isLsAllAppsRequested) {
+                isLsAllAppsRequested = true;
                 new RxDialog<ResponseLsAllApps>()
                         .with(() -> api.requestLsAllApps())
                         .execute(this);
@@ -167,13 +168,11 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Subscribe
     public void onResponseLsAllApps(ResponseLsAllApps response) {
+        isLsAllAppsRequested = false;
         allApps.setApps(response.getApps());
-        if (tryAgainBtn.getVisibility() == View.VISIBLE)
-            tryAgainBtn.setVisibility(View.GONE);
-        lsAllAppsRequested = false;
         fillListView();
-        disableSwipeLayout();
         contextUtils.showToast(R.string.list_updated);
+        disableSwipeLayout();
     }
 
     @Subscribe
@@ -186,17 +185,17 @@ public class LsAllAppsFragment extends Fragment implements
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_LS_ALL_APPS_REQUESTED, lsAllAppsRequested);
+        outState.putBoolean(KEY_IS_LS_ALL_APPS_REQUESTED, isLsAllAppsRequested);
         outState.putBoolean(KEY_IS_SWIPE_REFRESHING, swipeLayout != null ? swipeLayout.isRefreshing() : isSwipeRefreshing);
     }
 
     private void fillListView() {
         boolean isEmpty = allApps.getApps().isEmpty();
         swipeLayout.setEnabled(!isEmpty);
-        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.INVISIBLE);
+        listView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
         listView.setEmptyView(emptyView);
         appsAdapter.setApps(allApps.getApps());
-        listView.setOnItemClickListener(this);
     }
 
     private void disableSwipeLayout() {

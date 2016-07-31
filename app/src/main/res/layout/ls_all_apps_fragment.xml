@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey_light">
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/ls_all_apps_list_swipe"
@@ -14,7 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:visibility="invisible"
             android:divider="@null"
+            android:background="@color/grey_light"
             android:dividerHeight="8dp"
             android:listSelector="@android:color/transparent"
             android:paddingBottom="8dp"
@@ -37,12 +38,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:background="@drawable/selector_button"
-            android:padding="8dp"
             android:text="@string/try_again"
-            android:textColor="@color/black"
             android:textSize="@dimen/text_medium"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/ls_all_apps_empty_view"
