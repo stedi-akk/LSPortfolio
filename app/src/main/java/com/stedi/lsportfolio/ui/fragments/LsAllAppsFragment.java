@@ -78,7 +78,7 @@ public class LsAllAppsFragment extends Fragment implements
         if (swipeLayout != null)
             isSwipeRefreshing = swipeLayout.isRefreshing();
         swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.ls_all_apps_list_swipe);
-        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.main_color));
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         if (isSwipeRefreshing)
             swipeLayout.post(() -> swipeLayout.setRefreshing(true));
         swipeLayout.setOnRefreshListener(this);

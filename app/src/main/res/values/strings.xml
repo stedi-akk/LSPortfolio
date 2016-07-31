@@ -11,7 +11,7 @@
     <string name="about">O aplikacji</string>
     <string name="ok">OK</string>
     <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
-        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Support Library)
+        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Support Library, itp)
         \n\nminSdkVersion 14
         \ntargetSdkVersion 23
     </string>

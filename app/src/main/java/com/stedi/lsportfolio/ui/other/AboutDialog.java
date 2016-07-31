@@ -12,10 +12,10 @@ public class AboutDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getActivity(), R.style.AppCompatDialogTheme)
                 .setTitle(R.string.about)
                 .setMessage(R.string.about_text)
                 .setPositiveButton(R.string.ok, null)
-                .show();
+                .create();
     }
 }

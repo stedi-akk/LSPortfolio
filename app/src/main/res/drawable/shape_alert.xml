@@ -3,13 +3,13 @@
     <item android:bottom="24dp">
         <shape>
             <size android:width="8dp" />
-            <solid android:color="@color/error" />
+            <solid android:color="@color/red_error" />
         </shape>
     </item>
     <item android:top="80dp">
         <shape>
             <size android:height="8dp" />
-            <solid android:color="@color/error" />
+            <solid android:color="@color/red_error" />
         </shape>
     </item>
 </layer-list>
