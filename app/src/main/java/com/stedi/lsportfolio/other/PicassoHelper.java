@@ -24,8 +24,8 @@ public class PicassoHelper {
     public void load(String url, ImageView iv, Transformation transformation) {
         RequestCreator creator = picasso
                 .load(url)
-                .placeholder(R.drawable.shape_static_progress)
-                .error(R.drawable.shape_alert);
+                .placeholder(R.drawable.ic_image_placeholder)
+                .error(R.drawable.ic_image_placeholder);
         if (transformation != null)
             creator.transform(transformation);
         creator.into(iv);
