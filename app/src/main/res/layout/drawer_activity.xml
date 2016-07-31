@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout android:id="@+id/drawer_activity_drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,29 +26,21 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="280dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/main_color"
-        android:clickable="true"
-        android:orientation="vertical"
-        android:paddingLeft="35dp"
-        android:paddingRight="35dp"
-        android:paddingTop="100dp">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/drawer_activity_item_apps"
-            style="@style/DrawerItem"
-            android:text="@string/apps"/>
+        <android.support.design.widget.NavigationView
+            android:id="@+id/drawer_activity_navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:elevation="0dp"
+            app:headerLayout="@layout/navigation_header"
+            app:itemBackground="@android:color/transparent"
+            app:menu="@menu/navigation_view"/>
 
-        <View style="@style/GreyDivider"/>
-
-        <TextView
-            android:id="@+id/drawer_activity_item_contact"
-            style="@style/DrawerItem"
-            android:text="@string/contact"/>
-
-        <View style="@style/GreyDivider"/>
+        <View style="@style/DrawerShadow"/>
 
     </LinearLayout>
 

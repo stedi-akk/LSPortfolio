@@ -4,7 +4,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
     <style name="RxDialogTheme" parent="android:Theme.Dialog">
@@ -15,29 +14,19 @@
     <style name="ToolbarShadow">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">8dp</item>
-        <item name="android:background">@drawable/shape_material_shadow</item>
+        <item name="android:background">@drawable/shape_material_shadow_down</item>
     </style>
 
-    <style name="DrawerItem">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:textSize">@dimen/text_large</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/selector_default</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="DrawerShadow">
+        <item name="android:layout_width">8dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/shape_material_shadow_right</item>
     </style>
 
     <style name="MainDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/main_color</item>
-    </style>
-
-    <style name="GreyDivider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/grey_dark</item>
     </style>
 
     <style name="IndeterminateProgress">

@@ -1,19 +1,22 @@
 package com.stedi.lsportfolio.ui.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.ui.fragments.ContactFragment;
 import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
+import com.stedi.lsportfolio.ui.other.AboutDialog;
 
-public class DrawerActivity extends ToolbarActivity {
+public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +25,13 @@ public class DrawerActivity extends ToolbarActivity {
         setToolbarIconListener(toolbarIconListener);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_activity_drawer_layout);
-        drawerLayout.setScrimColor(Color.TRANSPARENT);
-        findViewById(R.id.drawer_activity_item_apps).setOnClickListener(drawerItemsListener);
-        findViewById(R.id.drawer_activity_item_contact).setOnClickListener(drawerItemsListener);
+        navigationView = (NavigationView) findViewById(R.id.drawer_activity_navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        if (getCurrentFragment() == null)
+        if (getCurrentFragment() == null) {
             showFragment(new LsAllAppsFragment(), false);
+            navigationView.setCheckedItem(R.id.nav_ls_all_apps);
+        }
     }
 
     @Override
@@ -36,27 +40,31 @@ public class DrawerActivity extends ToolbarActivity {
             drawerLayout.closeDrawers();
             return;
         }
+        if (getCurrentFragment() instanceof ContactFragment)
+            navigationView.setCheckedItem(R.id.nav_ls_all_apps);
         super.onBackPressed();
     }
 
-    private View.OnClickListener drawerItemsListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            drawerLayout.closeDrawers();
-            Fragment frgCurrent = getCurrentFragment();
-            if (v.getId() == R.id.drawer_activity_item_apps && frgCurrent instanceof ContactFragment) {
-                getSupportFragmentManager().popBackStack();
-            } else if (v.getId() == R.id.drawer_activity_item_contact && frgCurrent instanceof LsAllAppsFragment) {
-                showFragment(new ContactFragment(), true);
-            }
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        drawerLayout.closeDrawers();
+        Fragment frgCurrent = getCurrentFragment();
+        if (item.getItemId() == R.id.nav_ls_all_apps && frgCurrent instanceof ContactFragment) {
+            getSupportFragmentManager().popBackStack();
+        } else if (item.getItemId() == R.id.nav_contact && frgCurrent instanceof LsAllAppsFragment) {
+            showFragment(new ContactFragment(), true);
+        } else if (item.getItemId() == R.id.nav_about) {
+            new AboutDialog().show(getSupportFragmentManager(), AboutDialog.class.getSimpleName());
         }
-    };
+        return true;
+    }
 
     private View.OnClickListener toolbarIconListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (getToolbarIcon() == ToolbarIcon.BACK) {
+            if (getToolbarIcon() == ToolbarIcon.BACK && getCurrentFragment() instanceof ContactFragment) {
                 getSupportFragmentManager().popBackStack();
+                navigationView.setCheckedItem(R.id.nav_ls_all_apps);
             } else if (getToolbarIcon() == ToolbarIcon.DRAWER
                     && drawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
                 drawerLayout.openDrawer(GravityCompat.START);

@@ -8,4 +8,11 @@
     <string name="try_again">Ponów próbę</string>
     <string name="empty_list">Pusta lista</string>
     <string name="list_updated">Lista zaktualizowana</string>
+    <string name="about">O aplikacji</string>
+    <string name="ok">OK</string>
+    <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
+        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Support Library)
+        \n\nminSdkVersion 14
+        \ntargetSdkVersion 23
+    </string>
 </resources>
