@@ -16,6 +16,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Holder> {
     private final PicassoHelper picassoHelper;
 
@@ -61,13 +64,12 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        private final ImageView imageView;
-        private final TextView textView;
+        @BindView(R.id.ls_app_item_iv) ImageView imageView;
+        @BindView(R.id.ls_app_item_tv) TextView textView;
 
         private Holder(View root) {
             super(root);
-            imageView = (ImageView) root.findViewById(R.id.ls_app_item_iv);
-            textView = (TextView) root.findViewById(R.id.ls_app_item_tv);
+            ButterKnife.bind(this, root);
         }
     }
 }

@@ -20,6 +20,7 @@ public class LsAppScreenPagerAdapter extends PagerAdapter {
 
     private List<String> imgUrls;
     private Transformation transformation;
+
     private float pageWidth;
 
     @Inject

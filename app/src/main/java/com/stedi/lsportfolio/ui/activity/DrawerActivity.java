@@ -14,9 +14,11 @@ import com.stedi.lsportfolio.ui.fragments.ContactFragment;
 import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
 import com.stedi.lsportfolio.ui.other.AboutDialog;
 
+import butterknife.BindView;
+
 public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
+    @BindView(R.id.drawer_activity_drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,6 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         setContentView(R.layout.drawer_activity);
         setToolbarIconListener(toolbarIconListener);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_activity_drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.drawer_activity_navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (getCurrentFragment() == null) {

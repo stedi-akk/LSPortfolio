@@ -31,19 +31,20 @@ import com.stedi.lsportfolio.ui.other.RxDialog;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.schedulers.Schedulers;
 
 public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private final String KEY_IS_LS_ALL_APPS_REQUESTED = "KEY_IS_LS_ALL_APPS_REQUESTED";
     private final String KEY_IS_SWIPE_REFRESHING = "KEY_IS_SWIPE_REFRESHING";
 
-    private SwipeRefreshLayout swipeLayout;
-    private RecyclerView recyclerView;
-    private View emptyView;
-    private View tryAgainBtn;
-
-    private boolean isLsAllAppsRequested;
-    private boolean isSwipeRefreshing;
+    @BindView(R.id.ls_all_apps_list_swipe) SwipeRefreshLayout swipeLayout;
+    @BindView(R.id.ls_all_apps_recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.ls_all_apps_empty_view) View emptyView;
+    @BindView(R.id.ls_all_apps_try_again_btn) View tryAgainBtn;
+    private Unbinder unbinder;
 
     @Inject Bus bus;
     @Inject Api api;
@@ -51,6 +52,9 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     @Inject LsAllApps allApps;
     @Inject ContextUtils contextUtils;
     @Inject LsAllAppsAdapter recyclerAdapter;
+
+    private boolean isLsAllAppsRequested;
+    private boolean isSwipeRefreshing;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,21 +75,16 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
         act.setToolbarTitle(R.string.apps);
 
         View root = inflater.inflate(R.layout.ls_all_apps_fragment, container, false);
+        unbinder = ButterKnife.bind(this, root);
 
-        if (swipeLayout != null)
-            isSwipeRefreshing = swipeLayout.isRefreshing();
-        swipeLayout = (SwipeRefreshLayout) root.findViewById(R.id.ls_all_apps_list_swipe);
         swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         if (isSwipeRefreshing)
             swipeLayout.post(() -> swipeLayout.setRefreshing(true));
         swipeLayout.setOnRefreshListener(this);
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.ls_all_apps_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(recyclerAdapter);
-        recyclerAdapter.setOnClickListener(onAdapterClickListener);
-        emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
-        tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
+        recyclerAdapter.setOnClickListener(recyclerViewClickListener);
         tryAgainBtn.setOnClickListener(v -> {
             new RxDialog<ResponseLsAllApps>()
                     .with(() -> api.requestLsAllApps())
@@ -133,7 +132,14 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
     public void onRefresh() {
+        isSwipeRefreshing = true;
         api.requestLsAllApps()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SimpleObserver<ResponseLsAllApps>() {
@@ -149,7 +155,7 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
                 });
     }
 
-    private View.OnClickListener onAdapterClickListener = new View.OnClickListener() {
+    private View.OnClickListener recyclerViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int itemPosition = recyclerView.getChildLayoutPosition(v);
@@ -193,8 +199,8 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     private void fillListView() {
         boolean isEmpty = allApps.getApps().isEmpty();
         swipeLayout.setEnabled(!isEmpty);
-        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
+        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         recyclerAdapter.setApps(allApps.getApps());
     }

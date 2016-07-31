@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 
 import com.stedi.lsportfolio.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public abstract class ToolbarActivity extends AppCompatActivity {
-    private Toolbar toolbar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     private ToolbarIcon currentIcon;
 
     public enum ToolbarIcon {
@@ -63,7 +67,7 @@ public abstract class ToolbarActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
