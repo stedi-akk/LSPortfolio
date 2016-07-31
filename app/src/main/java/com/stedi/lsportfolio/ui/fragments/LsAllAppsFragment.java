@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -33,15 +33,12 @@ import javax.inject.Inject;
 
 import rx.schedulers.Schedulers;
 
-public class LsAllAppsFragment extends Fragment implements
-        AdapterView.OnItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
-
+public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private final String KEY_IS_LS_ALL_APPS_REQUESTED = "KEY_IS_LS_ALL_APPS_REQUESTED";
     private final String KEY_IS_SWIPE_REFRESHING = "KEY_IS_SWIPE_REFRESHING";
 
     private SwipeRefreshLayout swipeLayout;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private View emptyView;
     private View tryAgainBtn;
 
@@ -53,7 +50,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Inject CachedUiRunnables cur;
     @Inject LsAllApps allApps;
     @Inject ContextUtils contextUtils;
-    @Inject LsAllAppsAdapter appsAdapter;
+    @Inject LsAllAppsAdapter recyclerAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,9 +80,10 @@ public class LsAllAppsFragment extends Fragment implements
             swipeLayout.post(() -> swipeLayout.setRefreshing(true));
         swipeLayout.setOnRefreshListener(this);
 
-        listView = (ListView) root.findViewById(R.id.ls_all_apps_list);
-        listView.setAdapter(appsAdapter);
-        listView.setOnItemClickListener(this);
+        recyclerView = (RecyclerView) root.findViewById(R.id.ls_all_apps_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(recyclerAdapter);
+        recyclerAdapter.setOnClickListener(onAdapterClickListener);
         emptyView = root.findViewById(R.id.ls_all_apps_empty_view);
         tryAgainBtn = root.findViewById(R.id.ls_all_apps_try_again_btn);
         tryAgainBtn.setOnClickListener(v -> {
@@ -151,13 +149,16 @@ public class LsAllAppsFragment extends Fragment implements
                 });
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        LsApp app = (LsApp) parent.getItemAtPosition(position);
-        new RxDialog<ResponseLsApp>()
-                .with(() -> api.requestLsApp(app.getId()))
-                .execute(this);
-    }
+    private View.OnClickListener onAdapterClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int itemPosition = recyclerView.getChildLayoutPosition(v);
+            LsApp app = recyclerAdapter.getItem(itemPosition);
+            new RxDialog<ResponseLsApp>()
+                    .with(() -> api.requestLsApp(app.getId()))
+                    .execute(LsAllAppsFragment.this);
+        }
+    };
 
     @Subscribe
     public void onResponseLsApp(ResponseLsApp response) {
@@ -192,10 +193,10 @@ public class LsAllAppsFragment extends Fragment implements
     private void fillListView() {
         boolean isEmpty = allApps.getApps().isEmpty();
         swipeLayout.setEnabled(!isEmpty);
-        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.INVISIBLE);
-        listView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
-        listView.setEmptyView(emptyView);
-        appsAdapter.setApps(allApps.getApps());
+        tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
+        emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerAdapter.setApps(allApps.getApps());
     }
 
     private void disableSwipeLayout() {

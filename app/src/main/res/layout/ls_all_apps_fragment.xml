@@ -8,21 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/ls_all_apps_list"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ls_all_apps_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:visibility="invisible"
-            android:divider="@null"
             android:background="@color/grey_light"
-            android:dividerHeight="8dp"
-            android:listSelector="@android:color/transparent"
-            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            android:paddingBottom="4dp"
             android:paddingLeft="@dimen/ls_all_apps_lr_padding"
             android:paddingRight="@dimen/ls_all_apps_lr_padding"
-            android:paddingTop="8dp"
-            android:scrollbarStyle="outsideOverlay"/>
+            android:paddingTop="4dp"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            android:visibility="invisible"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -40,7 +38,7 @@
             android:layout_marginTop="48dp"
             android:text="@string/try_again"
             android:textSize="@dimen/text_medium"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/ls_all_apps_empty_view"
@@ -49,7 +47,7 @@
             android:layout_marginTop="48dp"
             android:text="@string/empty_list"
             android:textSize="@dimen/text_medium"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 
     </LinearLayout>
 
