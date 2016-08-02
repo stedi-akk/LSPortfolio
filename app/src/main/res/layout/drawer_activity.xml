@@ -5,25 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/drawer_activity_content"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/drawer_activity_appbarlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"/>
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
 
-        <View
-            style="@style/ToolbarShadow"
-            android:layout_below="@+id/toolbar"/>
+            <include layout="@layout/toolbar" />
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar"/>
+        </android.support.design.widget.AppBarLayout>
 
-    </RelativeLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:id="@+id/drawer_activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <View style="@style/ToolbarShadow" />
+
+        </FrameLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -38,9 +48,9 @@
             app:elevation="0dp"
             app:headerLayout="@layout/navigation_header"
             app:itemBackground="@android:color/transparent"
-            app:menu="@menu/navigation_view"/>
+            app:menu="@menu/navigation_view" />
 
-        <View style="@style/DrawerShadow"/>
+        <View style="@style/DrawerShadow" />
 
     </LinearLayout>
 

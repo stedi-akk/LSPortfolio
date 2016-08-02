@@ -193,7 +193,7 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_LS_ALL_APPS_REQUESTED, isLsAllAppsRequested);
-        outState.putBoolean(KEY_IS_SWIPE_REFRESHING, swipeLayout != null ? swipeLayout.isRefreshing() : isSwipeRefreshing);
+        outState.putBoolean(KEY_IS_SWIPE_REFRESHING, isSwipeRefreshing);
     }
 
     private void fillListView() {
@@ -207,8 +207,10 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
 
     private void disableSwipeLayout() {
         swipeLayout.post(() -> {
-            if (swipeLayout.isRefreshing())
+            if (swipeLayout.isRefreshing()) {
                 swipeLayout.setRefreshing(false);
+                isSwipeRefreshing = false;
+            }
         });
     }
 }

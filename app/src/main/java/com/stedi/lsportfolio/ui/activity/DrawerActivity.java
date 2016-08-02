@@ -1,6 +1,7 @@
 package com.stedi.lsportfolio.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import butterknife.BindView;
 public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.drawer_activity_drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
+    @BindView(R.id.drawer_activity_appbarlayout) AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         if (item.getItemId() == R.id.nav_ls_all_apps && frgCurrent instanceof ContactFragment) {
             getSupportFragmentManager().popBackStack();
         } else if (item.getItemId() == R.id.nav_contact && frgCurrent instanceof LsAllAppsFragment) {
+            appBarLayout.setExpanded(true, true);
             showFragment(new ContactFragment(), true);
         } else if (item.getItemId() == R.id.nav_about) {
             new AboutDialog().show(getSupportFragmentManager(), AboutDialog.class.getSimpleName());

@@ -1,5 +1,6 @@
 package com.stedi.lsportfolio.ui.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ public class ContactFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.contact_fragment, container, false);
         WebView webView = (WebView) root.findViewById(R.id.contact_fragment_web_view);
+        webView.setBackgroundColor(Color.TRANSPARENT);
         webView.getSettings().setJavaScriptEnabled(true);
 
         final View progressView = root.findViewById(R.id.contact_fragment_progress);
