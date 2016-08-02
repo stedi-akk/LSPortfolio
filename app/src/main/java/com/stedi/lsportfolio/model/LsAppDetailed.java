@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class LsAppDetailed extends LsApp implements Serializable {
+    @SerializedName("text")
     private String description;
     @SerializedName("gallery")
     private List<String> galleryUrls;

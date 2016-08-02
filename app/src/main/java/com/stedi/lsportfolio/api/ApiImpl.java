@@ -2,12 +2,15 @@ package com.stedi.lsportfolio.api;
 
 import com.stedi.lsportfolio.other.ContextUtils;
 
+import java.util.Locale;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public class ApiImpl implements Api {
@@ -27,22 +30,22 @@ public class ApiImpl implements Api {
 
     private interface RequestLsAllApps {
         @GET("/api/main")
-        Call<ResponseLsAllApps> get();
+        Call<ResponseLsAllApps> get(@Query("lang") String lang);
     }
 
     private interface RequestLsApp {
         @GET("/api/product/{id}")
-        Call<ResponseLsApp> get(@Path("id") long id);
+        Call<ResponseLsApp> get(@Path("id") long id, @Query("lang") String lang);
     }
 
     @Override
     public Observable<ResponseLsAllApps> requestLsAllApps() {
-        return request(() -> createCall(RequestLsAllApps.class).get());
+        return request(() -> createCall(RequestLsAllApps.class).get(getLang()));
     }
 
     @Override
     public Observable<ResponseLsApp> requestLsApp(long id) {
-        return request(() -> createCall(RequestLsApp.class).get(id));
+        return request(() -> createCall(RequestLsApp.class).get(id, getLang()));
     }
 
     private <T extends BaseResponse> Observable<T> request(OnRequest<T> onRequest) {
@@ -64,5 +67,9 @@ public class ApiImpl implements Api {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build().create(service);
+    }
+
+    private String getLang() {
+        return Locale.getDefault().getLanguage().equals("en") ? "en" : "pl";
     }
 }
