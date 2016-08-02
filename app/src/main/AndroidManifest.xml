@@ -1,5 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.stedi.lsportfolio">
+<manifest package="com.stedi.lsportfolio"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,8 +20,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.DrawerActivity" />
-        <activity android:name=".ui.activity.LsAppActivity" />
+        <activity
+            android:name=".ui.activity.DrawerActivity"
+            android:theme="@style/ToolbarActivityTheme" />
+
+        <activity
+            android:name=".ui.activity.LsAppActivity"
+            android:theme="@style/ToolbarActivityTheme" />
 
     </application>
 

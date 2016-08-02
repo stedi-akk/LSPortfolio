@@ -6,6 +6,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ToolbarActivityTheme" parent="AppTheme" />
+
     <style name="AppCompatDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -29,10 +31,14 @@
         <item name="android:background">@drawable/shape_material_shadow_right</item>
     </style>
 
-    <style name="MainDivider">
+    <style name="GreyDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/grey_dark</item>
+    </style>
+
+    <style name="CollapsingLayoutTextAppearance" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textSize">26sp</item>
     </style>
 
 </resources>

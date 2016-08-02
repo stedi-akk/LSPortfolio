@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -58,8 +60,17 @@ public class LsAppActivity extends ToolbarActivity {
     }
 
     private void fillMainInfo() {
-        picassoHelper.load(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_icon));
-        ((TextView) findViewById(R.id.ls_app_activity_name)).setText(app.getName());
+        picassoHelper.load(app.getIconUrl(), (ImageView) findViewById(R.id.ls_app_activity_collapsing_layout_image));
+        CollapsingToolbarLayout collapsingLayout = (CollapsingToolbarLayout) findViewById(R.id.ls_app_activity_collapsing_layout);
+        collapsingLayout.setTitle(app.getName());
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.ls_app_activity_appbarlayout);
+        View toolbarShadow = findViewById(R.id.ls_app_activity_toolbar_shadow);
+        appBarLayout.addOnOffsetChangedListener((appBarLayout1, verticalOffset) -> {
+            if (Math.abs(verticalOffset) >= appBarLayout1.getTotalScrollRange() && toolbarShadow.getVisibility() != View.VISIBLE)
+                toolbarShadow.setVisibility(View.VISIBLE);
+            else if (toolbarShadow.getVisibility() != View.INVISIBLE)
+                toolbarShadow.setVisibility(View.INVISIBLE);
+        });
         ((TextView) findViewById(R.id.ls_app_activity_description)).setText(app.getDescription());
     }
 
