@@ -6,19 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.di.components.ActivityComponent;
-import com.stedi.lsportfolio.di.components.DaggerActivityComponent;
 import com.stedi.lsportfolio.di.modules.ActivityModule;
 
-public abstract class ComponentActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     private ActivityComponent activityComponent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityComponent = DaggerActivityComponent.builder()
-                .appComponent(App.getComponent())
-                .activityModule(new ActivityModule(this))
-                .build();
+        activityComponent = App.getComponent()
+                .activityComponent(new ActivityModule(this));
     }
 
     public ActivityComponent getComponent() {

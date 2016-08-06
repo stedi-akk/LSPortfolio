@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
@@ -23,6 +22,7 @@ import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
+import com.stedi.lsportfolio.ui.activity.BaseActivity;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
@@ -67,7 +67,7 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.getComponent().inject(this);
+        ((BaseActivity) getActivity()).getComponent().inject(this);
 
         ToolbarActivity act = (ToolbarActivity) getActivity();
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);

@@ -10,7 +10,7 @@ import com.stedi.lsportfolio.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class ToolbarActivity extends ComponentActivity {
+public abstract class ToolbarActivity extends BaseActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     private ToolbarIcon currentIcon;

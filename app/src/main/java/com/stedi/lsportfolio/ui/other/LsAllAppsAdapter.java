@@ -1,5 +1,6 @@
 package com.stedi.lsportfolio.ui.other;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Holder> {
+    private final Context context;
     private final PicassoHelper picassoHelper;
 
     private List<LsApp> apps = new ArrayList<>();
     private View.OnClickListener listener;
 
     @Inject
-    public LsAllAppsAdapter(PicassoHelper picassoHelper) {
+    public LsAllAppsAdapter(@Named("ActivityContext") Context context, PicassoHelper picassoHelper) {
+        this.context = context;
         this.picassoHelper = picassoHelper;
     }
 
@@ -41,7 +45,7 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
 
     @Override
     public LsAllAppsAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ls_app_item, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.ls_app_item, parent, false);
         if (listener != null)
             v.setOnClickListener(listener);
         return new Holder(v);

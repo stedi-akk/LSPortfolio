@@ -1,13 +1,14 @@
 package com.stedi.lsportfolio.di.components;
 
-import com.stedi.lsportfolio.di.PerActivity;
 import com.stedi.lsportfolio.di.modules.ActivityModule;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
+import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
 
-import dagger.Component;
+import dagger.Subcomponent;
 
-@PerActivity
-@Component(dependencies = AppComponent.class, modules = ActivityModule.class)
+@Subcomponent(modules = ActivityModule.class)
 public interface ActivityComponent {
     void inject(LsAppActivity activity);
+
+    void inject(LsAllAppsFragment fragment);
 }

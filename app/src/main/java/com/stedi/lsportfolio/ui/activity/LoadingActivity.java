@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 import rx.schedulers.Schedulers;
 
-public class LoadingActivity extends ComponentActivity {
+public class LoadingActivity extends BaseActivity {
     private static boolean isLoading; // in case of back button
 
     @Inject Bus bus;
