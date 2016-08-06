@@ -67,7 +67,7 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.getInjector().inject(this);
+        App.getComponent().inject(this);
 
         ToolbarActivity act = (ToolbarActivity) getActivity();
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);

@@ -2,20 +2,20 @@ package com.stedi.lsportfolio;
 
 import android.app.Application;
 
-import com.stedi.lsportfolio.di.components.DaggerInjector;
-import com.stedi.lsportfolio.di.components.Injector;
+import com.stedi.lsportfolio.di.components.AppComponent;
+import com.stedi.lsportfolio.di.components.DaggerAppComponent;
 import com.stedi.lsportfolio.di.modules.AppModule;
 
 public final class App extends Application {
     private static App instance;
 
-    private Injector injector;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-        injector = DaggerInjector.builder()
+        appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
     }
@@ -27,7 +27,7 @@ public final class App extends Application {
         return instance;
     }
 
-    public static Injector getInjector() {
-        return instance.injector;
+    public static AppComponent getComponent() {
+        return instance.appComponent;
     }
 }

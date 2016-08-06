@@ -24,7 +24,7 @@ public class LsAppScreenPagerAdapter extends PagerAdapter {
     private float pageWidth;
 
     @Inject
-    public LsAppScreenPagerAdapter(@Named("ApplicationContext") Context context, PicassoHelper picassoHelper) {
+    public LsAppScreenPagerAdapter(@Named("ActivityContext") Context context, PicassoHelper picassoHelper) {
         this.context = context;
         this.picassoHelper = picassoHelper;
     }

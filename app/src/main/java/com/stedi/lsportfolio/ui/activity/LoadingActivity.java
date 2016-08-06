@@ -2,7 +2,6 @@ package com.stedi.lsportfolio.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -19,7 +18,7 @@ import javax.inject.Inject;
 
 import rx.schedulers.Schedulers;
 
-public class LoadingActivity extends AppCompatActivity {
+public class LoadingActivity extends ComponentActivity {
     private static boolean isLoading; // in case of back button
 
     @Inject Bus bus;
@@ -31,7 +30,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.getInjector().inject(this);
+        App.getComponent().inject(this);
         setContentView(R.layout.loading_activity);
         if (allApps.getApps() != null) {
             startDrawerActivity();

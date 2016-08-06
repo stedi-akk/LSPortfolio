@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsAppDetailed;
 import com.stedi.lsportfolio.model.StoreLink;
@@ -39,7 +38,7 @@ public class LsAppActivity extends ToolbarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.getInjector().inject(this);
+        getComponent().inject(this);
         app = (LsAppDetailed) getIntent().getSerializableExtra(INTENT_APP_KEY);
         if (app == null) {
             finish();

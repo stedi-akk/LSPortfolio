@@ -36,7 +36,7 @@ public class RxDialog<T> extends DialogFragment {
         @Inject CachedUiRunnables cur;
 
         public Injections() {
-            App.getInjector().inject(this);
+            App.getComponent().inject(this);
         }
     }
 

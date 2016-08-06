@@ -1,7 +1,6 @@
 package com.stedi.lsportfolio.ui.activity;
 
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import com.stedi.lsportfolio.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class ToolbarActivity extends AppCompatActivity {
+public abstract class ToolbarActivity extends ComponentActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     private ToolbarIcon currentIcon;
