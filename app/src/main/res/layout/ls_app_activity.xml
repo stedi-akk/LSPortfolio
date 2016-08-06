@@ -19,9 +19,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginBottom="24dp"
-            app:expandedTitleMarginEnd="24dp"
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleGravity="center_horizontal|bottom"
+            app:expandedTitleMargin="24dp"
             app:expandedTitleTextAppearance="@style/CollapsingLayoutTextAppearance"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -65,14 +64,16 @@
                     android:layout_marginLeft="@dimen/ls_app_activity_lr_padding"
                     android:layout_marginRight="@dimen/ls_app_activity_lr_padding"
                     android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
                     android:textSize="@dimen/text_medium" />
 
                 <View
+                    android:id="@+id/ls_app_activity_top_divider"
                     style="@style/GreyDivider"
                     android:layout_marginBottom="24dp"
                     android:layout_marginLeft="@dimen/ls_app_activity_lr_padding"
                     android:layout_marginRight="@dimen/ls_app_activity_lr_padding"
-                    android:layout_marginTop="24dp" />
+                    android:visibility="gone" />
 
                 <com.stedi.lsportfolio.ui.other.BlockingViewPager
                     android:id="@+id/ls_app_activity_pager"

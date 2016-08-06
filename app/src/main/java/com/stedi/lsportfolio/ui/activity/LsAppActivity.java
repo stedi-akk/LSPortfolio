@@ -79,6 +79,7 @@ public class LsAppActivity extends ToolbarActivity {
         if (lsAppScreensCount == 0)
             return;
 
+        findViewById(R.id.ls_app_activity_top_divider).setVisibility(View.VISIBLE);
         BlockingViewPager pager = (BlockingViewPager) findViewById(R.id.ls_app_activity_pager);
         pager.setVisibility(View.VISIBLE);
 
