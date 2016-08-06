@@ -14,7 +14,6 @@ import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
-import com.stedi.lsportfolio.other.SimpleObserver;
 
 import javax.inject.Inject;
 
@@ -40,17 +39,8 @@ public class LoadingActivity extends AppCompatActivity {
             isLoading = true;
             api.requestLsAllApps()
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new SimpleObserver<ResponseLsAllApps>() {
-                        @Override
-                        public void onError(Throwable e) {
-                            cur.post(() -> bus.post(e));
-                        }
-
-                        @Override
-                        public void onNext(ResponseLsAllApps responseLsAllApps) {
-                            cur.post(() -> bus.post(responseLsAllApps));
-                        }
-                    });
+                    .subscribe(responseLsAllApps -> cur.post(() -> bus.post(responseLsAllApps)),
+                            throwable -> cur.post(() -> bus.post(throwable)));
         }
     }
 

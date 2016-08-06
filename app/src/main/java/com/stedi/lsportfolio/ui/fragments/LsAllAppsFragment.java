@@ -23,7 +23,6 @@ import com.stedi.lsportfolio.model.LsApp;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
-import com.stedi.lsportfolio.other.SimpleObserver;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
@@ -142,17 +141,8 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
         isSwipeRefreshing = true;
         api.requestLsAllApps()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SimpleObserver<ResponseLsAllApps>() {
-                    @Override
-                    public void onError(Throwable e) {
-                        cur.post(() -> bus.post(e));
-                    }
-
-                    @Override
-                    public void onNext(ResponseLsAllApps responseLsAllApps) {
-                        cur.post(() -> bus.post(responseLsAllApps));
-                    }
-                });
+                .subscribe(responseLsAllApps -> cur.post(() -> bus.post(responseLsAllApps)),
+                        throwable -> cur.post(() -> bus.post(throwable)));
     }
 
     private View.OnClickListener recyclerViewClickListener = new View.OnClickListener() {
