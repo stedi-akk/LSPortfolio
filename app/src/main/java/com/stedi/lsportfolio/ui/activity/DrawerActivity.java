@@ -20,7 +20,6 @@ import butterknife.BindView;
 public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.drawer_activity_drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
-    @BindView(R.id.drawer_activity_appbarlayout) AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +29,16 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (getCurrentFragment() == null) {
-            showFragment(new LsAllAppsFragment(), false);
-            navigationView.setCheckedItem(R.id.nav_ls_all_apps);
+        Fragment current = getCurrentFragment();
+        if (current == null) {
+            current = new LsAllAppsFragment();
+            showFragment(current, false);
         }
+
+        if (current instanceof LsAllAppsFragment)
+            onShowLsAllAppsFragment();
+        else if (current instanceof ContactFragment)
+            onShowContactFragment();
     }
 
     @Override
@@ -43,7 +48,7 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
             return;
         }
         if (getCurrentFragment() instanceof ContactFragment)
-            navigationView.setCheckedItem(R.id.nav_ls_all_apps);
+            onShowLsAllAppsFragment();
         super.onBackPressed();
     }
 
@@ -51,15 +56,27 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         drawerLayout.closeDrawers();
         Fragment frgCurrent = getCurrentFragment();
-        if (item.getItemId() == R.id.nav_ls_all_apps && frgCurrent instanceof ContactFragment) {
+        if (item.getItemId() == R.id.action_ls_all_apps && frgCurrent instanceof ContactFragment) {
             getSupportFragmentManager().popBackStack();
-        } else if (item.getItemId() == R.id.nav_contact && frgCurrent instanceof LsAllAppsFragment) {
-            appBarLayout.setExpanded(true, true);
+            onShowLsAllAppsFragment();
+        } else if (item.getItemId() == R.id.action_contact && frgCurrent instanceof LsAllAppsFragment) {
             showFragment(new ContactFragment(), true);
-        } else if (item.getItemId() == R.id.nav_about) {
+            onShowContactFragment();
+        } else if (item.getItemId() == R.id.action_about) {
             new AboutDialog().show(getSupportFragmentManager(), AboutDialog.class.getSimpleName());
         }
         return true;
+    }
+
+    public void setToolbarScrollingEnabled(boolean enabled) {
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) getToolbar().getLayoutParams();
+        if (enabled) {
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
+        } else {
+            params.setScrollFlags(-1);
+        }
     }
 
     private View.OnClickListener toolbarIconListener = new View.OnClickListener() {
@@ -67,7 +84,7 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         public void onClick(View v) {
             if (getToolbarIcon() == ToolbarIcon.BACK && getCurrentFragment() instanceof ContactFragment) {
                 getSupportFragmentManager().popBackStack();
-                navigationView.setCheckedItem(R.id.nav_ls_all_apps);
+                onShowLsAllAppsFragment();
             } else if (getToolbarIcon() == ToolbarIcon.DRAWER
                     && drawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -85,5 +102,15 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
 
     private Fragment getCurrentFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.drawer_activity_content);
+    }
+
+    private void onShowLsAllAppsFragment() {
+        setToolbarScrollingEnabled(true);
+        navigationView.setCheckedItem(R.id.action_ls_all_apps);
+    }
+
+    private void onShowContactFragment() {
+        setToolbarScrollingEnabled(false);
+        navigationView.setCheckedItem(R.id.action_contact);
     }
 }

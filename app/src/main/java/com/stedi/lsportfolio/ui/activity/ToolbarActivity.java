@@ -53,6 +53,10 @@ public abstract class ToolbarActivity extends BaseActivity {
         return currentIcon;
     }
 
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
     public void setToolbarIconListener(View.OnClickListener onClickListener) {
         toolbar.setNavigationOnClickListener(onClickListener);
     }

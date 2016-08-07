@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +28,7 @@ import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
 import com.stedi.lsportfolio.ui.activity.BaseActivity;
+import com.stedi.lsportfolio.ui.activity.DrawerActivity;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
@@ -33,11 +39,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.Observable;
 import rx.schedulers.Schedulers;
 
-public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class LsAllAppsFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener,
+        SearchView.OnQueryTextListener,
+        MenuItemCompat.OnActionExpandListener {
+
     private final String KEY_IS_LS_ALL_APPS_REQUESTED = "KEY_IS_LS_ALL_APPS_REQUESTED";
     private final String KEY_IS_SWIPE_REFRESHING = "KEY_IS_SWIPE_REFRESHING";
+    private final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
+    private final String KEY_IS_SEARCH_EXPANDED = "KEY_IS_SEARCH_EXPANDED";
 
     @BindView(R.id.ls_all_apps_list_swipe) SwipeRefreshLayout swipeLayout;
     @BindView(R.id.ls_all_apps_recycler_view) RecyclerView recyclerView;
@@ -52,15 +65,20 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     @Inject ContextUtils contextUtils;
     @Inject LsAllAppsAdapter recyclerAdapter;
 
+    private String searchQuery = "";
     private boolean isLsAllAppsRequested;
     private boolean isSwipeRefreshing;
+    private boolean isSearchExpanded;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (savedInstanceState != null) {
-            isLsAllAppsRequested = savedInstanceState.getBoolean(KEY_IS_LS_ALL_APPS_REQUESTED);
-            isSwipeRefreshing = savedInstanceState.getBoolean(KEY_IS_SWIPE_REFRESHING);
+            isLsAllAppsRequested = savedInstanceState.getBoolean(KEY_IS_LS_ALL_APPS_REQUESTED, false);
+            isSwipeRefreshing = savedInstanceState.getBoolean(KEY_IS_SWIPE_REFRESHING, false);
+            searchQuery = savedInstanceState.getString(KEY_SEARCH_QUERY, "");
+            isSearchExpanded = savedInstanceState.getBoolean(KEY_IS_SEARCH_EXPANDED, false);
         }
     }
 
@@ -93,6 +111,7 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
         if (allApps.getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
+            ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(false);
             if (!isLsAllAppsRequested) {
                 isLsAllAppsRequested = true;
                 new RxDialog<ResponseLsAllApps>()
@@ -100,10 +119,26 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
                         .execute(this);
             }
         } else {
-            fillListView();
+            fillAppsList();
         }
 
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (allApps.getApps() == null || allApps.getApps().isEmpty())
+            return;
+        inflater.inflate(R.menu.ls_all_apps_fragment, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        MenuItemCompat.setOnActionExpandListener(searchItem, this);
+        if (isSearchExpanded)
+            MenuItemCompat.expandActionView(searchItem);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(this);
+        if (!searchQuery.isEmpty())
+            searchView.post(() -> searchView.setQuery(searchQuery, true));
     }
 
     @Override
@@ -137,6 +172,29 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        isSearchExpanded = true;
+        swipeLayout.setEnabled(false);
+        ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(false);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        isSearchExpanded = false;
+        swipeLayout.setEnabled(true);
+        ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(true);
+        performSearch("");
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        performSearch(newText);
+        return true;
+    }
+
+    @Override
     public void onRefresh() {
         isSwipeRefreshing = true;
         api.requestLsAllApps()
@@ -167,16 +225,17 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
     public void onResponseLsAllApps(ResponseLsAllApps response) {
         isLsAllAppsRequested = false;
         allApps.setApps(response.getApps());
-        fillListView();
+        fillAppsList();
+        getActivity().invalidateOptionsMenu();
         contextUtils.showToast(R.string.list_updated);
-        disableSwipeLayout();
+        disableSwipeRefreshing();
     }
 
     @Subscribe
     public void onException(Exception ex) {
         ex.printStackTrace();
         contextUtils.showToast(ex instanceof NoNetworkException ? R.string.no_internet : R.string.unknown_error);
-        disableSwipeLayout();
+        disableSwipeRefreshing();
     }
 
     @Override
@@ -184,10 +243,13 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_IS_LS_ALL_APPS_REQUESTED, isLsAllAppsRequested);
         outState.putBoolean(KEY_IS_SWIPE_REFRESHING, isSwipeRefreshing);
+        outState.putString(KEY_SEARCH_QUERY, searchQuery);
+        outState.putBoolean(KEY_IS_SEARCH_EXPANDED, isSearchExpanded);
     }
 
-    private void fillListView() {
+    private void fillAppsList() {
         boolean isEmpty = allApps.getApps().isEmpty();
+        ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(!isEmpty);
         swipeLayout.setEnabled(!isEmpty);
         recyclerView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
         tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
@@ -195,12 +257,29 @@ public class LsAllAppsFragment extends Fragment implements SwipeRefreshLayout.On
         recyclerAdapter.setApps(allApps.getApps());
     }
 
-    private void disableSwipeLayout() {
+    private void performSearch(String query) {
+        searchQuery = query;
+        if (searchQuery.isEmpty()) {
+            recyclerAdapter.setApps(allApps.getApps());
+        } else {
+            Observable.from(allApps.getApps())
+                    .filter(lsApp -> lsApp.getName().toLowerCase().contains(searchQuery.toLowerCase()))
+                    .toList()
+                    .subscribe(recyclerAdapter::setApps);
+        }
+    }
+
+    private void disableSwipeRefreshing() {
         swipeLayout.post(() -> {
             if (swipeLayout.isRefreshing()) {
                 swipeLayout.setRefreshing(false);
                 isSwipeRefreshing = false;
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 }

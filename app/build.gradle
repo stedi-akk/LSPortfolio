@@ -17,12 +17,15 @@ android {
 
     signingConfigs {
         release {
-            Properties props = new Properties()
-            props.load(new FileInputStream(new File("local.properties")))
-            storeFile = file(props['storeFile'])
-            keyAlias = props['keyAlias']
-            storePassword = props['storePassword']
-            keyPassword = props['keyPassword']
+            def propsFile = new File("local.properties")
+            if (propsFile.exists()) {
+                Properties props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                storeFile = file(props['storeFile'])
+                keyAlias = props['keyAlias']
+                storePassword = props['storePassword']
+                keyPassword = props['keyPassword']
+            }
         }
     }
 
