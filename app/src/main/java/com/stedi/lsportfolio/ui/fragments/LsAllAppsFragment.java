@@ -65,6 +65,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Inject ContextUtils contextUtils;
     @Inject LsAllAppsAdapter recyclerAdapter;
 
+    private SearchView searchView;
     private String searchQuery = "";
     private boolean isLsAllAppsRequested;
     private boolean isSwipeRefreshing;
@@ -134,9 +135,10 @@ public class LsAllAppsFragment extends Fragment implements
         MenuItemCompat.setOnActionExpandListener(searchItem, this);
         if (isSearchExpanded)
             MenuItemCompat.expandActionView(searchItem);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(this);
+        searchView.clearFocus();
         if (!searchQuery.isEmpty())
             searchView.post(() -> searchView.setQuery(searchQuery, true));
     }
@@ -169,6 +171,8 @@ public class LsAllAppsFragment extends Fragment implements
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (searchView != null)
+            searchView.setOnQueryTextListener(null);
     }
 
     @Override
@@ -265,7 +269,7 @@ public class LsAllAppsFragment extends Fragment implements
             Observable.from(allApps.getApps())
                     .filter(lsApp -> lsApp.getName().toLowerCase().contains(searchQuery.toLowerCase()))
                     .toList()
-                    .subscribe(recyclerAdapter::setApps);
+                    .subscribe(lsApps -> recyclerAdapter.setApps(lsApps, query));
         }
     }
 

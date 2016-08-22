@@ -2,6 +2,9 @@ package com.stedi.lsportfolio.ui.other;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Holder> {
+    private final StyleSpan highlightSpan = new StyleSpan(android.graphics.Typeface.BOLD);
     private final Context context;
     private final PicassoHelper picassoHelper;
 
     private List<LsApp> apps = new ArrayList<>();
     private View.OnClickListener listener;
+
+    private String highlightQuery;
 
     @Inject
     public LsAllAppsAdapter(@Named("ActivityContext") Context context, PicassoHelper picassoHelper) {
@@ -35,7 +41,12 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     }
 
     public void setApps(List<LsApp> apps) {
+        setApps(apps, null);
+    }
+
+    public void setApps(List<LsApp> apps, String highlightQuery) {
         this.apps = apps;
+        this.highlightQuery = highlightQuery;
         notifyDataSetChanged();
     }
 
@@ -55,7 +66,7 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     public void onBindViewHolder(Holder holder, int position) {
         LsApp app = getItem(position);
         picassoHelper.load(app.getIconUrl(), holder.imageView);
-        holder.textView.setText(app.getName());
+        holder.textView.setText(highlightQuery != null ? highlightQuery(app.getName()) : app.getName());
     }
 
     @Override
@@ -75,5 +86,13 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
             super(root);
             ButterKnife.bind(this, root);
         }
+    }
+
+    private CharSequence highlightQuery(String what) {
+        int indexInWhat = what.toLowerCase().indexOf(highlightQuery.toLowerCase());
+        Spannable text = new SpannableString(what);
+        if (indexInWhat > -1)
+            text.setSpan(highlightSpan, indexInWhat, indexInWhat + highlightQuery.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return text;
     }
 }
