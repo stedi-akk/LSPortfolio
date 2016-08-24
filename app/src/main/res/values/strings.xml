@@ -12,6 +12,7 @@
     <string name="about">O aplikacji</string>
     <string name="search">Szukaj</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="for_showcase">Dla demonstracji</string>
     <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
         (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
         \n\nminSdkVersion 14

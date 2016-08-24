@@ -18,9 +18,9 @@
             android:paddingLeft="@dimen/ls_all_apps_lr_padding"
             android:paddingRight="@dimen/ls_all_apps_lr_padding"
             android:paddingTop="4dp"
-            android:scrollbars="vertical"
             android:scrollbarStyle="outsideOverlay"
-            android:visibility="invisible"/>
+            android:scrollbars="vertical"
+            android:visibility="invisible" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -38,7 +38,7 @@
             android:layout_marginTop="48dp"
             android:text="@string/try_again"
             android:textSize="@dimen/text_medium"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/ls_all_apps_empty_view"
@@ -47,7 +47,7 @@
             android:layout_marginTop="48dp"
             android:text="@string/empty_list"
             android:textSize="@dimen/text_medium"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 

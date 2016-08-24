@@ -2,7 +2,9 @@ package com.stedi.lsportfolio.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,10 +18,12 @@ import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
 import com.stedi.lsportfolio.ui.other.AboutDialog;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.drawer_activity_drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
+    @BindView(R.id.drawer_activity_fab) FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,18 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         }
     }
 
+    public void setFabVisible(boolean visible, boolean animate) {
+        if (animate) {
+            if (visible)
+                fab.show();
+            else
+                fab.hide();
+        } else {
+            fab.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+        fab.setEnabled(visible);
+    }
+
     private View.OnClickListener toolbarIconListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -91,6 +107,11 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
             }
         }
     };
+
+    @OnClick(R.id.drawer_activity_fab)
+    public void onFabClick(View v) {
+        Snackbar.make(v, R.string.for_showcase, Snackbar.LENGTH_LONG).show();
+    }
 
     private void showFragment(Fragment frg, boolean addToBackStack) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -106,11 +127,13 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
 
     private void onShowLsAllAppsFragment() {
         setToolbarScrollingEnabled(true);
+        setFabVisible(true, false);
         navigationView.setCheckedItem(R.id.action_ls_all_apps);
     }
 
     private void onShowContactFragment() {
         setToolbarScrollingEnabled(false);
+        setFabVisible(false, false);
         navigationView.setCheckedItem(R.id.action_contact);
     }
 }

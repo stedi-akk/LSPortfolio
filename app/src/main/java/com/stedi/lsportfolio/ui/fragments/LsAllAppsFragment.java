@@ -112,7 +112,7 @@ public class LsAllAppsFragment extends Fragment implements
         if (allApps.getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
-            ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(false);
+            lockToolbarAndHideFab(true);
             if (!isLsAllAppsRequested) {
                 isLsAllAppsRequested = true;
                 new RxDialog<ResponseLsAllApps>()
@@ -179,7 +179,7 @@ public class LsAllAppsFragment extends Fragment implements
     public boolean onMenuItemActionExpand(MenuItem item) {
         isSearchExpanded = true;
         swipeLayout.setEnabled(false);
-        ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(false);
+        lockToolbarAndHideFab(true);
         return true;
     }
 
@@ -187,7 +187,7 @@ public class LsAllAppsFragment extends Fragment implements
     public boolean onMenuItemActionCollapse(MenuItem item) {
         isSearchExpanded = false;
         swipeLayout.setEnabled(true);
-        ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(true);
+        lockToolbarAndHideFab(false);
         performSearch("");
         return true;
     }
@@ -253,7 +253,7 @@ public class LsAllAppsFragment extends Fragment implements
 
     private void fillAppsList() {
         boolean isEmpty = allApps.getApps().isEmpty();
-        ((DrawerActivity) getActivity()).setToolbarScrollingEnabled(!isEmpty);
+        lockToolbarAndHideFab(isEmpty);
         swipeLayout.setEnabled(!isEmpty);
         recyclerView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
         tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
@@ -280,6 +280,12 @@ public class LsAllAppsFragment extends Fragment implements
                 isSwipeRefreshing = false;
             }
         });
+    }
+
+    private void lockToolbarAndHideFab(boolean value) {
+        DrawerActivity act = (DrawerActivity) getActivity();
+        act.setToolbarScrollingEnabled(!value);
+        act.setFabVisible(!value, true);
     }
 
     @Override

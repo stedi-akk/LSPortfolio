@@ -11,6 +11,7 @@
     <string name="try_again">Try again</string>
     <string name="unknown_error">Unknown error</string>
     <string name="search">Search</string>
+    <string name="for_showcase">For showcase</string>
     <string name="about_text">A simple client-server application with usage of popular external libraries
         (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
         \n\nminSdkVersion 14
