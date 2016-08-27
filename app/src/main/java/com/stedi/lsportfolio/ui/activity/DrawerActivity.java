@@ -1,5 +1,8 @@
 package com.stedi.lsportfolio.ui.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -12,10 +15,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
+import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.ui.fragments.ContactFragment;
 import com.stedi.lsportfolio.ui.fragments.LsAllAppsFragment;
 import com.stedi.lsportfolio.ui.other.AboutDialog;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,9 +32,12 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
     @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer_activity_fab) FloatingActionButton fab;
 
+    @Inject ContextUtils contextUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getComponent().inject(this);
         setContentView(R.layout.drawer_activity);
         setToolbarIconListener(toolbarIconListener);
 
@@ -66,6 +76,13 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.action_contact && frgCurrent instanceof LsAllAppsFragment) {
             showFragment(new ContactFragment(), true);
             onShowContactFragment();
+        } else if (item.getItemId() == R.id.action_source_code) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/stedi-akk/LSPortfolio")));
+            } catch (ActivityNotFoundException ex) {
+                ex.printStackTrace();
+                contextUtils.showToast(R.string.unknown_error);
+            }
         } else if (item.getItemId() == R.id.action_about) {
             new AboutDialog().show(getSupportFragmentManager(), AboutDialog.class.getSimpleName());
         }

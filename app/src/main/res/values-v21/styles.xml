@@ -7,7 +7,7 @@
     </style>
 
     <style name="DialogTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimary">@color/palette_primary</item>
+        <item name="android:colorAccent">@color/palette_accent</item>
     </style>
 </resources>

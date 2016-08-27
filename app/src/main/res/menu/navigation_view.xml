@@ -11,6 +11,11 @@
             android:icon="@drawable/ic_mail_outline_black"
             android:title="@string/contact"/>
         <item
+            android:id="@+id/action_source_code"
+            android:checkable="false"
+            android:icon="@drawable/ic_code_black"
+            android:title="@string/source_code"/>
+        <item
             android:id="@+id/action_about"
             android:checkable="false"
             android:icon="@drawable/ic_info_outline_black"

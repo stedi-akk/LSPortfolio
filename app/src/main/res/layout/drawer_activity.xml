@@ -62,6 +62,7 @@
             android:id="@+id/drawer_activity_navigation_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            app:theme="@style/NavigationViewTheme"
             app:elevation="0dp"
             app:headerLayout="@layout/navigation_header"
             app:itemBackground="@android:color/transparent"

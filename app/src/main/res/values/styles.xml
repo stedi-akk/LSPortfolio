@@ -1,21 +1,26 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/palette_primary</item>
+        <item name="colorPrimaryDark">@color/palette_primary_dark</item>
+        <item name="colorAccent">@color/palette_accent</item>
+        <item name="android:windowBackground">@color/palette_window_background</item>
     </style>
 
     <style name="ToolbarActivityTheme" parent="AppTheme" />
 
     <style name="AppCompatDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/palette_primary</item>
+        <item name="colorAccent">@color/palette_accent</item>
+    </style>
+
+    <style name="NavigationViewTheme">
+        <item name="android:textSize">@dimen/navigation_view_text_size</item>
     </style>
 
     <style name="MaterialProgress" parent="Material.Drawable.CircularProgress">
         <item name="cpd_padding">4dp</item>
-        <item name="cpd_strokeColor">@color/colorAccent</item>
+        <item name="cpd_strokeColor">@color/palette_accent</item>
         <item name="cpd_rotateDuration">1750</item>
     </style>
 

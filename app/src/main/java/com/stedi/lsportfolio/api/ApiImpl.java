@@ -70,6 +70,6 @@ public class ApiImpl implements Api {
     }
 
     private String getLang() {
-        return Locale.getDefault().getLanguage().equals("en") ? "en" : "pl";
+        return Locale.getDefault().getLanguage().equals("pl") ? "pl" : "en";
     }
 }

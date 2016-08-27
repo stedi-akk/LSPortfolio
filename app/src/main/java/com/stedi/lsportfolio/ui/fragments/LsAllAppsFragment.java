@@ -95,7 +95,7 @@ public class LsAllAppsFragment extends Fragment implements
         View root = inflater.inflate(R.layout.ls_all_apps_fragment, container, false);
         unbinder = ButterKnife.bind(this, root);
 
-        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.palette_accent));
         if (isSwipeRefreshing)
             swipeLayout.post(() -> swipeLayout.setRefreshing(true));
         swipeLayout.setOnRefreshListener(this);

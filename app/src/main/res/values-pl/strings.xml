@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LS Portfolio</string>
+    <string name="apps">Aplikacje</string>
+    <string name="contact">Kontakt</string>
+    <string name="no_internet">Brak połączenia z internetem</string>
+    <string name="please_wait">Czekaj…</string>
+    <string name="unknown_error">Nastąpił błąd</string>
+    <string name="try_again">Ponów próbę</string>
+    <string name="empty_list">Pusta lista</string>
+    <string name="list_updated">Lista zaktualizowana</string>
+    <string name="about">O aplikacji</string>
+    <string name="search">Szukaj</string>
+    <string name="for_showcase">Dla demonstracji</string>
+    <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
+        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
+        \n\nminSdkVersion 14
+        \ntargetSdkVersion 23
+    </string>
+    <string name="source_code">Kod źródłowy</string>
+</resources>
