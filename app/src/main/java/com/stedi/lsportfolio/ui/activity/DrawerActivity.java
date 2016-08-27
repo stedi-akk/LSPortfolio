@@ -27,12 +27,14 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
     @BindView(R.id.drawer_activity_drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer_activity_fab) FloatingActionButton fab;
 
     @Inject ContextUtils contextUtils;
+
+    private Runnable drawerCloseRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         setToolbarIconListener(toolbarIconListener);
 
         navigationView.setNavigationItemSelectedListener(this);
+        drawerLayout.addDrawerListener(this);
 
         Fragment current = getCurrentFragment();
         if (current == null) {
@@ -68,25 +71,34 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        drawerLayout.closeDrawers();
-        Fragment frgCurrent = getCurrentFragment();
-        if (item.getItemId() == R.id.action_ls_all_apps && frgCurrent instanceof ContactFragment) {
-            getSupportFragmentManager().popBackStack();
-            onShowLsAllAppsFragment();
-        } else if (item.getItemId() == R.id.action_contact && frgCurrent instanceof LsAllAppsFragment) {
-            showFragment(new ContactFragment(), true);
-            onShowContactFragment();
-        } else if (item.getItemId() == R.id.action_source_code) {
-            try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/stedi-akk/LSPortfolio")));
-            } catch (ActivityNotFoundException ex) {
-                ex.printStackTrace();
-                contextUtils.showToast(R.string.unknown_error);
+        closeDrawerAndRun(() -> {
+            Fragment frgCurrent = getCurrentFragment();
+            if (item.getItemId() == R.id.action_ls_all_apps && frgCurrent instanceof ContactFragment) {
+                getSupportFragmentManager().popBackStack();
+                onShowLsAllAppsFragment();
+            } else if (item.getItemId() == R.id.action_contact && frgCurrent instanceof LsAllAppsFragment) {
+                showFragment(new ContactFragment(), true);
+                onShowContactFragment();
+            } else if (item.getItemId() == R.id.action_source_code) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/stedi-akk/LSPortfolio")));
+                } catch (ActivityNotFoundException ex) {
+                    ex.printStackTrace();
+                    contextUtils.showToast(R.string.unknown_error);
+                }
+            } else if (item.getItemId() == R.id.action_about) {
+                new AboutDialog().show(getSupportFragmentManager(), AboutDialog.class.getSimpleName());
             }
-        } else if (item.getItemId() == R.id.action_about) {
-            new AboutDialog().show(getSupportFragmentManager(), AboutDialog.class.getSimpleName());
-        }
+        });
         return true;
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        if (drawerCloseRunnable != null) {
+            drawerCloseRunnable.run();
+            drawerCloseRunnable = null;
+        }
     }
 
     public void setToolbarScrollingEnabled(boolean enabled) {
@@ -152,5 +164,25 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         setToolbarScrollingEnabled(false);
         setFabVisible(false, false);
         navigationView.setCheckedItem(R.id.action_contact);
+    }
+
+    private void closeDrawerAndRun(Runnable run) {
+        drawerCloseRunnable = run;
+        drawerLayout.closeDrawers();
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
     }
 }
