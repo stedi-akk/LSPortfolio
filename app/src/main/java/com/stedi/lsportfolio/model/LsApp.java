@@ -21,4 +21,16 @@ public class LsApp implements Serializable {
     public String getIconUrl() {
         return iconUrl;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
 }

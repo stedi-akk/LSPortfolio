@@ -105,8 +105,10 @@ public class LsAllAppsFragment extends Fragment implements
         recyclerAdapter.setOnClickListener(recyclerViewClickListener);
         tryAgainBtn.setOnClickListener(v -> {
             new RxDialog<ResponseLsAllApps>()
+                    .on(this)
                     .with(() -> api.requestLsAllApps())
-                    .execute(this);
+                    .subscribe(responseLsAllApps -> cur.post(() -> bus.post(responseLsAllApps)),
+                            throwable -> cur.post(() -> bus.post(throwable)));
         });
 
         if (allApps.getApps() == null) {
@@ -116,8 +118,10 @@ public class LsAllAppsFragment extends Fragment implements
             if (!isLsAllAppsRequested) {
                 isLsAllAppsRequested = true;
                 new RxDialog<ResponseLsAllApps>()
+                        .on(this)
                         .with(() -> api.requestLsAllApps())
-                        .execute(this);
+                        .subscribe(responseLsAllApps -> cur.post(() -> bus.post(responseLsAllApps)),
+                                throwable -> cur.post(() -> bus.post(throwable)));
             }
         } else {
             fillAppsList();
@@ -213,8 +217,12 @@ public class LsAllAppsFragment extends Fragment implements
             int itemPosition = recyclerView.getChildLayoutPosition(v);
             LsApp app = recyclerAdapter.getItem(itemPosition);
             new RxDialog<ResponseLsApp>()
+                    .on(LsAllAppsFragment.this)
                     .with(() -> api.requestLsApp(app.getId()))
-                    .execute(LsAllAppsFragment.this);
+                    .subscribe(responseLsApp -> {
+                        responseLsApp.getApp().setId(app.getId()); // because id = 0 on requestLsApp :/
+                        cur.post(() -> bus.post(responseLsApp));
+                    }, throwable -> cur.post(() -> bus.post(throwable)));
         }
     };
 

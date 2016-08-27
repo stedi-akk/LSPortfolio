@@ -19,4 +19,5 @@
     </string>
     <string name="source_code">Source code</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="open_in_browser">Open in browser</string>
 </resources>

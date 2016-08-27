@@ -19,11 +19,13 @@ import com.stedi.lsportfolio.model.StoreLink;
 import com.stedi.lsportfolio.other.BorderTransformation;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.PicassoHelper;
+import com.stedi.lsportfolio.other.StaticUtils;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
 import com.stedi.lsportfolio.ui.other.LsAppScreenPagerAdapter;
 
 import javax.inject.Inject;
 
+import butterknife.OnClick;
 import dagger.Lazy;
 
 public class LsAppActivity extends ToolbarActivity {
@@ -49,6 +51,17 @@ public class LsAppActivity extends ToolbarActivity {
         fillMainInfo();
         fillViewPager();
         fillStoreLinks();
+    }
+
+    @OnClick(R.id.ls_app_activity_open_in_browser)
+    public void onOpenInBrowserClick(View v) {
+        try {
+            String url = String.format("http://www.looksoft.pl/product?id=%s&lang=%s", app.getId(), StaticUtils.getSupportedLanguage());
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (ActivityNotFoundException ex) {
+            ex.printStackTrace();
+            contextUtils.showToast(R.string.unknown_error);
+        }
     }
 
     private void initLayout() {
@@ -78,7 +91,7 @@ public class LsAppActivity extends ToolbarActivity {
         if (lsAppScreensCount == 0)
             return;
 
-        findViewById(R.id.ls_app_activity_top_divider).setVisibility(View.VISIBLE);
+        findViewById(R.id.ls_app_activity_pager_divider).setVisibility(View.VISIBLE);
         BlockingViewPager pager = (BlockingViewPager) findViewById(R.id.ls_app_activity_pager);
         pager.setVisibility(View.VISIBLE);
 
@@ -116,8 +129,8 @@ public class LsAppActivity extends ToolbarActivity {
         boolean isSw600Dp = contextUtils.isSw600dp();
         int margin = (int) contextUtils.dp2px(24); // space between buttons
 
-        findViewById(R.id.ls_app_activity_bottom_container).setVisibility(View.VISIBLE);
         LinearLayout container = (LinearLayout) findViewById(R.id.ls_app_activity_stores_container);
+        container.setVisibility(View.VISIBLE);
         container.setOrientation(isSw600Dp ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
 
         for (int i = 0; i < app.getStoreLinks().size(); i++) {

@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
-import com.squareup.otto.Bus;
 import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
@@ -17,11 +16,12 @@ import com.stedi.lsportfolio.other.CachedUiRunnables;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Actions;
+import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
-/**
- * For doing background operation with RxJava, and posting result of this operation with Bus
- */
 public class RxDialog<T> extends DialogFragment {
     private final Injections injections = new Injections();
 
@@ -32,7 +32,6 @@ public class RxDialog<T> extends DialogFragment {
     }
 
     public static class Injections {
-        @Inject Bus bus;
         @Inject CachedUiRunnables cur;
 
         public Injections() {
@@ -86,25 +85,45 @@ public class RxDialog<T> extends DialogFragment {
         super.onDestroyView();
     }
 
-    public RxDialog with(OnBackground<T> onBackground) {
+    public RxDialog<T> on(Fragment fragment) {
+        setTargetFragment(fragment, 0);
+        return this;
+    }
+
+    public RxDialog<T> with(OnBackground<T> onBackground) {
         this.onBackground = onBackground;
         return this;
     }
 
-    public void execute(Fragment fragment) {
-        super.show(fragment.getFragmentManager(), getClass().getSimpleName());
-        onBackground.getObservable()
+    public void subscribe(Action1<? super T> onNext) {
+        subscribe(onNext, null, null);
+    }
+
+    public void subscribe(Action1<? super T> onNext, Action1<Throwable> onError) {
+        subscribe(onNext, onError, null);
+    }
+
+    public void subscribe(Action1<? super T> onNext, Action1<Throwable> onError, Action0 onCompleted) {
+        if (getTargetFragment() == null)
+            throw new IllegalArgumentException("Target fragment is not specified. Did you forget to call on(Fragment fragment) ?");
+        ConnectableObservable<T> co = prepare();
+        if (onError == null)
+            co.subscribe(onNext);
+        else if (onCompleted == null)
+            co.subscribe(onNext, onError);
+        else
+            co.subscribe(onNext, onError, onCompleted);
+        super.show(getTargetFragment().getFragmentManager(), getClass().getSimpleName());
+        co.connect();
+    }
+
+    private ConnectableObservable<T> prepare() {
+        ConnectableObservable<T> co = onBackground.getObservable()
                 .subscribeOn(Schedulers.io())
-                .subscribe(t -> {
-                    injections.cur.post(() -> {
-                        injections.bus.post(t);
-                        dismiss();
-                    });
-                }, throwable -> {
-                    injections.cur.post(() -> {
-                        injections.bus.post(throwable);
-                        dismiss();
-                    });
-                });
+                .publish();
+        co.subscribe(Actions.empty(),
+                throwable -> injections.cur.post(this::dismiss),
+                () -> injections.cur.post(this::dismiss));
+        return co;
     }
 }

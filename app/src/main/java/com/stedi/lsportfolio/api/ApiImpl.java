@@ -1,8 +1,7 @@
 package com.stedi.lsportfolio.api;
 
 import com.stedi.lsportfolio.other.ContextUtils;
-
-import java.util.Locale;
+import com.stedi.lsportfolio.other.StaticUtils;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -40,12 +39,12 @@ public class ApiImpl implements Api {
 
     @Override
     public Observable<ResponseLsAllApps> requestLsAllApps() {
-        return request(() -> createCall(RequestLsAllApps.class).get(getLang()));
+        return request(() -> createCall(RequestLsAllApps.class).get(StaticUtils.getSupportedLanguage()));
     }
 
     @Override
     public Observable<ResponseLsApp> requestLsApp(long id) {
-        return request(() -> createCall(RequestLsApp.class).get(id, getLang()));
+        return request(() -> createCall(RequestLsApp.class).get(id, StaticUtils.getSupportedLanguage()));
     }
 
     private <T extends BaseResponse> Observable<T> request(OnRequest<T> onRequest) {
@@ -67,9 +66,5 @@ public class ApiImpl implements Api {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build().create(service);
-    }
-
-    private String getLang() {
-        return Locale.getDefault().getLanguage().equals("pl") ? "pl" : "en";
     }
 }

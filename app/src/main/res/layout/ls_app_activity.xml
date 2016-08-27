@@ -50,7 +50,8 @@
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,14 +62,14 @@
                     android:id="@+id/ls_app_activity_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
                     android:layout_marginLeft="@dimen/ls_app_activity_lr_padding"
                     android:layout_marginRight="@dimen/ls_app_activity_lr_padding"
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
                     android:textSize="@dimen/text_medium" />
 
                 <View
-                    android:id="@+id/ls_app_activity_top_divider"
+                    android:id="@+id/ls_app_activity_pager_divider"
                     style="@style/GreyDivider"
                     android:layout_marginBottom="24dp"
                     android:layout_marginLeft="@dimen/ls_app_activity_lr_padding"
@@ -86,29 +87,35 @@
                     android:paddingRight="@dimen/ls_app_activity_lr_padding"
                     android:visibility="gone" />
 
-                <LinearLayout
-                    android:id="@+id/ls_app_activity_bottom_container"
+                <View
+                    style="@style/GreyDivider"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="@dimen/ls_app_activity_lr_padding"
+                    android:layout_marginRight="@dimen/ls_app_activity_lr_padding" />
+
+                <TextView
+                    android:id="@+id/ls_app_activity_open_in_browser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableTop="@drawable/ic_open_in_browser_black"
+                    android:gravity="center_horizontal"
+                    android:text="@string/open_in_browser"
+                    android:textColor="@color/grey_dark" />
+
+                <LinearLayout
+                    android:id="@+id/ls_app_activity_stores_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/palette_window_background_second"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
+                    android:paddingBottom="24dp"
                     android:paddingLeft="@dimen/ls_app_activity_lr_padding"
                     android:paddingRight="@dimen/ls_app_activity_lr_padding"
-                    android:visibility="gone">
-
-                    <View
-                        style="@style/GreyDivider"
-                        android:layout_marginBottom="24dp" />
-
-                    <LinearLayout
-                        android:id="@+id/ls_app_activity_stores_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
-                        android:gravity="center"
-                        android:orientation="vertical" />
-
-                </LinearLayout>
+                    android:paddingTop="24dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

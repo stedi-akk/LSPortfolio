@@ -18,4 +18,5 @@
         \ntargetSdkVersion 23
     </string>
     <string name="source_code">Kod źródłowy</string>
+    <string name="open_in_browser">Otwórz w przeglądarce</string>
 </resources>

@@ -24,4 +24,16 @@ public class LsAppDetailed extends LsApp implements Serializable {
     public List<StoreLink> getStoreLinks() {
         return storeLinks;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setGalleryUrls(List<String> galleryUrls) {
+        this.galleryUrls = galleryUrls;
+    }
+
+    public void setStoreLinks(List<StoreLink> storeLinks) {
+        this.storeLinks = storeLinks;
+    }
 }
