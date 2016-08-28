@@ -140,6 +140,11 @@ public class LsAllAppsFragment extends Fragment implements
         if (isSearchExpanded)
             MenuItemCompat.expandActionView(searchItem);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView.SearchAutoComplete autoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
+        if (autoComplete != null) {
+            int hintColor = getActivity().getResources().getColor(R.color.white_transparent);
+            autoComplete.setHintTextColor(hintColor);
+        }
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(this);
         searchView.clearFocus();
