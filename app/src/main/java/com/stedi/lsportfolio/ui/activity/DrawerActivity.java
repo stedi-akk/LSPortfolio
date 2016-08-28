@@ -14,8 +14,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.stedi.lsportfolio.App;
+import com.stedi.lsportfolio.BuildConfig;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.ui.fragments.ContactFragment;
@@ -42,6 +44,9 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         App.getComponent().inject(this);
         setContentView(R.layout.drawer_activity);
         setToolbarIconListener(toolbarIconListener);
+
+        TextView tvVersion = (TextView) navigationView.getHeaderView(0).findViewById(R.id.navigation_header_version_info);
+        tvVersion.setText(BuildConfig.VERSION_NAME);
 
         navigationView.setNavigationItemSelectedListener(this);
         drawerLayout.addDrawerListener(this);

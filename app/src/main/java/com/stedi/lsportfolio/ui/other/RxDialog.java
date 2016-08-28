@@ -118,6 +118,8 @@ public class RxDialog<T> extends DialogFragment {
     }
 
     private ConnectableObservable<T> prepare() {
+        if (onBackground == null)
+            throw new IllegalArgumentException("Observable is not specified. Did you forget to call with(OnBackground<T> onBackground) ?");
         ConnectableObservable<T> co = onBackground.getObservable()
                 .subscribeOn(Schedulers.io())
                 .publish();

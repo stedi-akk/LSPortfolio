@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LS Portfolio</string>
     <string name="apps">Aplikacje</string>
     <string name="contact">Kontakt</string>
     <string name="no_internet">Brak połączenia z internetem</string>

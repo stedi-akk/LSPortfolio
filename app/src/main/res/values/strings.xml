@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LS Portfolio</string>
+    <string name="app_name" translatable="false">LS Portfolio</string>
     <string name="about">About</string>
     <string name="apps">Apps</string>
     <string name="contact">Contact</string>
