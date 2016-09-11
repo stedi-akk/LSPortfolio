@@ -14,7 +14,7 @@
     <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
         (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
         \n\nminSdkVersion 14
-        \ntargetSdkVersion 23
+        \ntargetSdkVersion 24
     </string>
     <string name="source_code">Kod źródłowy</string>
     <string name="open_in_browser">Otwórz w przeglądarce</string>
