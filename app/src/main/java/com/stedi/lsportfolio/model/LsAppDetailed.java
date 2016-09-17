@@ -7,14 +7,14 @@ import java.util.List;
 
 public class LsAppDetailed extends LsApp implements Serializable {
     @SerializedName("text")
-    private String description;
+    private String fullDescription;
     @SerializedName("gallery")
     private List<String> galleryUrls;
     @SerializedName("link")
     private List<StoreLink> storeLinks;
 
-    public String getDescription() {
-        return description;
+    public String getFullDescription() {
+        return fullDescription;
     }
 
     public List<String> getGalleryUrls() {
@@ -25,8 +25,8 @@ public class LsAppDetailed extends LsApp implements Serializable {
         return storeLinks;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFullDescription(String fullDescription) {
+        this.fullDescription = fullDescription;
     }
 
     public void setGalleryUrls(List<String> galleryUrls) {

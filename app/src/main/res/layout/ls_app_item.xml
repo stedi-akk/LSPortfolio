@@ -4,30 +4,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
     android:foreground="?attr/selectableItemBackground"
     app:contentPadding="16dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="80dp">
 
         <ImageView
-            android:id="@+id/ls_app_item_iv"
+            android:id="@+id/ls_app_item_iv_logo"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp" />
 
         <TextView
-            android:id="@+id/ls_app_item_tv"
+            android:id="@+id/ls_app_item_tv_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ls_app_item_iv_logo"
             android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="3"
-            android:textSize="@dimen/text_large"/>
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_large" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/ls_app_item_tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/ls_app_item_tv_name"
+            android:layout_toRightOf="@+id/ls_app_item_iv_logo"
+            android:ellipsize="end"
+            android:maxLines="3" />
+
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

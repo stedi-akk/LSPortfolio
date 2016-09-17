@@ -9,6 +9,7 @@ public class LsApp implements Serializable {
     private String name;
     @SerializedName("icon")
     private String iconUrl;
+    private String description;
 
     public long getId() {
         return id;
@@ -22,6 +23,10 @@ public class LsApp implements Serializable {
         return iconUrl;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -32,5 +37,9 @@ public class LsApp implements Serializable {
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

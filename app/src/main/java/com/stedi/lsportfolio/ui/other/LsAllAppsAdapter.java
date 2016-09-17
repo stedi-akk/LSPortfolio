@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Holder> {
-    private final StyleSpan highlightSpan = new StyleSpan(android.graphics.Typeface.BOLD);
     private final Context context;
     private final PicassoHelper picassoHelper;
+    private final StyleSpan boldSpan;
+    private final ForegroundColorSpan colorSpan;
 
     private List<LsApp> apps = new ArrayList<>();
     private View.OnClickListener listener;
@@ -38,6 +40,8 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     public LsAllAppsAdapter(@Named("ActivityContext") Context context, PicassoHelper picassoHelper) {
         this.context = context;
         this.picassoHelper = picassoHelper;
+        boldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+        colorSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.palette_accent));
     }
 
     public void setApps(List<LsApp> apps) {
@@ -65,8 +69,9 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         LsApp app = getItem(position);
-        picassoHelper.load(app.getIconUrl(), holder.imageView);
-        holder.textView.setText(highlightQuery != null ? highlightQuery(app.getName()) : app.getName());
+        picassoHelper.load(app.getIconUrl(), holder.ivLogo);
+        holder.tvName.setText(highlightQuery != null ? highlightQuery(app.getName()) : app.getName());
+        holder.tvDescription.setText(app.getDescription());
     }
 
     @Override
@@ -79,8 +84,9 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     }
 
     public static class Holder extends RecyclerView.ViewHolder {
-        @BindView(R.id.ls_app_item_iv) ImageView imageView;
-        @BindView(R.id.ls_app_item_tv) TextView textView;
+        @BindView(R.id.ls_app_item_iv_logo) ImageView ivLogo;
+        @BindView(R.id.ls_app_item_tv_name) TextView tvName;
+        @BindView(R.id.ls_app_item_tv_description) TextView tvDescription;
 
         private Holder(View root) {
             super(root);
@@ -91,8 +97,10 @@ public class LsAllAppsAdapter extends RecyclerView.Adapter<LsAllAppsAdapter.Hold
     private CharSequence highlightQuery(String what) {
         int indexInWhat = what.toLowerCase().indexOf(highlightQuery.toLowerCase());
         Spannable text = new SpannableString(what);
-        if (indexInWhat > -1)
-            text.setSpan(highlightSpan, indexInWhat, indexInWhat + highlightQuery.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        if (indexInWhat > -1) {
+            text.setSpan(boldSpan, indexInWhat, indexInWhat + highlightQuery.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            text.setSpan(colorSpan, indexInWhat, indexInWhat + highlightQuery.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
         return text;
     }
 }

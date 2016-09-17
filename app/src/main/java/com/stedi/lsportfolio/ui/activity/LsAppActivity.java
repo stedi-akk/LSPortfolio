@@ -83,7 +83,7 @@ public class LsAppActivity extends ToolbarActivity {
             else if (toolbarShadow.getVisibility() != View.INVISIBLE)
                 toolbarShadow.setVisibility(View.INVISIBLE);
         });
-        ((TextView) findViewById(R.id.ls_app_activity_description)).setText(app.getDescription());
+        ((TextView) findViewById(R.id.ls_app_activity_full_description)).setText(app.getFullDescription());
     }
 
     private void fillViewPager() {
