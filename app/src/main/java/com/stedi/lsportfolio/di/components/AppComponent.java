@@ -5,6 +5,7 @@ import com.stedi.lsportfolio.di.modules.ApiModule;
 import com.stedi.lsportfolio.di.modules.AppModule;
 import com.stedi.lsportfolio.ui.activity.DrawerActivity;
 import com.stedi.lsportfolio.ui.activity.LoadingActivity;
+import com.stedi.lsportfolio.ui.fragments.ContactFragment;
 import com.stedi.lsportfolio.ui.other.RxDialog;
 
 import javax.inject.Singleton;
@@ -19,6 +20,8 @@ public interface AppComponent {
     void inject(DrawerActivity activity);
 
     void inject(RxDialog.Injections injections);
+
+    void inject(ContactFragment fragment);
 
     ActivityComponent activityComponent(ActivityModule module);
 }
