@@ -8,7 +8,7 @@
 
     <color name="palette_primary">#4dc88f</color>
     <color name="palette_primary_dark">#238f5d</color>
-    <color name="palette_accent">#FFD740</color>
+    <color name="palette_accent">#fbc02d</color>
     <color name="palette_window_background">@color/white</color>
     <color name="palette_window_background_second">@color/grey_light</color>
 
