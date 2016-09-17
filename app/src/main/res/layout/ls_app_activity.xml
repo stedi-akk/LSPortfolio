@@ -98,6 +98,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
+                    android:layout_marginLeft="@dimen/ls_app_activity_lr_padding"
+                    android:layout_marginRight="@dimen/ls_app_activity_lr_padding"
                     android:background="?attr/selectableItemBackground"
                     android:drawableTop="@drawable/ic_open_in_browser_black"
                     android:gravity="center_horizontal"

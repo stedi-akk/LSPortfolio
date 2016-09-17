@@ -20,4 +20,6 @@
     <string name="source_code">Source code</string>
     <string name="ok" translatable="false">OK</string>
     <string name="open_in_browser">Open in browser</string>
+    <string name="reload">Reload</string>
+    <string name="clear_cache">Clear cache</string>
 </resources>
