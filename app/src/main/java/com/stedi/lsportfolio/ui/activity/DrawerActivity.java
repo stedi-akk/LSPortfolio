@@ -31,7 +31,7 @@ import butterknife.OnClick;
 
 public class DrawerActivity extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
     @BindView(R.id.drawer_activity_drawer_layout) DrawerLayout drawerLayout;
-    @BindView(R.id.drawer_activity_navigation_view) NavigationView navigationView;
+    @BindView(R.id.navigation_view) NavigationView navigationView;
     @BindView(R.id.drawer_activity_fab) FloatingActionButton fab;
 
     @Inject ContextUtils contextUtils;

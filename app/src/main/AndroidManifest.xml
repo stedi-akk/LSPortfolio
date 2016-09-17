@@ -22,11 +22,11 @@
 
         <activity
             android:name=".ui.activity.DrawerActivity"
-            android:theme="@style/ToolbarActivityTheme" />
+            android:theme="@style/AppTheme.Toolbar" />
 
         <activity
             android:name=".ui.activity.LsAppActivity"
-            android:theme="@style/ToolbarActivityTheme" />
+            android:theme="@style/AppTheme.Toolbar" />
 
     </application>
 

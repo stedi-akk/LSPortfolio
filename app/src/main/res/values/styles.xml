@@ -7,7 +7,7 @@
         <item name="android:windowBackground">@color/palette_window_background</item>
     </style>
 
-    <style name="ToolbarActivityTheme" parent="AppTheme" />
+    <style name="AppTheme.Toolbar" />
 
     <style name="AppCompatDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/palette_primary</item>
