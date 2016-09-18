@@ -6,11 +6,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public final class LsAllApps {
+public final class Model {
     private List<LsApp> apps;
+    private List<LsJob> jobs;
 
     @Inject
-    public LsAllApps() {
+    public Model() {
     }
 
     public void setApps(List<LsApp> apps) {
@@ -19,5 +20,13 @@ public final class LsAllApps {
 
     public List<LsApp> getApps() {
         return apps;
+    }
+
+    public void setJobs(List<LsJob> jobs) {
+        this.jobs = jobs;
+    }
+
+    public List<LsJob> getJobs() {
+        return jobs;
     }
 }

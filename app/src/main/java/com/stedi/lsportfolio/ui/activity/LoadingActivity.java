@@ -9,7 +9,7 @@ import com.stedi.lsportfolio.App;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
-import com.stedi.lsportfolio.model.LsAllApps;
+import com.stedi.lsportfolio.model.Model;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
@@ -24,7 +24,7 @@ public class LoadingActivity extends BaseActivity {
     @Inject Bus bus;
     @Inject Api api;
     @Inject CachedUiRunnables cur;
-    @Inject LsAllApps allApps;
+    @Inject Model model;
     @Inject ContextUtils contextUtils;
 
     @Override
@@ -32,7 +32,7 @@ public class LoadingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         App.getComponent().inject(this);
         setContentView(R.layout.loading_activity);
-        if (allApps.getApps() != null) {
+        if (model.getApps() != null) {
             startDrawerActivity();
         } else if (savedInstanceState == null && !isLoading) {
             isLoading = true;
@@ -45,7 +45,8 @@ public class LoadingActivity extends BaseActivity {
 
     @Subscribe
     public void onResponse(ResponseLsAllApps response) {
-        allApps.setApps(response.getApps());
+        model.setApps(response.getApps());
+        model.setJobs(response.getJobs());
         startDrawerActivity();
         isLoading = false;
     }

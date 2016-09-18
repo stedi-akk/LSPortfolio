@@ -22,8 +22,8 @@ import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.api.Api;
 import com.stedi.lsportfolio.api.ResponseLsAllApps;
 import com.stedi.lsportfolio.api.ResponseLsApp;
-import com.stedi.lsportfolio.model.LsAllApps;
 import com.stedi.lsportfolio.model.LsApp;
+import com.stedi.lsportfolio.model.Model;
 import com.stedi.lsportfolio.other.CachedUiRunnables;
 import com.stedi.lsportfolio.other.ContextUtils;
 import com.stedi.lsportfolio.other.NoNetworkException;
@@ -31,6 +31,7 @@ import com.stedi.lsportfolio.ui.activity.BaseActivity;
 import com.stedi.lsportfolio.ui.activity.DrawerActivity;
 import com.stedi.lsportfolio.ui.activity.LsAppActivity;
 import com.stedi.lsportfolio.ui.activity.ToolbarActivity;
+import com.stedi.lsportfolio.ui.other.JobsDialog;
 import com.stedi.lsportfolio.ui.other.LsAllAppsAdapter;
 import com.stedi.lsportfolio.ui.other.RxDialog;
 
@@ -61,7 +62,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Inject Bus bus;
     @Inject Api api;
     @Inject CachedUiRunnables cur;
-    @Inject LsAllApps allApps;
+    @Inject Model model;
     @Inject ContextUtils contextUtils;
     @Inject LsAllAppsAdapter recyclerAdapter;
 
@@ -87,6 +88,7 @@ public class LsAllAppsFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((BaseActivity) getActivity()).getComponent().inject(this);
+        ((DrawerActivity) getActivity()).setOnFabClickListener(fabClickListener);
 
         ToolbarActivity act = (ToolbarActivity) getActivity();
         act.setToolbarIcon(ToolbarActivity.ToolbarIcon.DRAWER);
@@ -111,7 +113,7 @@ public class LsAllAppsFragment extends Fragment implements
                             throwable -> cur.post(() -> bus.post(throwable)));
         });
 
-        if (allApps.getApps() == null) {
+        if (model.getApps() == null) {
             tryAgainBtn.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
             lockToolbarAndHideFab(true);
@@ -132,7 +134,7 @@ public class LsAllAppsFragment extends Fragment implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (allApps.getApps() == null || allApps.getApps().isEmpty())
+        if (model.getApps() == null || model.getApps().isEmpty())
             return;
         inflater.inflate(R.menu.ls_all_apps_fragment, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -231,6 +233,17 @@ public class LsAllAppsFragment extends Fragment implements
         }
     };
 
+    private View.OnClickListener fabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (model.getJobs().isEmpty()) {
+                contextUtils.showToast(R.string.currently_not_possible);
+                return;
+            }
+            new JobsDialog().show(getFragmentManager(), JobsDialog.class.getSimpleName());
+        }
+    };
+
     @Subscribe
     public void onResponseLsApp(ResponseLsApp response) {
         Intent intent = new Intent(getActivity(), LsAppActivity.class);
@@ -241,7 +254,8 @@ public class LsAllAppsFragment extends Fragment implements
     @Subscribe
     public void onResponseLsAllApps(ResponseLsAllApps response) {
         isLsAllAppsRequested = false;
-        allApps.setApps(response.getApps());
+        model.setApps(response.getApps());
+        model.setJobs(response.getJobs());
         fillAppsList();
         getActivity().invalidateOptionsMenu();
         contextUtils.showToast(R.string.list_updated);
@@ -265,21 +279,21 @@ public class LsAllAppsFragment extends Fragment implements
     }
 
     private void fillAppsList() {
-        boolean isEmpty = allApps.getApps().isEmpty();
+        boolean isEmpty = model.getApps().isEmpty();
         lockToolbarAndHideFab(isEmpty);
         swipeLayout.setEnabled(!isEmpty);
         recyclerView.setVisibility(isEmpty ? View.INVISIBLE : View.VISIBLE);
         tryAgainBtn.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
-        recyclerAdapter.setApps(allApps.getApps());
+        recyclerAdapter.setApps(model.getApps());
     }
 
     private void performSearch(String query) {
         searchQuery = query;
         if (searchQuery.isEmpty()) {
-            recyclerAdapter.setApps(allApps.getApps());
+            recyclerAdapter.setApps(model.getApps());
         } else {
-            Observable.from(allApps.getApps())
+            Observable.from(model.getApps())
                     .filter(lsApp -> lsApp.getName().toLowerCase().contains(searchQuery.toLowerCase()))
                     .toList()
                     .subscribe(lsApps -> recyclerAdapter.setApps(lsApps, query));

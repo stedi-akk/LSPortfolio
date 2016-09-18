@@ -10,7 +10,6 @@
     <string name="list_updated">Lista zaktualizowana</string>
     <string name="about">O aplikacji</string>
     <string name="search">Szukaj</string>
-    <string name="for_showcase">Dla demonstracji</string>
     <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
         (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
         \n\nminSdkVersion 14
@@ -22,4 +21,7 @@
     <string name="reload">Przeładuj</string>
     <string name="clear_cache">Wyczyść pamięć podręczną</string>
     <string name="more_info">Więcej informacji</string>
+    <string name="work_with_us">Pracuj u nas!</string>
+    <string name="want_create_application">Chcesz stworzyć aplikację?</string>
+    <string name="currently_not_possible">Obecnie nie jest możliwe :(</string>
 </resources>
