@@ -21,7 +21,7 @@
     <string name="reload">Przeładuj</string>
     <string name="clear_cache">Wyczyść pamięć WebView</string>
     <string name="website">Strona internetowa</string>
-    <string name="work_with_us">Pracuj u nas!</string>
+    <string name="work_with_us">Pracuj z nami!</string>
     <string name="want_create_application">Chcesz stworzyć aplikację?</string>
     <string name="currently_not_possible">Obecnie nie jest możliwe :(</string>
 </resources>

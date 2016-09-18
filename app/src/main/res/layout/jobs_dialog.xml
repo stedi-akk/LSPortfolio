@@ -17,6 +17,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbarSize="2dp"
         android:fillViewport="true">
 
         <LinearLayout
@@ -24,6 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
             android:orientation="horizontal" />
 
     </HorizontalScrollView>
