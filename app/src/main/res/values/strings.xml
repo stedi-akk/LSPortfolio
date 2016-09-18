@@ -19,10 +19,10 @@
     </string>
     <string name="source_code">Source code</string>
     <string name="ok" translatable="false">OK</string>
-    <string name="open_in_browser">Open in browser</string>
+    <string name="view_on_our_website">View on our website</string>
     <string name="reload">Reload</string>
-    <string name="clear_cache">Clear cache</string>
-    <string name="more_info">More info</string>
+    <string name="clear_cache">Clear WebView cache</string>
+    <string name="website">Website</string>
     <string name="work_with_us">Work with us!</string>
     <string name="want_create_application">Want to create an application?</string>
     <string name="currently_not_possible">Currently not possible :(</string>

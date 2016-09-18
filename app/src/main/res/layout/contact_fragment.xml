@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <WebView
+        android:id="@+id/contact_fragment_web_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <WebView
-            android:id="@+id/contact_fragment_web_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <com.rey.material.widget.ProgressView
+        android:id="@+id/contact_fragment_progress"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="48dp"
+        app:pv_autostart="true"
+        app:pv_circular="true"
+        app:pv_progressMode="indeterminate"
+        app:pv_progressStyle="@style/MaterialProgress" />
 
-        <com.rey.material.widget.ProgressView
-            android:id="@+id/contact_fragment_progress"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="48dp"
-            app:pv_autostart="true"
-            app:pv_circular="true"
-            app:pv_progressMode="indeterminate"
-            app:pv_progressStyle="@style/MaterialProgress" />
-    </FrameLayout>
-
-</android.support.v4.widget.NestedScrollView>
+    <Button
+        android:id="@+id/contact_fragment_btn_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:textColor="@color/white"
+        android:text="@string/website" />
+</FrameLayout>

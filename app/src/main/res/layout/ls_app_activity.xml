@@ -103,7 +103,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:drawableTop="@drawable/ic_open_in_browser_black"
                     android:gravity="center_horizontal"
-                    android:text="@string/open_in_browser"
+                    android:text="@string/view_on_our_website"
                     android:textColor="@color/grey_dark" />
 
                 <LinearLayout

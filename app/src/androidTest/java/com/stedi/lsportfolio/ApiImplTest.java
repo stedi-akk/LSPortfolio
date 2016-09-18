@@ -68,6 +68,7 @@ public class ApiImplTest {
                     public void onNext(ResponseLsAllApps response) {
                         assertThat(response, is(notNullValue()));
                         assertThat(response.getApps(), is(notNullValue()));
+                        assertThat(response.getJobs(), is(notNullValue()));
                     }
                 });
     }

@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/palette_primary</item>
         <item name="colorPrimaryDark">@color/palette_primary_dark</item>
         <item name="colorAccent">@color/palette_accent</item>
+        <item name="colorButtonNormal">@color/palette_accent</item>
         <item name="android:windowBackground">@color/palette_window_background</item>
     </style>
 

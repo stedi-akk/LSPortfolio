@@ -17,10 +17,10 @@
         \n\nP.S. To było zadaniem dla rozmowy kwalifikacyjnej
     </string>
     <string name="source_code">Kod źródłowy</string>
-    <string name="open_in_browser">Otwórz w przeglądarce</string>
+    <string name="view_on_our_website">Zobacz na naszej stronie</string>
     <string name="reload">Przeładuj</string>
-    <string name="clear_cache">Wyczyść pamięć podręczną</string>
-    <string name="more_info">Więcej informacji</string>
+    <string name="clear_cache">Wyczyść pamięć WebView</string>
+    <string name="website">Strona internetowa</string>
     <string name="work_with_us">Pracuj u nas!</string>
     <string name="want_create_application">Chcesz stworzyć aplikację?</string>
     <string name="currently_not_possible">Obecnie nie jest możliwe :(</string>

@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ContactFragment extends Fragment {
@@ -80,9 +81,6 @@ public class ContactFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_more_info:
-                moreInfo();
-                return true;
             case R.id.action_reload:
                 loadPage();
                 return true;
@@ -100,13 +98,8 @@ public class ContactFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void loadPage() {
-        progressView.setVisibility(View.VISIBLE);
-        webView.setVisibility(View.INVISIBLE);
-        webView.loadUrl("http://public.looksoft.pl/portfolio/kontakt.html");
-    }
-
-    private void moreInfo() {
+    @OnClick(R.id.contact_fragment_btn_website)
+    public void onWebsiteClick(View v) {
         try {
             String url = String.format("http://www.looksoft.pl/?lang=%s", StaticUtils.getSupportedLanguage());
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
@@ -114,5 +107,11 @@ public class ContactFragment extends Fragment {
             ex.printStackTrace();
             contextUtils.showToast(R.string.unknown_error);
         }
+    }
+
+    private void loadPage() {
+        progressView.setVisibility(View.VISIBLE);
+        webView.setVisibility(View.INVISIBLE);
+        webView.loadUrl("http://public.looksoft.pl/portfolio/kontakt.html");
     }
 }
