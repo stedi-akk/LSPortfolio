@@ -15,7 +15,7 @@
         (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
         \n\nminSdkVersion 14
         \ntargetSdkVersion 24
-        \n\nP.S. This was a task for a job interview
+        \n\nP.S. This was a task for an Android Developer job position
     </string>
     <string name="source_code">Source code</string>
     <string name="ok" translatable="false">OK</string>
