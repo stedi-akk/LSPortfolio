@@ -44,7 +44,7 @@ public class DrawerActivity extends ToolbarActivity implements NavigationView.On
         setToolbarIconListener(toolbarIconListener);
 
         TextView tvVersion = (TextView) navigationView.getHeaderView(0).findViewById(R.id.navigation_header_version_info);
-        tvVersion.setText(BuildConfig.VERSION_NAME);
+        tvVersion.setText(String.format(getString(R.string.version), BuildConfig.VERSION_NAME));
 
         navigationView.setNavigationItemSelectedListener(this);
         drawerLayout.addDrawerListener(this);

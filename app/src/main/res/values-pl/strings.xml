@@ -4,24 +4,25 @@
     <string name="contact">Kontakt</string>
     <string name="no_internet">Brak połączenia z internetem</string>
     <string name="please_wait">Czekaj…</string>
-    <string name="unknown_error">Nastąpił błąd</string>
+    <string name="unknown_error">Wystąpił nieoczekiwany błąd</string>
     <string name="try_again">Ponów próbę</string>
     <string name="empty_list">Pusta lista</string>
     <string name="list_updated">Lista zaktualizowana</string>
     <string name="about">O aplikacji</string>
     <string name="search">Szukaj</string>
     <string name="about_text">Prosta klient-serwer aplikacja z wykorzystaniem popularnych zewnętrznych bibliotek
-        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
+        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library, Retrolambda)
         \n\nminSdkVersion 14
         \ntargetSdkVersion 24
-        \n\nP.S. To było zadaniem na stanowisko Programista Android
+        \n\nTo było zadaniem na stanowisko Programista Android
     </string>
     <string name="source_code">Kod źródłowy</string>
     <string name="view_on_our_website">Zobacz na naszej stronie</string>
     <string name="reload">Przeładuj</string>
     <string name="clear_cache">Wyczyść pamięć WebView</string>
     <string name="website">Strona internetowa</string>
-    <string name="work_with_us">Pracuj z nami!</string>
-    <string name="want_create_application">Chcesz stworzyć aplikację?</string>
+    <string name="work_with_us">Pracuj razem z nami !</string>
+    <string name="want_create_application">Chcesz stworzyć aplikację ?</string>
     <string name="currently_not_possible">Obecnie nie jest możliwe :(</string>
+    <string name="version">Wersja: %s</string>
 </resources>

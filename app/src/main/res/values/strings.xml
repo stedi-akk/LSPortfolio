@@ -9,13 +9,13 @@
     <string name="no_internet">No internet connection</string>
     <string name="please_wait">Please wait…</string>
     <string name="try_again">Try again</string>
-    <string name="unknown_error">Unknown error</string>
+    <string name="unknown_error">An unexpected error has occurred</string>
     <string name="search">Search</string>
     <string name="about_text">A simple client-server application with usage of popular external libraries
-        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library)
+        (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library, Retrolambda)
         \n\nminSdkVersion 14
         \ntargetSdkVersion 24
-        \n\nP.S. This was a task for an Android Developer job position
+        \n\nThis was a task for an Android Developer job position
     </string>
     <string name="source_code">Source code</string>
     <string name="ok" translatable="false">OK</string>
@@ -23,7 +23,8 @@
     <string name="reload">Reload</string>
     <string name="clear_cache">Clear WebView cache</string>
     <string name="website">Website</string>
-    <string name="work_with_us">Work with us!</string>
-    <string name="want_create_application">Want to create an application?</string>
+    <string name="work_with_us">Work with us !</string>
+    <string name="want_create_application">Want to create an application ?</string>
     <string name="currently_not_possible">Currently not possible :(</string>
+    <string name="version">Version: %s</string>
 </resources>
