@@ -2,7 +2,9 @@ package com.stedi.lsportfolio.ui.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -13,11 +15,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.stedi.lsportfolio.R;
 import com.stedi.lsportfolio.model.LsAppDetailed;
 import com.stedi.lsportfolio.model.StoreLink;
 import com.stedi.lsportfolio.other.BorderTransformation;
 import com.stedi.lsportfolio.other.ContextUtils;
+import com.stedi.lsportfolio.other.DBG;
 import com.stedi.lsportfolio.other.PicassoHelper;
 import com.stedi.lsportfolio.other.StaticUtils;
 import com.stedi.lsportfolio.ui.other.BlockingViewPager;
@@ -91,35 +96,64 @@ public class LsAppActivity extends ToolbarActivity {
         if (lsAppScreensCount == 0)
             return;
 
-        findViewById(R.id.ls_app_activity_pager_divider).setVisibility(View.VISIBLE);
+        View pagerDivider = findViewById(R.id.ls_app_activity_pager_divider);
         BlockingViewPager pager = (BlockingViewPager) findViewById(R.id.ls_app_activity_pager);
-        pager.setVisibility(View.VISIBLE);
 
-        float pageMargin = contextUtils.dp2px(24); // space between images
-        pager.setPageMargin((int) pageMargin);
+        // should be based on all images, not just on first :/
+        Target firstImageTarget = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                pagerDivider.setVisibility(View.VISIBLE);
+                pager.setVisibility(View.VISIBLE);
 
-        float leftPadding = pager.getPaddingLeft();
-        float rightPadding = pager.getPaddingRight();
+                float pageMargin = contextUtils.dp2px(24); // space between images
+                pager.setPageMargin((int) pageMargin);
 
-        int lsAppScreenWidth = getResources().getDimensionPixelSize(R.dimen.ls_app_screen_width); // image width
-        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        float pageWidth = 1 / ((screenWidth - leftPadding - rightPadding) / lsAppScreenWidth); // adapter getPageWidth()
+                float leftPadding = pager.getPaddingLeft();
+                float rightPadding = pager.getPaddingRight();
 
-        float fullPagerWidth = (lsAppScreensCount * lsAppScreenWidth) +
-                leftPadding + rightPadding +
-                ((lsAppScreensCount - 1) * pageMargin);
+                int screenWidth = getResources().getDisplayMetrics().widthPixels;
+                float pagerContentWidht = screenWidth - leftPadding - rightPadding;
 
-        if (fullPagerWidth <= screenWidth)
-            pager.disableSwipe(true);
+                float lsAppScreenHeight = getResources().getDimensionPixelSize(R.dimen.ls_app_screen_height);
+                float lsAppScreenWidth = (bitmap.getWidth() * 1f / bitmap.getHeight()) * lsAppScreenHeight;
+                if (lsAppScreenWidth > pagerContentWidht)
+                    lsAppScreenWidth = pagerContentWidht;
 
-        pager.setOffscreenPageLimit((int) (3 / pageWidth));
+                float pageWidth = 1 / (pagerContentWidht / lsAppScreenWidth); // adapter getPageWidth()
 
-        LsAppScreenPagerAdapter adapter = lazyScreensAdapter.get();
-        adapter.setImgUrls(app.getGalleryUrls());
-        adapter.setTransformation(new BorderTransformation(Color.LTGRAY, contextUtils.dp2px(1)));
-        adapter.setPageWidth(pageWidth);
+                float fullPagerWidth = (lsAppScreensCount * lsAppScreenWidth) +
+                        leftPadding + rightPadding +
+                        ((lsAppScreensCount - 1) * pageMargin);
 
-        pager.setAdapter(adapter);
+                if (fullPagerWidth <= screenWidth)
+                    pager.disableSwipe(true);
+
+                pager.setOffscreenPageLimit((int) (3 / pageWidth));
+
+                LsAppScreenPagerAdapter adapter = lazyScreensAdapter.get();
+                adapter.setImgUrls(app.getGalleryUrls());
+                adapter.setTransformation(new BorderTransformation(Color.LTGRAY, contextUtils.dp2px(1)));
+                adapter.setPageWidth(pageWidth);
+
+                pager.setAdapter(adapter);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                pagerDivider.setVisibility(View.GONE);
+                pager.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                pagerDivider.setVisibility(View.GONE);
+                pager.setVisibility(View.GONE);
+            }
+        };
+
+        pager.setTag(firstImageTarget);
+        picassoHelper.getPicasso().load(app.getGalleryUrls().get(0)).into(firstImageTarget);
     }
 
     private void fillStoreLinks() {

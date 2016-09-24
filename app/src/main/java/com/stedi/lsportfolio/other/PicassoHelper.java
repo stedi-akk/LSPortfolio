@@ -17,6 +17,10 @@ public class PicassoHelper {
         this.picasso = picasso;
     }
 
+    public Picasso getPicasso() {
+        return picasso;
+    }
+
     public void load(String url, ImageView iv) {
         load(url, iv, null);
     }

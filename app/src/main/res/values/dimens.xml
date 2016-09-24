@@ -3,8 +3,7 @@
     <dimen name="text_small">12sp</dimen>
     <dimen name="text_medium">16sp</dimen>
     <dimen name="text_large">20sp</dimen>
-    <dimen name="ls_app_screen_height">427dp</dimen>
-    <dimen name="ls_app_screen_width">240dp</dimen>
+    <dimen name="ls_app_screen_height">400dp</dimen>
     <dimen name="ls_all_apps_lr_padding">16dp</dimen>
     <dimen name="ls_app_activity_lr_padding">24dp</dimen>
     <dimen name="navigation_view_text_size">14sp</dimen>
