@@ -2,7 +2,7 @@
 
 A simple client-server application with usage of popular external libraries (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library, Retrolambda)
 
-minSdkVersion 14
+minSdkVersion 14  
 targetSdkVersion 24
 
 This was a task for an Android Developer job position
