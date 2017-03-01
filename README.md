@@ -1,6 +1,6 @@
 # WARNING! Server API is dead!
 
-A simple client-server application with usage of popular external libraries (Dagger 2, RxJava, Retrofit, Otto, Picasso, Butter Knife, Android Support Library, Retrolambda)
+A simple client-server application with usage of popular external libraries
 
 minSdkVersion 14  
 targetSdkVersion 24
